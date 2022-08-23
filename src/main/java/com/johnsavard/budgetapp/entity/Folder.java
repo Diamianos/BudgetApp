@@ -17,6 +17,9 @@ public class Folder {
     @Column(name="amount")
     private double amount;
 
+    @Column(name="balance")
+    private double balance;
+
     public Folder(){}
 
     public Folder(String name, double amount) {
@@ -24,6 +27,9 @@ public class Folder {
         this.amount = amount;
     }
 
+    public int getId() {
+        return id;
+    }
     public String getName() {
         return name;
     }
@@ -40,12 +46,21 @@ public class Folder {
         this.amount = amount;
     }
 
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
+
     @Override
     public String toString() {
         return "Folder{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", amount=" + amount +
+                ", balance=" + balance +
                 '}';
     }
 }
