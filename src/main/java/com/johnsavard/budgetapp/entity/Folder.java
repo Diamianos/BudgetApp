@@ -1,30 +1,40 @@
 package com.johnsavard.budgetapp.entity;
 
+
 import javax.persistence.*;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name="folder")
-public class Folder {
+public class Folder extends AuditModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
     private int id;
-
+    @NotNull
+    @Size(max = 45)
     @Column(name="name")
     private String name;
 
+    @NotNull
+    @DecimalMin(value="0.0", inclusive = false)
     @Column(name="amount")
-    private double amount;
+    private BigDecimal amount;
 
+    @NotNull
+    @DecimalMin(value="0.0", inclusive = false)
     @Column(name="balance")
-    private double balance;
+    private BigDecimal balance;
 
     public Folder(){}
 
-    public Folder(String name, double amount) {
+    public Folder(String name, BigDecimal amount, BigDecimal balance) {
         this.name = name;
         this.amount = amount;
+        this.balance = balance;
     }
 
     public int getId() {
@@ -38,19 +48,19 @@ public class Folder {
         this.name = name;
     }
 
-    public double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 
-    public double getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 
-    public void setBalance(double balance) {
+    public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 
