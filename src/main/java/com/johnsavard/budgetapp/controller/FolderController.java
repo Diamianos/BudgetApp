@@ -18,23 +18,46 @@ import java.util.Optional;
 @Controller
 public class FolderController {
 
-    @Autowired
-    FolderRepository folderRepository;
 
-    @Autowired
-    ExpenseRepository expenseRepository;
+    private FolderRepository folderRepository;
+    private ExpenseRepository expenseRepository;
+
+    /**
+     *
+     * @param folderRepository - Injected property
+     * @param expenseRepository - Injected property
+     */
+    public FolderController(FolderRepository folderRepository, ExpenseRepository expenseRepository){
+        this.folderRepository = folderRepository;
+        this.expenseRepository = expenseRepository;
+    };
 
 
+    /**
+     * Returns all folders that are located in the repo.
+     *
+     * @return List of Folder Objects
+     */
     @GetMapping("/folder")
     public List<Folder> getAllFolders(){
         return folderRepository.findAll();
     }
 
+    /**
+     *
+     * @param folderId - Passed in with path variable annotation.
+     * @return Folder wrapped in an Optional object.
+     */
     @GetMapping("/folder/{folderId}")
     public Optional<Folder> getFolderById(@PathVariable Integer folderId){
         return folderRepository.findById(folderId);
     }
 
+    /**
+     *
+     * @param folder - Model attribute with data for a new folder.
+     * @return the template to be displayed in string format.
+     */
     @PostMapping("/folder")
     public String createFolder(@ModelAttribute("folder") Folder folder){
 
@@ -45,6 +68,12 @@ public class FolderController {
         return "redirect:/";
     }
 
+    /**
+     *
+     * @param folderId - Determines which folder to be updated.
+     * @param theModel - Used for passing form information to the folder-form-add html page
+     * @return
+     */
     @GetMapping("/folder/showFormForUpdate")
     public String updateFolder(@RequestParam("folderId") int folderId, Model theModel){
 
@@ -55,6 +84,11 @@ public class FolderController {
         return "folder-form-add.html";
     }
 
+    /**
+     *
+     * @param folderId - The folder ID to be deleted.
+     * @return a redirect to the homepage in string format.
+     */
     @GetMapping("/folder/delete")
     public String deleteFolder(@RequestParam("folderId") int folderId){
 

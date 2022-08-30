@@ -14,6 +14,11 @@ public class IndexController {
     @Autowired
     private FolderRepository folderRepository;
 
+    /**
+     *
+     * @param theModel - Used for getting all folders to be displayed
+     * @return - the index page to be displayed in string format.
+     */
     @GetMapping("/")
     public String showIndexPage(Model theModel){
         theModel.addAttribute("folders", folderRepository.findAll());
