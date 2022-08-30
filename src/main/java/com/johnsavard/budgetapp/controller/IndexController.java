@@ -33,7 +33,7 @@ public class IndexController {
 
         theModel.addAttribute("folder", theFolder);
 
-        return "folder-form";
+        return "folder-form-add";
 
     }
 }

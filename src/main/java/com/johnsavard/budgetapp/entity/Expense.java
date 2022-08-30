@@ -45,6 +45,9 @@ public class Expense extends AuditModel {
         this.amount = amount;
     }
 
+    public int getId() {
+        return id;
+    }
     public String getMerchant() {
         return merchant;
     }
