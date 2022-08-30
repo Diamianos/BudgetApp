@@ -5,13 +5,14 @@ import com.johnsavard.budgetapp.entity.Folder;
 import com.johnsavard.budgetapp.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
-@RestController
+@Controller
 public class FolderController {
 
     @Autowired
@@ -29,8 +30,10 @@ public class FolderController {
     }
 
     @PostMapping("/folder")
-    public Folder createFolder(@Valid @RequestBody Folder folder){
-        return folderRepository.save(folder);
+    public String createFolder(@ModelAttribute("folder") Folder folder){
+        folderRepository.save(folder);
+
+        return "redirect:/";
     }
 
     @PutMapping("/folder/{folderId}")

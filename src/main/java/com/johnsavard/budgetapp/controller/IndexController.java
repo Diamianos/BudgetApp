@@ -1,6 +1,7 @@
 package com.johnsavard.budgetapp.controller;
 
 import com.johnsavard.budgetapp.dao.FolderRepository;
+import com.johnsavard.budgetapp.entity.Folder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,5 +18,22 @@ public class IndexController {
     public String showIndexPage(Model theModel){
         theModel.addAttribute("folders", folderRepository.findAll());
         return "index";
+    }
+
+    /**
+     *
+     * @param theModel - for binding the folder data
+     * @return The html page to display
+     */
+    @GetMapping("/showFormForAdd")
+    public String showFormForAdd(Model theModel){
+
+        // Create model attribute to bind form data
+        Folder theFolder = new Folder();
+
+        theModel.addAttribute("folder", theFolder);
+
+        return "folder-form";
+
     }
 }
