@@ -9,7 +9,7 @@ import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.util.Optional;
 
 @Entity
 @Table(name="expense")
@@ -37,6 +37,7 @@ public class Expense extends AuditModel {
     private Folder folder;
 
 
+
     public Expense() {
     }
 
@@ -48,6 +49,10 @@ public class Expense extends AuditModel {
     public int getId() {
         return id;
     }
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getMerchant() {
         return merchant;
     }
@@ -68,7 +73,7 @@ public class Expense extends AuditModel {
         return folder;
     }
 
-    public void setFolder(Folder folder) {
+    public void setFolder (Folder folder) {
         this.folder = folder;
     }
 

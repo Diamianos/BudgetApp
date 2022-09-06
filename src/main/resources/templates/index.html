@@ -13,7 +13,7 @@
         <h3>Budget Application</h3>
         <hr>
 
-       <a th:href="@{/showFormForAdd}"
+       <a th:href="@{/showFormForFolderAdd}"
           class="btn btn-primary btn-sm mb-3">
            Add Folder
        </a>
@@ -34,6 +34,11 @@
                 <td th:text = "${tempFolder.amount}"></td>
                 <td th:text = "${tempFolder.balance }"></td>
                 <td>
+                    <!-- Add view transactions button -->
+                    <a th:href="@{folder/showFormForTransactions(folderId=${tempFolder.id})}"
+                       class="btn btn-secondary btn-sm">
+                        View Transactions
+                    </a>
                     <!-- Add modify button -->
                     <a th:href="@{folder/showFormForUpdate(folderId=${tempFolder.id})}"
                        class="btn btn-info btn-sm">

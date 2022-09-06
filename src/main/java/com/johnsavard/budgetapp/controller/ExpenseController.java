@@ -3,60 +3,64 @@ package com.johnsavard.budgetapp.controller;
 import com.johnsavard.budgetapp.dao.ExpenseRepository;
 import com.johnsavard.budgetapp.dao.FolderRepository;
 import com.johnsavard.budgetapp.entity.Expense;
+import com.johnsavard.budgetapp.entity.Folder;
 import com.johnsavard.budgetapp.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
-@RestController
+@Controller
 public class ExpenseController {
 
-    @Autowired
     private FolderRepository folderRepository;
-
-    @Autowired
     private ExpenseRepository expenseRepository;
 
-    @GetMapping("/folder/{folderId}/expenses")
-    public List<Expense> getAllExpensesByFolderId(@PathVariable (value= "folderId") Integer folderId){
-        return expenseRepository.findByFolderId(folderId);
+    public ExpenseController(FolderRepository folderRepository, ExpenseRepository expenseRepository){
+        this.folderRepository = folderRepository;
+        this.expenseRepository = expenseRepository;
     }
 
-    @PostMapping("/folder/{folderId}/expenses")
-    public Expense createExpense(@PathVariable(value="folderId") Integer folderId,
-                                 @Valid @RequestBody Expense expense){
-        return folderRepository.findById(folderId).map(folder -> {
-            expense.setFolder(folder);
-            return expenseRepository.save(expense);
-        }).orElseThrow(() -> new ResourceNotFoundException("Folder Id " + folderId + " not found!"));
+    /**
+     *
+     * @param theModel - Used for binding the expense data
+     * @return String for the correct view
+     */
+    @GetMapping("/showFormForExpenseAdd")
+    public String showFormForExpenseAdd(@RequestParam("folderId") int folderId, Model theModel){
+        Expense expense = new Expense();
+
+        theModel.addAttribute("expense", expense);
+        theModel.addAttribute("folderId", folderId);
+
+        return "expense-form-add";
     }
 
-    @PutMapping("/folder/{folderId}/expenses/{expenseId}")
-    public Expense updateExpense(@PathVariable(value="folderId") Integer folderId,
-                                 @PathVariable(value="expenseId") Integer expenseId,
-                                 @Valid @RequestBody Expense theExpense){
-        if (!folderRepository.existsById(folderId)){
-            throw new ResourceNotFoundException("Folder Id " + folderId + " not found!");
-        }
+    /**
+     *
+     * @param folderId - Passed in path variable, contains the folder id to be updated
+     * @param expense - Expense object to be saved
+     * @return
+     */
+    @PostMapping("/expense")
+    public ModelAndView addExpense(@RequestParam("folderId") int folderId, @ModelAttribute("expense") Expense expense){
+        Optional<Folder> folder = folderRepository.findById(folderId);
 
-        return expenseRepository.findById(expenseId).map(expense -> {
-            expense.setAmount(theExpense.getAmount());
-            expense.setMerchant(theExpense.getMerchant());
-            return expenseRepository.save(expense);
-        }).orElseThrow(() -> new ResourceNotFoundException("Expense Id " + expenseId + " not found!"));
+        folder.ifPresent(theFolder -> {
+            expense.setFolder(theFolder);
+        });
+
+        expenseRepository.save(expense);
+
+        return new ModelAndView("redirect:/folder/showFormForTransactions?folderId=" + folderId);
     }
 
-    @DeleteMapping("/folder/{folderId}/expenses/{expenseId}")
-    public ResponseEntity<?> deleteExpense(@PathVariable(value="folderId") Integer folderId,
-                                           @PathVariable(value="expenseId") Integer expenseId){
-        return expenseRepository.findByIdAndFolderId(expenseId, folderId).map(expense -> {
-            expenseRepository.deleteById(expenseId);
-            return ResponseEntity.ok().build();
-        }).orElseThrow(() -> new ResourceNotFoundException("Expense not found with expense id " + expenseId +
-                                                            " and folder id " + folderId));
-    }
+
 }

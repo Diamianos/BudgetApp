@@ -105,4 +105,23 @@ public class FolderController {
         return "redirect:/";
     }
 
+    /**
+     *
+     * @param folderId - the folder associated to the expenses displayed
+     * @param theModel - for attaching the expenses to be shown in the view
+     * @return the string "transactions" for displaying the correct page
+     */
+    @GetMapping("/folder/showFormForTransactions")
+    public String showTransactions(@RequestParam("folderId") int folderId, Model theModel){
+        // Getting all the expenses related to the folder
+        List<Expense> expenses = expenseRepository.findByFolderId(folderId);
+
+        // Adding expenses to the model
+        theModel.addAttribute("expenses", expenses);
+        theModel.addAttribute("folderId", folderId);
+
+        // Redirecting to the correct page
+        return "transactions";
+    }
+
 }

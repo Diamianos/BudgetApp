@@ -30,7 +30,7 @@ public class IndexController {
      * @param theModel - for binding the folder data
      * @return The html page to display
      */
-    @GetMapping("/showFormForAdd")
+    @GetMapping("/showFormForFolderAdd")
     public String showFormForAdd(Model theModel){
 
         // Create model attribute to bind form data
