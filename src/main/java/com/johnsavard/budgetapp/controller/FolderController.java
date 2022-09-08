@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
+@RequestMapping("/folder")
 public class FolderController {
 
 
@@ -38,7 +39,7 @@ public class FolderController {
      *
      * @return List of Folder Objects
      */
-    @GetMapping("/folder")
+    @GetMapping()
     public List<Folder> getAllFolders(){
         return folderRepository.findAll();
     }
@@ -48,7 +49,7 @@ public class FolderController {
      * @param folderId - Passed in with path variable annotation.
      * @return Folder wrapped in an Optional object.
      */
-    @GetMapping("/folder/{folderId}")
+    @GetMapping("/{folderId}")
     public Optional<Folder> getFolderById(@PathVariable Integer folderId){
         return folderRepository.findById(folderId);
     }
@@ -58,7 +59,7 @@ public class FolderController {
      * @param folder - Model attribute with data for a new folder.
      * @return the template to be displayed in string format.
      */
-    @PostMapping("/folder")
+    @PostMapping()
     public String createFolder(@ModelAttribute("folder") Folder folder){
 
         System.out.println("Folder: " + folder.toString());
@@ -74,7 +75,7 @@ public class FolderController {
      * @param theModel - Used for passing form information to the folder-form-add html page
      * @return
      */
-    @GetMapping("/folder/showFormForUpdate")
+    @GetMapping("/showFormForUpdate")
     public String updateFolder(@RequestParam("folderId") int folderId, Model theModel){
 
         Optional<Folder> theFolder = folderRepository.findById(folderId);
@@ -89,7 +90,7 @@ public class FolderController {
      * @param folderId - The folder ID to be deleted.
      * @return a redirect to the homepage in string format.
      */
-    @GetMapping("/folder/delete")
+    @GetMapping("/delete")
     public String deleteFolder(@RequestParam("folderId") int folderId){
 
         // First deleting the expenses related to the folder
@@ -111,7 +112,7 @@ public class FolderController {
      * @param theModel - for attaching the expenses to be shown in the view
      * @return the string "transactions" for displaying the correct page
      */
-    @GetMapping("/folder/showFormForTransactions")
+    @GetMapping("/showFormForTransactions")
     public String showTransactions(@RequestParam("folderId") int folderId, Model theModel){
         // Getting all the expenses related to the folder
         List<Expense> expenses = expenseRepository.findByFolderId(folderId);

@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
+@RequestMapping("/expense")
 public class ExpenseController {
 
     private FolderRepository folderRepository;
@@ -30,26 +31,11 @@ public class ExpenseController {
 
     /**
      *
-     * @param theModel - Used for binding the expense data
-     * @return String for the correct view
-     */
-    @GetMapping("/showFormForExpenseAdd")
-    public String showFormForExpenseAdd(@RequestParam("folderId") int folderId, Model theModel){
-        Expense expense = new Expense();
-
-        theModel.addAttribute("expense", expense);
-        theModel.addAttribute("folderId", folderId);
-
-        return "expense-form-add";
-    }
-
-    /**
-     *
      * @param folderId - Passed in path variable, contains the folder id to be updated
      * @param expense - Expense object to be saved
      * @return
      */
-    @PostMapping("/expense")
+    @PostMapping()
     public ModelAndView addExpense(@RequestParam("folderId") int folderId, @ModelAttribute("expense") Expense expense){
         Optional<Folder> folder = folderRepository.findById(folderId);
 
@@ -60,6 +46,17 @@ public class ExpenseController {
         expenseRepository.save(expense);
 
         return new ModelAndView("redirect:/folder/showFormForTransactions?folderId=" + folderId);
+    }
+
+    @GetMapping("/delete")
+    public ModelAndView deleteExpense(
+            @RequestParam("expenseId") int expenseId,
+            @RequestParam("folderId") int folderId
+            ){
+        expenseRepository.deleteById(expenseId);
+
+        return new ModelAndView("redirect:/folder/showFormForTransactions?folderId=" + folderId);
+
     }
 
 

@@ -1,11 +1,13 @@
 package com.johnsavard.budgetapp.controller;
 
 import com.johnsavard.budgetapp.dao.FolderRepository;
+import com.johnsavard.budgetapp.entity.Expense;
 import com.johnsavard.budgetapp.entity.Folder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Controller
@@ -39,6 +41,20 @@ public class IndexController {
         theModel.addAttribute("folder", theFolder);
 
         return "folder-form-add";
+    }
 
+    /**
+     *
+     * @param theModel - Used for binding the expense data
+     * @return String for the correct view
+     */
+    @GetMapping("/showFormForExpenseAdd")
+    public String showFormForExpenseAdd(@RequestParam("folderId") int folderId, Model theModel){
+        Expense expense = new Expense();
+
+        theModel.addAttribute("expense", expense);
+        theModel.addAttribute("folderId", folderId);
+
+        return "expense-form-add";
     }
 }

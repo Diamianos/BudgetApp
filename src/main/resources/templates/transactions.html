@@ -38,7 +38,7 @@
                     Update
                 </a>
                 <!-- Add delete button -->
-                <a
+                <a th:href="@{/expense/delete(expenseId=${tempExpense.id},folderId=${folderId})}"
                    class="btn btn-danger btn-sm"
                    onclick="if (!(confirm('Are you sure you want to delete this employee?'))) return false">
                     Delete
@@ -49,6 +49,13 @@
         </tr>
         </tbody>
     </table>
+
+    <hr>
+
+    <a th:href="@{/}"
+        class="btn btn-secondary btn-md">
+        Back to Folders</a>
+
 </div>
 </body>
 </html>
