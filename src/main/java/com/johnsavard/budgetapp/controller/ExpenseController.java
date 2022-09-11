@@ -56,6 +56,19 @@ public class ExpenseController {
         expenseRepository.deleteById(expenseId);
 
         return new ModelAndView("redirect:/folder/showFormForTransactions?folderId=" + folderId);
+    }
+    @GetMapping("/update")
+    public String updateExpense(
+            @RequestParam("expenseId") int expenseId,
+            @RequestParam("folderId") int folderId,
+            Model theModel
+            ){
+        Optional<Expense> expense = expenseRepository.findById(expenseId);
+
+        theModel.addAttribute("expense", expense);
+        theModel.addAttribute("folderId", folderId);
+
+        return "expense-form-add.html";
 
     }
 

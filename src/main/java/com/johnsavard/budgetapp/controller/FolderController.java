@@ -114,12 +114,16 @@ public class FolderController {
      */
     @GetMapping("/showFormForTransactions")
     public String showTransactions(@RequestParam("folderId") int folderId, Model theModel){
-        // Getting all the expenses related to the folder
+        // Getting all objects that need to be added to the model
+        Optional<Folder> folder = folderRepository.findById(folderId);
         List<Expense> expenses = expenseRepository.findByFolderId(folderId);
 
         // Adding expenses to the model
+        folder.ifPresent(theFolder -> {
+            theModel.addAttribute("folder", theFolder);
+        });
         theModel.addAttribute("expenses", expenses);
-        theModel.addAttribute("folderId", folderId);
+//        theModel.addAttribute("folderId", folderId);
 
         // Redirecting to the correct page
         return "transactions";
