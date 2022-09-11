@@ -1,17 +1,14 @@
 package com.johnsavard.budgetapp.controller;
 
 import com.johnsavard.budgetapp.dao.ExpenseRepository;
-import com.johnsavard.budgetapp.dao.FolderRepository;
 import com.johnsavard.budgetapp.entity.Expense;
 import com.johnsavard.budgetapp.entity.Folder;
-import com.johnsavard.budgetapp.exception.ResourceNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import com.johnsavard.budgetapp.service.ExpenseService;
+import com.johnsavard.budgetapp.service.FolderService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,17 +17,17 @@ import java.util.Optional;
 public class FolderController {
 
 
-    private FolderRepository folderRepository;
-    private ExpenseRepository expenseRepository;
+    private final FolderService folderService;
+    private final ExpenseService expenseService;
 
     /**
      *
-     * @param folderRepository - Injected property
-     * @param expenseRepository - Injected property
+     * @param folderService - Injected property
+     * @param expenseService - Injected property
      */
-    public FolderController(FolderRepository folderRepository, ExpenseRepository expenseRepository){
-        this.folderRepository = folderRepository;
-        this.expenseRepository = expenseRepository;
+    public FolderController(FolderService folderService, ExpenseService expenseService){
+        this.folderService = folderService;
+        this.expenseService = expenseService;
     };
 
 
@@ -41,7 +38,7 @@ public class FolderController {
      */
     @GetMapping()
     public List<Folder> getAllFolders(){
-        return folderRepository.findAll();
+        return folderService.findAllFolders();
     }
 
     /**
@@ -51,7 +48,7 @@ public class FolderController {
      */
     @GetMapping("/{folderId}")
     public Optional<Folder> getFolderById(@PathVariable Integer folderId){
-        return folderRepository.findById(folderId);
+        return folderService.findFolderById(folderId);
     }
 
     /**
@@ -64,7 +61,7 @@ public class FolderController {
 
         System.out.println("Folder: " + folder.toString());
 
-        folderRepository.save(folder);
+        folderService.saveFolder(folder);
 
         return "redirect:/";
     }
@@ -78,7 +75,7 @@ public class FolderController {
     @GetMapping("/showFormForUpdate")
     public String updateFolder(@RequestParam("folderId") int folderId, Model theModel){
 
-        Optional<Folder> theFolder = folderRepository.findById(folderId);
+        Optional<Folder> theFolder = folderService.findFolderById(folderId);
 
         theModel.addAttribute("folder", theFolder);
 
@@ -94,14 +91,14 @@ public class FolderController {
     public String deleteFolder(@RequestParam("folderId") int folderId){
 
         // First deleting the expenses related to the folder
-        List<Expense> expenses = expenseRepository.findByFolderId(folderId);
+        List<Expense> expenses = expenseService.findExpensesByFolderId(folderId);
         expenses.stream()
                 .forEach(item -> {
-                    expenseRepository.deleteById(item.getId());
+                    expenseService.deleteExpense(item.getId());
                 });
 
         // Deleting the folder
-        folderRepository.deleteById(folderId);
+        folderService.deleteFolder(folderId);
 
         return "redirect:/";
     }
@@ -115,15 +112,14 @@ public class FolderController {
     @GetMapping("/showFormForTransactions")
     public String showTransactions(@RequestParam("folderId") int folderId, Model theModel){
         // Getting all objects that need to be added to the model
-        Optional<Folder> folder = folderRepository.findById(folderId);
-        List<Expense> expenses = expenseRepository.findByFolderId(folderId);
+        Optional<Folder> folder = folderService.findFolderById(folderId);
+        List<Expense> expenses = expenseService.findExpensesByFolderId(folderId);
 
         // Adding expenses to the model
         folder.ifPresent(theFolder -> {
             theModel.addAttribute("folder", theFolder);
         });
         theModel.addAttribute("expenses", expenses);
-//        theModel.addAttribute("folderId", folderId);
 
         // Redirecting to the correct page
         return "transactions";

@@ -1,32 +1,26 @@
 package com.johnsavard.budgetapp.controller;
 
-import com.johnsavard.budgetapp.dao.ExpenseRepository;
-import com.johnsavard.budgetapp.dao.FolderRepository;
 import com.johnsavard.budgetapp.entity.Expense;
 import com.johnsavard.budgetapp.entity.Folder;
-import com.johnsavard.budgetapp.exception.ResourceNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import com.johnsavard.budgetapp.service.ExpenseService;
+import com.johnsavard.budgetapp.service.FolderService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.validation.Valid;
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 @Controller
 @RequestMapping("/expense")
 public class ExpenseController {
 
-    private FolderRepository folderRepository;
-    private ExpenseRepository expenseRepository;
+    private final FolderService folderService;
+    private final ExpenseService expenseService;
 
-    public ExpenseController(FolderRepository folderRepository, ExpenseRepository expenseRepository){
-        this.folderRepository = folderRepository;
-        this.expenseRepository = expenseRepository;
+    public ExpenseController(FolderService folderService, ExpenseService expenseService){
+        this.folderService = folderService;
+        this.expenseService = expenseService;
     }
 
     /**
@@ -37,13 +31,13 @@ public class ExpenseController {
      */
     @PostMapping()
     public ModelAndView addExpense(@RequestParam("folderId") int folderId, @ModelAttribute("expense") Expense expense){
-        Optional<Folder> folder = folderRepository.findById(folderId);
+        Optional<Folder> folder = folderService.findFolderById(folderId);
 
         folder.ifPresent(theFolder -> {
             expense.setFolder(theFolder);
         });
 
-        expenseRepository.save(expense);
+        expenseService.saveExpense(expense);
 
         return new ModelAndView("redirect:/folder/showFormForTransactions?folderId=" + folderId);
     }
@@ -59,7 +53,7 @@ public class ExpenseController {
             @RequestParam("expenseId") int expenseId,
             @RequestParam("folderId") int folderId
             ){
-        expenseRepository.deleteById(expenseId);
+        expenseService.deleteExpense(expenseId);
 
         return new ModelAndView("redirect:/folder/showFormForTransactions?folderId=" + folderId);
     }
@@ -77,7 +71,7 @@ public class ExpenseController {
             @RequestParam("folderId") int folderId,
             Model theModel
             ){
-        Optional<Expense> expense = expenseRepository.findById(expenseId);
+        Optional<Expense> expense = expenseService.findExpenseById(expenseId);
 
         theModel.addAttribute("expense", expense);
         theModel.addAttribute("folderId", folderId);
