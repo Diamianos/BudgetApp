@@ -14,11 +14,11 @@
     <hr>
 
     <a th:href="@{/showFormForExpenseAdd(folderId=${folder.getId})}"
-       class="btn btn-primary btn-sm mb-3">
+       class="btn btn-primary btn-md mb-3">
         Add Transaction
     </a>
 
-    <h2 th:text = "${folder.getName}" class="text-center mb-4"></h2>
+    <h2 th:text = "${folder.getName} + ' Folder'" class="text-center mb-4"></h2>
     <table class="table table-bordered table-striped">
         <thead class="table-dark">
         <tr>

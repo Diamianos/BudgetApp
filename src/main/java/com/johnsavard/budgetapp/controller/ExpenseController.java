@@ -48,6 +48,12 @@ public class ExpenseController {
         return new ModelAndView("redirect:/folder/showFormForTransactions?folderId=" + folderId);
     }
 
+    /**
+     *
+     * @param expenseId - Passed in from html page
+     * @param folderId - Passed in from html page
+     * @return The ModelAndView to be displayed
+     */
     @GetMapping("/delete")
     public ModelAndView deleteExpense(
             @RequestParam("expenseId") int expenseId,
@@ -57,6 +63,14 @@ public class ExpenseController {
 
         return new ModelAndView("redirect:/folder/showFormForTransactions?folderId=" + folderId);
     }
+
+    /**
+     *
+     * @param expenseId - Passed in from html page
+     * @param folderId - Passed in from html page
+     * @param theModel - Injected for adding attributes to html page
+     * @return The view to be displayed
+     */
     @GetMapping("/update")
     public String updateExpense(
             @RequestParam("expenseId") int expenseId,
