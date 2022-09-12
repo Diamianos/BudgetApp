@@ -37,7 +37,7 @@ public class ExpenseController {
             expense.setFolder(theFolder);
         });
 
-        expenseService.saveExpense(expense);
+        expenseService.saveExpense(folderId, expense);
 
         return new ModelAndView("redirect:/folder/showFormForTransactions?folderId=" + folderId);
     }
@@ -53,7 +53,7 @@ public class ExpenseController {
             @RequestParam("expenseId") int expenseId,
             @RequestParam("folderId") int folderId
             ){
-        expenseService.deleteExpense(expenseId);
+        expenseService.deleteExpense(expenseId, folderId);
 
         return new ModelAndView("redirect:/folder/showFormForTransactions?folderId=" + folderId);
     }

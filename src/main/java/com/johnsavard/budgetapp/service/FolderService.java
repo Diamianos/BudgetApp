@@ -25,6 +25,9 @@ public class FolderService {
     }
 
     public void saveFolder(Folder folder){
+        if (folder.getId() == 0){
+            folder.setBalance(folder.getAmount());
+        }
         folderRepository.save(folder);
     }
 

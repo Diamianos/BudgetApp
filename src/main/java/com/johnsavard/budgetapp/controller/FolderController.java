@@ -1,6 +1,5 @@
 package com.johnsavard.budgetapp.controller;
 
-import com.johnsavard.budgetapp.dao.ExpenseRepository;
 import com.johnsavard.budgetapp.entity.Expense;
 import com.johnsavard.budgetapp.entity.Folder;
 import com.johnsavard.budgetapp.service.ExpenseService;
@@ -59,8 +58,6 @@ public class FolderController {
     @PostMapping()
     public String createFolder(@ModelAttribute("folder") Folder folder){
 
-        System.out.println("Folder: " + folder.toString());
-
         folderService.saveFolder(folder);
 
         return "redirect:/";
@@ -94,7 +91,7 @@ public class FolderController {
         List<Expense> expenses = expenseService.findExpensesByFolderId(folderId);
         expenses.stream()
                 .forEach(item -> {
-                    expenseService.deleteExpense(item.getId());
+                    expenseService.deleteExpense(item.getId(), folderId);
                 });
 
         // Deleting the folder

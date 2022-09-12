@@ -29,8 +29,7 @@
                class="form-control mb-4 col-4" placeholder="Name">
         <input type="text" th:field="*{amount}"
                class="form-control mb-4 col-4" placeholder="Amount">
-        <input type="text" th:field="*{balance}"
-               class="form-control mb-4 col-4" placeholder="Balance">
+        <input type="hidden" th:field="*{balance}">
         <button type="submit" class="btn btn-info col-2">Save</button>
 
 
