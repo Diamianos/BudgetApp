@@ -25,7 +25,7 @@ public class Folder extends AuditModel {
     private BigDecimal amount;
 
     @NotNull
-    @DecimalMin(value="0.0", inclusive = false)
+    @DecimalMin(value="0.0", inclusive = true)
     @Column(name="balance")
     private BigDecimal balance;
 

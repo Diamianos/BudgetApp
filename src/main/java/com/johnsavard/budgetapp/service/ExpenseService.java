@@ -51,7 +51,6 @@ public class ExpenseService {
             folder.setBalance(folder.getBalance().add(theExpense.getAmount()));
         });
 
-
         expenseRepository.deleteById(expenseId);
     }
 }

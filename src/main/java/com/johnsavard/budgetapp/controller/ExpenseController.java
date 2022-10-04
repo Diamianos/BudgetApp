@@ -2,6 +2,7 @@ package com.johnsavard.budgetapp.controller;
 
 import com.johnsavard.budgetapp.entity.Expense;
 import com.johnsavard.budgetapp.entity.Folder;
+import com.johnsavard.budgetapp.exception.CustomException;
 import com.johnsavard.budgetapp.service.ExpenseService;
 import com.johnsavard.budgetapp.service.FolderService;
 import org.springframework.stereotype.Controller;
@@ -9,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.persistence.RollbackException;
 import java.util.Optional;
 
 @Controller
@@ -33,7 +35,15 @@ public class ExpenseController {
     public ModelAndView addExpense(@RequestParam("folderId") int folderId, @ModelAttribute("expense") Expense expense){
         Optional<Folder> folder = folderService.findFolderById(folderId);
 
+        if (folder.get().getBalance().compareTo(expense.getAmount()) < 0){
+
+        }
+
         folder.ifPresent(theFolder -> {
+            if (folder.get().getBalance().compareTo(expense.getAmount()) < 0){
+                throw new CustomException("Custome Exception has occured", "CustomException");
+            }
+
             expense.setFolder(theFolder);
         });
 
@@ -70,7 +80,7 @@ public class ExpenseController {
             @RequestParam("expenseId") int expenseId,
             @RequestParam("folderId") int folderId,
             Model theModel
-            ){
+            ) {
         Optional<Expense> expense = expenseService.findExpenseById(expenseId);
 
         theModel.addAttribute("expense", expense);
