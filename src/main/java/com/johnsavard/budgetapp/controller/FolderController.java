@@ -1,9 +1,12 @@
 package com.johnsavard.budgetapp.controller;
 
+import com.johnsavard.budgetapp.dao.TimePeriodRepository;
 import com.johnsavard.budgetapp.entity.Expense;
 import com.johnsavard.budgetapp.entity.Folder;
+import com.johnsavard.budgetapp.entity.TimePeriod;
 import com.johnsavard.budgetapp.service.ExpenseService;
 import com.johnsavard.budgetapp.service.FolderService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -56,11 +59,18 @@ public class FolderController {
      * @return the template to be displayed in string format.
      */
     @PostMapping()
-    public String createFolder(@ModelAttribute("folder") Folder folder){
+    public String createFolder(@ModelAttribute("folder") Folder folder, Model theModel){
 
         folderService.saveFolder(folder);
 
-        return "redirect:/";
+        TimePeriod timePeriod = folder.getTimePeriod();
+
+        // Adding the model attributes
+        theModel.addAttribute("folders", folderService.findAllByTimePeriod(timePeriod));
+        theModel.addAttribute("date", timePeriod.monthAndYearToString());
+
+
+        return "index";
     }
 
     /**

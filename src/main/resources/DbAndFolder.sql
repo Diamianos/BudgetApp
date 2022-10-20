@@ -6,12 +6,20 @@ USE `budget-app`;
 --
 DROP TABLE IF EXISTS `expense`;
 DROP TABLE IF EXISTS `folder`;
+DROP TABLE IF EXISTS `time_period`;
 
 --
 -- Table structure for table `table`
 --
 
-
+CREATE TABLE `time_period` (
+	`id` int(11) NOT NULL AUTO_INCREMENT,
+    `created_at` DATETIME,
+    `updated_at` DATETIME,
+    `month` varchar(15),
+    `year` int,
+    PRIMARY KEY (`id`)
+);
 
 CREATE TABLE `folder` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -20,7 +28,9 @@ CREATE TABLE `folder` (
   `name` varchar(45),
   `amount` decimal,
   `balance` decimal,
-  PRIMARY KEY (`id`)
+  `time_period_id` int,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`time_period_id`) REFERENCES time_period(`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 --
@@ -53,5 +63,7 @@ CREATE TABLE `expense` (
     -- (4, 'Baby Stuff', '50', 2),
     -- (5, 'Paper Towels', '15', 2),
     -- (6, 'Dollar General Snacks', '10', 2);
+    
+
 	
 

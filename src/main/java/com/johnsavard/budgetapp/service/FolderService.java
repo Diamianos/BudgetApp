@@ -2,6 +2,7 @@ package com.johnsavard.budgetapp.service;
 
 import com.johnsavard.budgetapp.dao.FolderRepository;
 import com.johnsavard.budgetapp.entity.Folder;
+import com.johnsavard.budgetapp.entity.TimePeriod;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,4 +35,6 @@ public class FolderService {
     public void deleteFolder(int folderId){
         folderRepository.deleteById(folderId);
     }
+
+    public List<Folder> findAllByTimePeriod(TimePeriod timePeriod){ return folderRepository.findAllByTimePeriod(timePeriod);}
 }
