@@ -24,14 +24,9 @@ public class Folder extends AuditModel {
     @Column(name="amount")
     private BigDecimal amount;
 
-    @NotNull
     @DecimalMin(value="0.0", inclusive = true)
     @Column(name="balance")
     private BigDecimal balance;
-
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name = "time_period_id")
-    private TimePeriod timePeriod;
 
     public Folder(){}
 
@@ -39,14 +34,6 @@ public class Folder extends AuditModel {
         this.name = name;
         this.amount = amount;
         this.balance = balance;
-    }
-
-    public TimePeriod getTimePeriod() {
-        return timePeriod;
-    }
-
-    public void setTimePeriod(TimePeriod timePeriod) {
-        this.timePeriod = timePeriod;
     }
 
     public int getId() {

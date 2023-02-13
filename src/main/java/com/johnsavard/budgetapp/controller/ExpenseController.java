@@ -5,15 +5,12 @@ import com.johnsavard.budgetapp.entity.Folder;
 import com.johnsavard.budgetapp.exception.CustomException;
 import com.johnsavard.budgetapp.service.ExpenseService;
 import com.johnsavard.budgetapp.service.FolderService;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
-import javax.persistence.RollbackException;
 import java.util.Optional;
 
-@Controller
+@RestController
 @RequestMapping("/expense")
 public class ExpenseController {
 
@@ -32,7 +29,7 @@ public class ExpenseController {
      * @return
      */
     @PostMapping()
-    public ModelAndView addExpense(@RequestParam("folderId") int folderId, @ModelAttribute("expense") Expense expense){
+    public void addExpense(@RequestParam("folderId") int folderId, @ModelAttribute("expense") Expense expense){
         Optional<Folder> folder = folderService.findFolderById(folderId);
 
         if (folder.get().getBalance().compareTo(expense.getAmount()) < 0){
@@ -48,8 +45,6 @@ public class ExpenseController {
         });
 
         expenseService.saveExpense(folderId, expense);
-
-        return new ModelAndView("redirect:/folder/showFormForTransactions?folderId=" + folderId);
     }
 
     /**
@@ -59,13 +54,12 @@ public class ExpenseController {
      * @return The ModelAndView to be displayed
      */
     @GetMapping("/delete")
-    public ModelAndView deleteExpense(
+    public void deleteExpense(
             @RequestParam("expenseId") int expenseId,
             @RequestParam("folderId") int folderId
             ){
         expenseService.deleteExpense(expenseId, folderId);
 
-        return new ModelAndView("redirect:/folder/showFormForTransactions?folderId=" + folderId);
     }
 
     /**
@@ -76,7 +70,7 @@ public class ExpenseController {
      * @return The view to be displayed
      */
     @GetMapping("/update")
-    public String updateExpense(
+    public void updateExpense(
             @RequestParam("expenseId") int expenseId,
             @RequestParam("folderId") int folderId,
             Model theModel
@@ -85,8 +79,6 @@ public class ExpenseController {
 
         theModel.addAttribute("expense", expense);
         theModel.addAttribute("folderId", folderId);
-
-        return "expense-form-add.html";
 
     }
 

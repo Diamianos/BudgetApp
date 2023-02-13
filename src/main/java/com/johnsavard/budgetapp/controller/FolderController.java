@@ -1,20 +1,17 @@
 package com.johnsavard.budgetapp.controller;
 
-import com.johnsavard.budgetapp.dao.TimePeriodRepository;
-import com.johnsavard.budgetapp.entity.Expense;
 import com.johnsavard.budgetapp.entity.Folder;
-import com.johnsavard.budgetapp.entity.TimePeriod;
 import com.johnsavard.budgetapp.service.ExpenseService;
 import com.johnsavard.budgetapp.service.FolderService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 
-@Controller
+@RestController
 @RequestMapping("/folder")
 public class FolderController {
 
@@ -40,6 +37,7 @@ public class FolderController {
      */
     @GetMapping()
     public List<Folder> getAllFolders(){
+
         return folderService.findAllFolders();
     }
 
@@ -56,80 +54,42 @@ public class FolderController {
     /**
      *
      * @param folder - Model attribute with data for a new folder.
-     * @return the template to be displayed in string format.
+     * @return Response entity of the newly created folder
      */
     @PostMapping()
-    public String createFolder(@ModelAttribute("folder") Folder folder, Model theModel){
+    public ResponseEntity createFolder(@RequestBody Folder folder) throws URISyntaxException {
 
-        folderService.saveFolder(folder);
+        Folder savedFolder = folderService.saveFolder(folder);
 
-        TimePeriod timePeriod = folder.getTimePeriod();
-
-        // Adding the model attributes
-        theModel.addAttribute("folders", folderService.findAllByTimePeriod(timePeriod));
-        theModel.addAttribute("date", timePeriod.monthAndYearToString());
-
-
-        return "index";
+        return ResponseEntity.created(new URI("/folder/" + savedFolder.getId())).body(savedFolder);
     }
 
     /**
      *
-     * @param folderId - Determines which folder to be updated.
-     * @param theModel - Used for passing form information to the folder-form-add html page
-     * @return
+     * @param id - Id of the folder to be updated
+     * @param folder - Request body with the new values for the folder
+     * @return - ResponseEntity of the result of saving the folder
+     * @throws Exception
      */
-    @GetMapping("/showFormForUpdate")
-    public String updateFolder(@RequestParam("folderId") int folderId, Model theModel){
-
-        Optional<Folder> theFolder = folderService.findFolderById(folderId);
-
-        theModel.addAttribute("folder", theFolder);
-
-        return "folder-form-add.html";
-    }
-
-    /**
-     *
-     * @param folderId - The folder ID to be deleted.
-     * @return a redirect to the homepage in string format.
-     */
-    @GetMapping("/delete")
-    public String deleteFolder(@RequestParam("folderId") int folderId){
-
-        // First deleting the expenses related to the folder
-        List<Expense> expenses = expenseService.findExpensesByFolderId(folderId);
-        expenses.stream()
-                .forEach(item -> {
-                    expenseService.deleteExpense(item.getId(), folderId);
-                });
-
-        // Deleting the folder
-        folderService.deleteFolder(folderId);
-
-        return "redirect:/";
-    }
-
-    /**
-     *
-     * @param folderId - the folder associated to the expenses displayed
-     * @param theModel - for attaching the expenses to be shown in the view
-     * @return the string "transactions" for displaying the correct page
-     */
-    @GetMapping("/showFormForTransactions")
-    public String showTransactions(@RequestParam("folderId") int folderId, Model theModel){
-        // Getting all objects that need to be added to the model
-        Optional<Folder> folder = folderService.findFolderById(folderId);
-        List<Expense> expenses = expenseService.findExpensesByFolderId(folderId);
-
-        // Adding expenses to the model
-        folder.ifPresent(theFolder -> {
-            theModel.addAttribute("folder", theFolder);
+    @PutMapping("/{id}")
+    public ResponseEntity updateFolder(@PathVariable Integer id, @RequestBody Folder folder) throws Exception {
+        Optional<Folder> currentFolder = folderService.findFolderById(id);
+        currentFolder.ifPresent(f -> {
+                f.setName(folder.getName());
+                f.setAmount(folder.getAmount());
+                f.setBalance(folder.getBalance());
         });
-        theModel.addAttribute("expenses", expenses);
-
-        // Redirecting to the correct page
-        return "transactions";
+        return ResponseEntity.ok(folderService.saveFolder(currentFolder.get()));
     }
 
+    /**
+     *
+     * @param id - Id of the folder to be deleted
+     * @return - Response entity with an "okay" build
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteClient(@PathVariable Integer id){
+        folderService.deleteFolder(id);
+        return ResponseEntity.ok().build();
+    }
 }
