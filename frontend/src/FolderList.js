@@ -1,19 +1,20 @@
 import React, {Component} from 'react';
 import {Button, ButtonGroup, Container, Table} from "reactstrap";
 import {Link} from "react-router-dom";
+import AppNavbar from "./AppNavbar";
 
 class FolderList extends Component {
 
     constructor(props){
         super(props);
-        this.state = {folders: []};
+        this.state = {folder: []};
         this.remove = this.remove.bind(this);
     }
 
     componentDidMount() {
         fetch('/folder')
             .then(response => response.json())
-            .then(data => this.setState({folders: data}));
+            .then(data => this.setState({folder: data}));
     }
 
     async remove(id){
@@ -24,26 +25,26 @@ class FolderList extends Component {
                 'Content-Type': 'application/json'
             }
         }).then(() => {
-            let updatedFolders = [...this.state.folders].filter(i => i.id !== id);
-            this.setState({folders: updatedFolders});
+            let updatedFolder = [...this.state.folder].filter(i => i.id !== id);
+            this.setState({folder: updatedFolder});
         });
     }
 
     render(){
-        const {folders, isLoading} = this.state;
+        const {folder, isLoading} = this.state;
 
         if (isLoading){
             return <p>Loading...</p>;
         }
 
-        const folderList = folders.map(folder => {
-            return <tr key={folder.id}>
-                <td style={{whiteSpace: 'nowrap'}}>{folder.name}</td>
-                <td>{folder.balance}</td>
+        const folderList = folder.map(f => {
+            return <tr key={f.id}>
+                <td style={{whiteSpace: 'nowrap'}}>{f.name}</td>
+                <td>{f.amount}</td>
                 <td>
                     <ButtonGroup>
-                        <Button size="sm" color="primary" tag={Link} to={"/folder/" + folder.id}>Edit</Button>
-                        <Button size="sm" color="danger" onClick={() => this.remove(folder.id)}>Delete</Button>
+                        <Button size="sm" color="primary" tag={Link} to={"/folder/" + f.id}>Edit</Button>
+                        <Button size="sm" color="danger" onClick={() => this.remove(f.id)}>Delete</Button>
                     </ButtonGroup>
                 </td>
             </tr>
@@ -61,7 +62,7 @@ class FolderList extends Component {
                         <thead>
                         <tr>
                             <th width="30%">Name</th>
-                            <th width="30%">Email</th>
+                            <th width="30%">Amount</th>
                             <th width="40%">Actions</th>
                         </tr>
                         </thead>
