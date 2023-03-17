@@ -15,7 +15,22 @@ code {
     monospace;
 }
 
+.text-center{
+  text-align: center;
+}
+
+.action-buttons{
+  display: -webkit-flex;
+  display: flex;
+  -webkit-justify-content: space-between;
+  justify-content: space-between;
+}
+
 .folder-table{
   max-height:fit-content !important;
   --table-body-hover-back-color: #a7dbcd;
+}
+
+.folder-row-button{
+  --universal-border-radius: 10px;
 }

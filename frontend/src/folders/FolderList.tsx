@@ -1,5 +1,6 @@
 import React from 'react'
 import { Folder } from './Folder'
+import FolderRow from './FolderRow'
 
 // https://minicss.us/docs.htm#tables
 
@@ -17,15 +18,12 @@ export default function FolderList({folders}: FolderListProps) {
                 <th>Name</th>
                 <th>Amount</th>
                 <th>Balance</th>
+                <th className="text-center">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 {folders.map((folder) => (
-                    <tr key={folder.id}>
-                        <td data-label="Name">{folder.name}</td>
-                        <td data-label="Amount">{folder.amount}</td>
-                        <td data-label="Balance">{folder.balance}</td>
-                    </tr>
+                    <FolderRow key={folder.id} folder={folder} />
                 ))}
             </tbody>
         </table>
