@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { unstable_renderSubtreeIntoContainer } from 'react-dom';
 import { Folder } from './Folder'
 import FolderRow from './FolderRow'
 
@@ -17,6 +18,9 @@ export default function FolderList({folders, onSave}: FolderListProps) {
         console.log("Folder with id clicked: " + folder.id)
         setIndexFolderBeingEdited(folder.id)
     }
+    const handleCancel = () => {
+        setIndexFolderBeingEdited(undefined);
+    }
 
     return (
             <div>
@@ -32,7 +36,13 @@ export default function FolderList({folders, onSave}: FolderListProps) {
                 </thead>
                 <tbody>
                     {folders.map((folder) => (
-                        <FolderRow key={folder.id} folder={folder} onEdit={handleEdit} indexFolderBeingEdited={indexFolderBeingEdited} />
+                        <FolderRow 
+                            key={folder.id} 
+                            folder={folder} 
+                            onEdit={handleEdit} 
+                            onCancel={handleCancel}
+                            indexFolderBeingEdited={indexFolderBeingEdited} 
+                        />
                     ))}
                 </tbody>
             </table>
