@@ -19,11 +19,16 @@ code {
   text-align: center;
 }
 
+.action-header{
+  max-width: 200px;
+}
+
 .action-buttons{
   display: -webkit-flex;
   display: flex;
   -webkit-justify-content: space-between;
   justify-content: space-between;
+  max-width: 200px;
 }
 
 .folder-table{

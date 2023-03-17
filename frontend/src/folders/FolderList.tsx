@@ -1,33 +1,42 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Folder } from './Folder'
 import FolderRow from './FolderRow'
 
 // https://minicss.us/docs.htm#tables
 
 interface FolderListProps {
-    folders: Folder[]
+    folders: Folder[];
+    onSave: (folder: Folder) => void;
 }
 
-export default function FolderList({folders}: FolderListProps) {
-  return (
-        <div>
-        <table className="folder-table striped hoverable">
-            <caption>Folders</caption>
-            <thead>
-                <tr>
-                <th>Name</th>
-                <th>Amount</th>
-                <th>Balance</th>
-                <th className="text-center">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {folders.map((folder) => (
-                    <FolderRow key={folder.id} folder={folder} />
-                ))}
-            </tbody>
-        </table>
-        </div>
-  )
+export default function FolderList({folders, onSave}: FolderListProps) {
+
+    const [indexFolderBeingEdited, setIndexFolderBeingEdited] = useState<number|undefined>(undefined);
+
+    const handleEdit = (folder: Folder) => {
+        console.log("Folder with id clicked: " + folder.id)
+        setIndexFolderBeingEdited(folder.id)
+    }
+
+    return (
+            <div>
+            <table className="folder-table striped hoverable">
+                <caption>Folders</caption>
+                <thead>
+                    <tr>
+                    <th>Name</th>
+                    <th>Amount</th>
+                    <th>Balance</th>
+                    <th className="action-header text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {folders.map((folder) => (
+                        <FolderRow key={folder.id} folder={folder} onEdit={handleEdit} indexFolderBeingEdited={indexFolderBeingEdited} />
+                    ))}
+                </tbody>
+            </table>
+            </div>
+    )
 }
 
