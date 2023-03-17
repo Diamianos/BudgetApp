@@ -7,15 +7,20 @@ function FoldersPage(){
 
     const [folders, setFolders] = useState<Folder[]>(MOCK_FOLDERS)
 
-    const saveFolder = (folder: Folder) => {
+    const handleSave = (folder: Folder) => {
         console.log("folder saved");
+    }
+    const handleDelete = (folder: Folder) => {
+        let updatedFolders = folders.filter(f => folder.id !== f.id);
+        setFolders(updatedFolders);
     }
 
     return (
     <>
         <FolderList 
             folders={folders} 
-            onSave={saveFolder}
+            onSave={handleSave}
+            onDelete={handleDelete}
         />
     </>
     )

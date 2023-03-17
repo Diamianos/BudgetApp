@@ -8,9 +8,10 @@ import FolderRow from './FolderRow'
 interface FolderListProps {
     folders: Folder[];
     onSave: (folder: Folder) => void;
+    onDelete: (folder: Folder) => void;
 }
 
-export default function FolderList({folders, onSave}: FolderListProps) {
+export default function FolderList({folders, onSave, onDelete}: FolderListProps) {
 
     const [indexFolderBeingEdited, setIndexFolderBeingEdited] = useState<number|undefined>(undefined);
 
@@ -41,6 +42,7 @@ export default function FolderList({folders, onSave}: FolderListProps) {
                             folder={folder} 
                             onEdit={handleEdit} 
                             onCancel={handleCancel}
+                            onDelete={onDelete}
                             indexFolderBeingEdited={indexFolderBeingEdited} 
                         />
                     ))}
