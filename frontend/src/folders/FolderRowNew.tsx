@@ -1,22 +1,23 @@
 import React, { useState } from 'react'
-import { Folder } from './Folder';
+import { Folder } from './Folder'
 
-interface FolderRowEditProps {
-    folder: Folder;
+interface FolderRowNewProps{
     onSave: (folder: Folder, newFolder: boolean) => void;
     onCancel: (newFolder: boolean) => void;
+    hideNewFolder: boolean;
 }
 
-function FolderRowEdit(props: FolderRowEditProps) {
-    const {folder:initalFolder, onSave, onCancel} = props;
-    const [folder, setFolder] = useState(initalFolder)
-    
-    const handleCancel = () => {
-        onCancel(false);
-    }
+function FolderRowNew(props: FolderRowNewProps) {
+    const {onSave, onCancel, hideNewFolder} = props;
+    const [folder, setFolder] = useState(new Folder())
 
     const handleSave = (folder: Folder) => {
-        onSave(folder, false);
+        onSave(folder, true);
+        setFolder(new Folder())
+    }
+
+    const handleCancel = () => {
+        onCancel(true);
     }
 
     const handleChange = (event: any) => {
@@ -43,7 +44,7 @@ function FolderRowEdit(props: FolderRowEditProps) {
         });
     }
     return (
-        <tr>
+        <tr className={hideNewFolder ? 'folder-row-new' : ''}>
             <td className='folder-cell' data-label="Name">
                 <input value={folder.name} name="name" onChange={handleChange}/> 
             </td>
@@ -67,4 +68,4 @@ function FolderRowEdit(props: FolderRowEditProps) {
     )
 }
 
-export default FolderRowEdit
+export default FolderRowNew

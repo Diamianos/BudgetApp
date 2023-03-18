@@ -7,10 +7,16 @@ function FoldersPage(){
 
     const [folders, setFolders] = useState<Folder[]>(MOCK_FOLDERS)
 
-    const handleSave = (folder: Folder) => {
-        let updatedFolders = folders.map((f:Folder) => {
-            return f.id === folder.id ? folder : f
-        })
+    const handleSave = (folder: Folder, newFolder: boolean) => {
+        let updatedFolders: React.SetStateAction<Folder[]> = [];
+        if (newFolder){
+            folder.id = folders.length + 1;
+            updatedFolders = [...folders];
+            updatedFolders.push(folder);
+        } else {
+            updatedFolders = folders.map((f:Folder) => {
+                return f.id === folder.id ? folder : f
+            })}
         setFolders(updatedFolders);
     }
     const handleDelete = (folder: Folder) => {

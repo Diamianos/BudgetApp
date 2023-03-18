@@ -36,9 +36,25 @@ code {
   --table-body-hover-back-color: #a7dbcd;
 }
 
+.folder-table-caption{
+  margin-top: 0px
+}
+
 .folder-row-button{
   --universal-border-radius: 10px;
   width: 64px;
+}
+
+.new-folder-row-button{
+  --universal-border-radius: 10px;
+  align-items: flex-end;
+  margin-bottom: 0px !important;
+}
+
+.new-folder-div{
+  margin-top:10px;
+  width:100%;
+  text-align: right;
 }
 
 .folder-cell{
@@ -49,4 +65,8 @@ code {
 
 .folder-cell-span{
   padding-left:17px;
+}
+
+.folder-row-new{
+  display:none;
 }
