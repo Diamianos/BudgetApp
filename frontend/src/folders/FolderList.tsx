@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { unstable_renderSubtreeIntoContainer } from 'react-dom';
 import { Folder } from './Folder'
 import FolderRow from './FolderRow'
+import FolderRowEdit from './FolderRowEdit';
 
 // https://minicss.us/docs.htm#tables
 
@@ -13,14 +14,14 @@ interface FolderListProps {
 
 export default function FolderList({folders, onSave, onDelete}: FolderListProps) {
 
-    const [indexFolderBeingEdited, setIndexFolderBeingEdited] = useState<number|undefined>(undefined);
+    const [folderBeingEdited, setFolderBeingEdited] = useState({});
 
     const handleEdit = (folder: Folder) => {
         console.log("Folder with id clicked: " + folder.id)
-        setIndexFolderBeingEdited(folder.id)
+        setFolderBeingEdited(folder)
     }
     const handleCancel = () => {
-        setIndexFolderBeingEdited(undefined);
+        setFolderBeingEdited({});
     }
 
     return (
@@ -37,15 +38,19 @@ export default function FolderList({folders, onSave, onDelete}: FolderListProps)
                 </thead>
                 <tbody>
                     {folders.map((folder) => (
-                        <FolderRow 
-                            key={folder.id} 
-                            folder={folder} 
-                            onEdit={handleEdit} 
-                            onCancel={handleCancel}
-                            onDelete={onDelete}
-                            onSave={onSave}
-                            indexFolderBeingEdited={indexFolderBeingEdited} 
-                        />
+                        <React.Fragment key={folder.id}>
+                            {folder === folderBeingEdited ?
+                            <FolderRowEdit 
+                                folder={folder}
+                                onSave={onSave} 
+                                onCancel={handleCancel}/> 
+                            :
+                            <FolderRow 
+                                folder={folder} 
+                                onEdit={handleEdit} 
+                                onDelete={onDelete}
+                            />}
+                        </React.Fragment>
                     ))}
                 </tbody>
             </table>

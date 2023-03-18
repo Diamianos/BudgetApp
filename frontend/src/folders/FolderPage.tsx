@@ -8,7 +8,10 @@ function FoldersPage(){
     const [folders, setFolders] = useState<Folder[]>(MOCK_FOLDERS)
 
     const handleSave = (folder: Folder) => {
-        console.log("folder saved");
+        let updatedFolders = folders.map((f:Folder) => {
+            return f.id === folder.id ? folder : f
+        })
+        setFolders(updatedFolders);
     }
     const handleDelete = (folder: Folder) => {
         let updatedFolders = folders.filter(f => folder.id !== f.id);
