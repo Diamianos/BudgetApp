@@ -38,4 +38,15 @@ code {
 
 .folder-row-button{
   --universal-border-radius: 10px;
+  width: 64px;
+}
+
+.folder-cell{
+  display:flex;
+  align-items: center;
+  /* padding-right:5px; */
+}
+
+.folder-cell-span{
+  padding-left:17px;
 }

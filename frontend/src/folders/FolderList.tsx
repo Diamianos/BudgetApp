@@ -43,6 +43,7 @@ export default function FolderList({folders, onSave, onDelete}: FolderListProps)
                             onEdit={handleEdit} 
                             onCancel={handleCancel}
                             onDelete={onDelete}
+                            onSave={onSave}
                             indexFolderBeingEdited={indexFolderBeingEdited} 
                         />
                     ))}

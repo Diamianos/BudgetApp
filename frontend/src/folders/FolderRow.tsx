@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Folder } from './Folder'
 import FolderCell from './FolderCell';
 
@@ -7,21 +7,26 @@ interface FolderRowProps{
     onEdit: (folder: Folder) => void;
     onCancel: () => void;
     onDelete: (folder: Folder) => void;
+    onSave: (folder: Folder) => void;
     indexFolderBeingEdited: number | undefined;
 }
 
 function FolderRow(props: FolderRowProps) {
-    const {folder, onEdit, onCancel, onDelete, indexFolderBeingEdited} = props;
+    const {folder:initalFolder, onEdit, onCancel, onDelete, onSave, indexFolderBeingEdited} = props;
+    const [folder, setFolder] = useState(initalFolder)
     const handleCancel = () => {
         onCancel();
     }
     const handleEdit = (folder: Folder) => {
         onEdit(folder);
     }
-
     const handleDelete = (folder: Folder) => {
         onDelete(folder);
     }
+    const handleSave = (folder: Folder) => {
+        onSave(folder);
+    }
+
 
     return (
         <tr>

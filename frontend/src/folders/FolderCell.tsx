@@ -15,10 +15,10 @@ function FolderCell(props : FolderCellProps) {
     }
 
     return (
-        <td data-label={label}>
+        <td className='folder-cell' data-label={label}>
             { indexFolderBeingEdited === folder_id ? <input value={value} 
             onChange={handleFieldEdit}
-            />: <span>{value}</span> } 
+            />: <span className='folder-cell-span'>{value}</span> } 
         </td> 
     )
 }
