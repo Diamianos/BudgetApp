@@ -21,7 +21,6 @@ function FolderRowNew(props: FolderRowNewProps) {
     }
 
     const handleChange = (event: any) => {
-        console.log(event)
         const {type, name, value} = event.target;
 
         let updatedValue = value;
@@ -42,17 +41,24 @@ function FolderRowNew(props: FolderRowNewProps) {
             updatedFolder = new Folder({...p, ...change});
             return updatedFolder;
         });
+
+        
     }
+
+    const handleFocus = (event: any) => {
+        event.target.select();
+    }
+    
     return (
         <tr className={hideNewFolder ? 'folder-row-new' : ''}>
             <td className='folder-cell' data-label="Name">
-                <input value={folder.name} name="name" onChange={handleChange}/> 
+                <input value={folder.name} name="name" onChange={handleChange} onFocus={handleFocus}/> 
             </td>
             <td className='folder-cell' data-label="Amount">
-                <input value={folder.amount} name="amount" type="number" onChange={handleChange}/> 
+                <input value={folder.amount} name="amount" type="number" onChange={handleChange} onFocus={handleFocus}/> 
             </td>
             <td className='folder-cell' data-label="Balance">
-                <input value={folder.balance} name="balance" type="number" onChange={handleChange}/> 
+                <input value={folder.balance} name="balance" type="number" onChange={handleChange} onFocus={handleFocus}/> 
             </td>
             <td data-label="Actions" className='action-buttons'>
                 <button

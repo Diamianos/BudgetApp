@@ -29,6 +29,7 @@ export default function FolderList({folders, onSave, onDelete}: FolderListProps)
 
     const handleNewFolder = (hideFolder: boolean) => {
         setHideNewFolder(hideFolder);
+        setFolderBeingEdited({});
     }
 
     const handleSave = (folder: Folder, newFolder: boolean) => {
@@ -42,7 +43,7 @@ export default function FolderList({folders, onSave, onDelete}: FolderListProps)
             <div>
                 <div className='new-folder-div'>
                     <button
-                        className="tertiary small new-folder-row-button"
+                        className="tertiary medium new-folder-row-button"
                         onClick={() => {handleNewFolder(false)}}
                         >New Folder
                     </button>
@@ -53,7 +54,7 @@ export default function FolderList({folders, onSave, onDelete}: FolderListProps)
                         <tr>
                         <th>Name</th>
                         <th>Amount</th>
-                        <th>Balance</th>
+                        <th>Remaining</th>
                         <th className="action-header text-center">Actions</th>
                         </tr>
                     </thead>
