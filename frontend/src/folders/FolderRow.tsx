@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import { Button, TableCell, TableRow, TextField } from '@mui/material';
+import React from 'react'
 import { Folder } from './Folder'
 
 interface FolderRowProps{
@@ -17,27 +18,30 @@ function FolderRow(props: FolderRowProps) {
     }
     
     return (
-        <tr>
-            <td className='folder-cell' data-label="Name">
-                <span className='folder-cell-span'>{folder.name}</span>
-            </td>
-            <td className='folder-cell' data-label="Amount">
-                <span className='folder-cell-span'>{folder.amount}</span> 
-            </td>
-            <td className='folder-cell' data-label="Balance">
-                <span className='folder-cell-span'>{folder.balance}</span> 
-            </td>
-            <td data-label="Actions" className='action-buttons'>
-                <button 
-                    className="primary small folder-row-button"
+        <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+            <TableCell align='center'>
+               <TextField size='small' InputProps={{readOnly: true}} defaultValue={folder.name} />
+            </TableCell>
+            <TableCell align='center'>
+                <TextField size='small' InputProps={{readOnly: true}} defaultValue={folder.amount}/>
+            </TableCell>
+            <TableCell align='center'>
+                <TextField size='small' InputProps={{readOnly: true}} defaultValue={folder.balance}/>
+            </TableCell>
+            <TableCell align='center'>
+                <Button
+                    sx={{minWidth:'71px'}}
+                    variant="contained"
                     onClick={() => {handleEdit(folder)}}>Edit
-                </button>
-                <button 
-                    className="secondary small folder-row-button"
+                </Button>
+                <Button
+                    sx={{marginLeft: 2}}
+                    variant="contained" 
+                    color='error'
                     onClick={() => {handleDelete(folder)}}>Delete
-                </button>
-            </td>
-        </tr>
+                </Button>
+            </TableCell>
+        </TableRow>
     )
 }
 

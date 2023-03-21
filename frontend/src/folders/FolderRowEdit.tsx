@@ -1,3 +1,4 @@
+import { Button, styled, TableCell, TableRow, TextField, withStyles } from '@mui/material';
 import React, { useState } from 'react'
 import { Folder } from './Folder';
 
@@ -6,6 +7,15 @@ interface FolderRowEditProps {
     onSave: (folder: Folder, newFolder: boolean) => void;
     onCancel: (newFolder: boolean) => void;
 }
+
+const GreenBorderTextField = styled(TextField)`
+        & .MuiOutlinedInput-root {
+            & fieldset {
+               border-color: green;
+               border-width: medium
+            }
+        }
+        `;
 
 function FolderRowEdit(props: FolderRowEditProps) {
     const {folder:initalFolder, onSave, onCancel} = props;
@@ -48,27 +58,48 @@ function FolderRowEdit(props: FolderRowEditProps) {
     }
     
     return (
-        <tr>
-            <td className='folder-cell' data-label="Name">
-                <input value={folder.name} name="name" onChange={handleChange} onFocus={handleFocus}/> 
-            </td>
-            <td className='folder-cell' data-label="Amount">
-                <input value={folder.amount} name="amount" type="number" onChange={handleChange} onFocus={handleFocus}/> 
-            </td>
-            <td className='folder-cell' data-label="Balance">
-                <input value={folder.balance} name="balance" type="number" onChange={handleChange} onFocus={handleFocus}/> 
-            </td>
-            <td data-label="Actions" className='action-buttons'>
-                <button
-                    className="tertiary small folder-row-button"
+        <TableRow>
+            <TableCell align='center'>
+                <GreenBorderTextField  
+                    size='small' 
+                    defaultValue={folder.name} 
+                    name="name" 
+                    onChange={handleChange}
+                    onFocus={handleFocus}/> 
+            </TableCell>
+            <TableCell align='center'>
+                <GreenBorderTextField 
+                    size='small' 
+                    defaultValue={folder.amount} 
+                    name="amount" 
+                    type='number'
+                    onChange={handleChange} 
+                    onFocus={handleFocus}/> 
+            </TableCell>
+            <TableCell align='center'>
+                <GreenBorderTextField 
+                    size='small' 
+                    defaultValue={folder.balance} 
+                    name="balance" 
+                    type='number'
+                    onChange={handleChange} 
+                    onFocus={handleFocus}/> 
+            </TableCell>
+            <TableCell align='center'>
+                <Button
+                    sx={{minWidth:'36px'}}
+                    variant="contained"
+                    color='success'
                     onClick={() => {handleSave(folder)}}>Save
-                </button> 
-                <button
-                    className="inverse small folder-row-button"
+                </Button> 
+                <Button
+                    sx={{marginLeft: 2}}
+                    variant="contained"
+                    color='warning'
                     onClick={() => {handleCancel()}}>Cancel
-                </button> 
-            </td>
-        </tr>
+                </Button> 
+            </TableCell>
+        </TableRow>
     )
 }
 

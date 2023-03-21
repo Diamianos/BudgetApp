@@ -1,5 +1,13 @@
 import React, { useState } from 'react'
-import { unstable_renderSubtreeIntoContainer } from 'react-dom';
+import Button from '@mui/material/Button';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+
 import { Folder } from './Folder'
 import FolderRow from './FolderRow'
 import FolderRowEdit from './FolderRowEdit';
@@ -40,25 +48,24 @@ export default function FolderList({folders, onSave, onDelete}: FolderListProps)
     }
 
     return (
-            <div>
+            <TableContainer>
                 <div className='new-folder-div'>
-                    <button
-                        className="tertiary medium new-folder-row-button"
+                    <Button variant="contained"
                         onClick={() => {handleNewFolder(false)}}
+                        color='success'
                         >New Folder
-                    </button>
+                    </Button>
                 </div> 
-                <table className="folder-table striped hoverable">
-                    <caption className='folder-table-caption'>Folders</caption>
-                    <thead>
-                        <tr>
-                        <th>Name</th>
-                        <th>Amount</th>
-                        <th>Remaining</th>
-                        <th className="action-header text-center">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+                <Table aria-label="simple table">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell sx={{fontSize: 16, fontWeight: 'bold' }} align='center'>Name</TableCell>
+                            <TableCell sx={{fontSize: 16, fontWeight: 'bold' }} align='center'>Amount</TableCell>
+                            <TableCell sx={{fontSize: 16, fontWeight: 'bold' }} align='center'>Remaining</TableCell>
+                            <TableCell sx={{fontSize: 16, fontWeight: 'bold' }} align='center'>Actions</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
                         <FolderRowNew onSave={handleSave} onCancel={handleCancel} hideNewFolder={hideNewFolder}/>
                         {folders.map((folder) => (
                             <React.Fragment key={folder.id}>
@@ -75,9 +82,9 @@ export default function FolderList({folders, onSave, onDelete}: FolderListProps)
                                 />}
                             </React.Fragment>
                         ))}
-                    </tbody>
-                </table>
-            </div>
+                    </TableBody>
+                </Table>
+            </TableContainer>
     )
 }
 

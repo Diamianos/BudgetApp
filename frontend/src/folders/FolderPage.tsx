@@ -25,13 +25,11 @@ function FoldersPage(){
     }
 
     return (
-    <>
         <FolderList 
             folders={folders} 
             onSave={handleSave}
             onDelete={handleDelete}
         />
-    </>
     )
 }
 
