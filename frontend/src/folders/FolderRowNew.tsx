@@ -22,6 +22,7 @@ function FolderRowNew(props: FolderRowNewProps) {
     }
 
     const handleChange = (event: any) => {
+        console.log("handleChange")
         const {type, name, value} = event.target;
 
         let updatedValue = value;
@@ -53,21 +54,23 @@ function FolderRowNew(props: FolderRowNewProps) {
     return (
         <TableRow sx={hideNewFolder ? {display: 'none'}: {display: 'table-row'}}>
             <TableCell align='center'>
-                <TextField size='small' defaultValue={folder.name} name="name" onChange={handleChange} onFocus={handleFocus}/> 
+                <TextField size='small' value={folder.name} name="name" onChange={handleChange} onFocus={handleFocus}/> 
             </TableCell>
             <TableCell align='center'>
-                <TextField size='small' defaultValue={folder.amount} name="amount" type="number" onChange={handleChange} onFocus={handleFocus}/> 
+                <TextField size='small' value={folder.amount} name="amount" type="number" onChange={handleChange} onFocus={handleFocus}/> 
             </TableCell>
             <TableCell align='center'>
-                <TextField size='small' defaultValue={folder.balance} name="balance" type="number" onChange={handleChange} onFocus={handleFocus}/> 
+                <TextField size='small' value={folder.balance} name="balance" type="number" onChange={handleChange} onFocus={handleFocus}/> 
             </TableCell>
             <TableCell align='center'>
                 <Button
+                    color='success'
                     variant="contained"
                     onClick={() => {handleSave(folder)}}>Save
                 </Button> 
                 <Button
                     sx={{marginLeft: 2}}
+                    color='warning'
                     variant="contained"
                     onClick={() => {handleCancel()}}>Cancel
                 </Button> 

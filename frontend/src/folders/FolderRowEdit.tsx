@@ -62,7 +62,7 @@ function FolderRowEdit(props: FolderRowEditProps) {
             <TableCell align='center'>
                 <GreenBorderTextField  
                     size='small' 
-                    defaultValue={folder.name} 
+                    value={folder.name} 
                     name="name" 
                     onChange={handleChange}
                     onFocus={handleFocus}/> 
@@ -70,7 +70,7 @@ function FolderRowEdit(props: FolderRowEditProps) {
             <TableCell align='center'>
                 <GreenBorderTextField 
                     size='small' 
-                    defaultValue={folder.amount} 
+                    value={folder.amount} 
                     name="amount" 
                     type='number'
                     onChange={handleChange} 
@@ -79,7 +79,7 @@ function FolderRowEdit(props: FolderRowEditProps) {
             <TableCell align='center'>
                 <GreenBorderTextField 
                     size='small' 
-                    defaultValue={folder.balance} 
+                    value={folder.balance}    
                     name="balance" 
                     type='number'
                     onChange={handleChange} 
