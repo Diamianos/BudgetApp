@@ -1,4 +1,4 @@
-import { Button, styled, TableCell, TableRow, TextField, withStyles } from '@mui/material';
+import { Button, TableCell, TableRow, TextField } from '@mui/material';
 import React, { useState } from 'react'
 import { Folder } from './Folder';
 
@@ -8,14 +8,6 @@ interface FolderRowEditProps {
     onCancel: (newFolder: boolean) => void;
 }
 
-const GreenBorderTextField = styled(TextField)`
-        & .MuiOutlinedInput-root {
-            & fieldset {
-               border-color: green;
-               border-width: medium
-            }
-        }
-        `;
 
 function FolderRowEdit(props: FolderRowEditProps) {
     const {folder:initalFolder, onSave, onCancel} = props;
@@ -56,34 +48,54 @@ function FolderRowEdit(props: FolderRowEditProps) {
     const handleFocus = (event: any) => {
         event.target.select();
     }
+
+    const style = {
+        "& label.Mui-focused": {
+            color: "rgba(0,0,0,0.23)"
+        },
+        "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+                borderColor: "#2e7d32",
+                borderWidth: "medium"
+            },
+            '&.Mui-focused fieldset': {
+                borderColor: '#2e7d32',
+                borderWidth: "medium"
+            },
+            '&:hover fieldset': {
+                borderColor: '#2e7d32',
+            }
+        },
+    }  
     
     return (
         <TableRow>
             <TableCell align='center'>
-                <GreenBorderTextField  
+                <TextField  
+                    sx={style}
                     size='small' 
                     value={folder.name} 
                     name="name" 
                     onChange={handleChange}
-                    onFocus={handleFocus}/> 
+                    onFocus={handleFocus}/>
             </TableCell>
             <TableCell align='center'>
-                <GreenBorderTextField 
+                <TextField  
+                    sx={style}
                     size='small' 
                     value={folder.amount} 
-                    name="amount" 
-                    type='number'
-                    onChange={handleChange} 
-                    onFocus={handleFocus}/> 
+                    name="name" 
+                    onChange={handleChange}
+                    onFocus={handleFocus}/>
             </TableCell>
             <TableCell align='center'>
-                <GreenBorderTextField 
+                <TextField  
+                    sx={style}
                     size='small' 
-                    value={folder.balance}    
-                    name="balance" 
-                    type='number'
-                    onChange={handleChange} 
-                    onFocus={handleFocus}/> 
+                    value={folder.balance} 
+                    name="name" 
+                    onChange={handleChange}
+                    onFocus={handleFocus}/>
             </TableCell>
             <TableCell align='center'>
                 <Button

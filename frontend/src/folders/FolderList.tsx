@@ -6,7 +6,6 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
 
 import { Folder } from './Folder'
 import FolderRow from './FolderRow'
@@ -49,6 +48,7 @@ export default function FolderList({folders, onSave, onDelete}: FolderListProps)
 
     return (
             <TableContainer>
+                <h2 className='table-header'>Folders</h2>
                 <div className='new-folder-div'>
                     <Button variant="contained"
                         onClick={() => {handleNewFolder(false)}}

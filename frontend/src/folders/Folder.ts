@@ -3,8 +3,8 @@ export class Folder{
     created_at: Date = new Date();
     updated_at: Date = new Date();
     name: string = '';
-    amount: number = 0;
-    balance: number = 0;
+    amount: string = '';
+    balance: string = '';
     get isNew(): boolean {
         return this.id === undefined;
     }

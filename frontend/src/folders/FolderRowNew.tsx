@@ -50,17 +50,36 @@ function FolderRowNew(props: FolderRowNewProps) {
     const handleFocus = (event: any) => {
         event.target.select();
     }
+
+    const style = {
+        "& label.Mui-focused": {
+            color: "rgba(0,0,0,0.23)"
+        },
+        "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+                borderColor: "#2e7d32",
+                borderWidth: "medium"
+            },
+            '&.Mui-focused fieldset': {
+                borderColor: '#2e7d32',
+                borderWidth: "medium"
+            },
+            '&:hover fieldset': {
+                borderColor: '#2e7d32',
+            }
+        },
+    }
     
     return (
         <TableRow sx={hideNewFolder ? {display: 'none'}: {display: 'table-row'}}>
             <TableCell align='center'>
-                <TextField size='small' value={folder.name} name="name" onChange={handleChange} onFocus={handleFocus}/> 
+                <TextField sx={style} size='small' value={folder.name} name="name" onChange={handleChange} onFocus={handleFocus}/> 
             </TableCell>
             <TableCell align='center'>
-                <TextField size='small' value={folder.amount} name="amount" type="number" onChange={handleChange} onFocus={handleFocus}/> 
+                <TextField sx={style} size='small' value={folder.amount} name="amount" type="number" onChange={handleChange} onFocus={handleFocus}/> 
             </TableCell>
             <TableCell align='center'>
-                <TextField size='small' value={folder.balance} name="balance" type="number" onChange={handleChange} onFocus={handleFocus}/> 
+                <TextField sx={style} size='small' value={folder.balance} name="balance" type="number" onChange={handleChange} onFocus={handleFocus}/> 
             </TableCell>
             <TableCell align='center'>
                 <Button
