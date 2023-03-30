@@ -1,5 +1,6 @@
 import { Button, TableCell, TableRow, TextField} from '@mui/material';
-import React from 'react'
+import React, { useState } from 'react'
+import ConfirmDialog from '../components/ConfirmDialog';
 import { Folder } from './Folder'
 
 interface FolderRowProps{
@@ -11,6 +12,8 @@ interface FolderRowProps{
 
 function FolderRow(props: FolderRowProps) {
     const {folder, onEdit, onDelete} = props;
+    const [open, setOpen] = useState(false);
+    
     const handleEdit = (folder: Folder) => {
         onEdit(folder);
     }
@@ -53,8 +56,9 @@ function FolderRow(props: FolderRowProps) {
                     sx={{marginLeft: 2}}
                     variant="contained" 
                     color='error'
-                    onClick={() => {handleDelete(folder)}}>Delete
+                    onClick={() => setOpen(true)}>Delete
                 </Button>
+                <ConfirmDialog title="Confirm" children="Are you sure you want to delete this folder?" open={open} setOpen= {setOpen} onConfirm={handleDelete} folder={folder}  />
             </TableCell>
         </TableRow>
     )
