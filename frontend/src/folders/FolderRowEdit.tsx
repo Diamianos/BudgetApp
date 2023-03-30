@@ -77,25 +77,28 @@ function FolderRowEdit(props: FolderRowEditProps) {
                     value={folder.name} 
                     name="name" 
                     onChange={handleChange}
-                    onFocus={handleFocus}/>
+                    onFocus={handleFocus}
+                    />
             </TableCell>
             <TableCell align='center'>
                 <TextField  
                     sx={style}
                     size='small' 
                     value={folder.amount} 
-                    name="name" 
+                    name="amount" 
                     onChange={handleChange}
-                    onFocus={handleFocus}/>
+                    onFocus={handleFocus}
+                    />
             </TableCell>
             <TableCell align='center'>
                 <TextField  
                     sx={style}
                     size='small' 
                     value={folder.balance} 
-                    name="name" 
+                    name="balance" 
                     onChange={handleChange}
-                    onFocus={handleFocus}/>
+                    onFocus={handleFocus}
+                    />
             </TableCell>
             <TableCell align='center'>
                 <Button

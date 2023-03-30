@@ -1,3 +1,6 @@
+## Tutorial Link
+https://handsonreact.com/docs/labs/ts/HTTP-GET
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

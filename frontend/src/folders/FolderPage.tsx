@@ -9,21 +9,25 @@ function FoldersPage(){
     // const [folders, setFolders] = useState<Folder[]>(MOCK_FOLDERS)
     const [folders, setFolders] = useState<Folder[]>([])
 
-    const handleSave = (folder: Folder, newFolder: boolean) => {
+    const handleSave = async (folder: Folder, newFolder: boolean) => {
         let updatedFolders: React.SetStateAction<Folder[]> = [];
         if (newFolder){
-            folder.id = folders.length + 1;
+            const newFolder = await folderAPI.post(folder)
             updatedFolders = [...folders];
-            updatedFolders.push(folder);
+            updatedFolders.push(new Folder(newFolder));
         } else {
+            const updatedFolder = await folderAPI.put(folder)
             updatedFolders = folders.map((f:Folder) => {
-                return f.id === folder.id ? folder : f
+                return f.id === updatedFolder.id ? updatedFolder : f
             })}
         setFolders(updatedFolders);
     }
-    const handleDelete = (folder: Folder) => {
-        let updatedFolders = folders.filter(f => folder.id !== f.id);
-        setFolders(updatedFolders);
+    const handleDelete = async (folder: Folder) => {
+        const response = await folderAPI.delete(folder)
+        if (response.ok){
+            let updatedFolders = folders.filter(f => folder.id !== f.id);
+            setFolders(updatedFolders);
+        }   
     }
 
     useEffect(() => {
