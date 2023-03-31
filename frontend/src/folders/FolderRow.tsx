@@ -33,7 +33,7 @@ function FolderRow(props: FolderRowProps) {
             borderColor: 'rgba(0,0,0,0.23)',
         }
         },
-      }  
+    }
 
     return (
         <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>

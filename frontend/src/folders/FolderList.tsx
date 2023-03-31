@@ -11,6 +11,7 @@ import { Folder } from './Folder'
 import FolderRow from './FolderRow'
 import FolderRowEdit from './FolderRowEdit';
 import FolderRowNew from './FolderRowNew';
+import FolderTotal from './FolderTotal';
 
 // https://minicss.us/docs.htm#tables
 
@@ -82,6 +83,7 @@ export default function FolderList({folders, onSave, onDelete}: FolderListProps)
                                 />}
                             </React.Fragment>
                         ))}
+                        <FolderTotal folders={folders}/>
                     </TableBody>
                 </Table>
             </TableContainer>
