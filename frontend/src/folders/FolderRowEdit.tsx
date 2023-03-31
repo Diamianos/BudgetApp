@@ -45,6 +45,13 @@ function FolderRowEdit(props: FolderRowEditProps) {
         });
     }
 
+    const handleKeyDown = (event: any) => {
+        if (event.key === 'Enter'){
+            console.log("Enter was pressed");
+            handleSave(folder);
+        }
+    }
+
     const handleFocus = (event: any) => {
         event.target.select();
     }
@@ -72,6 +79,7 @@ function FolderRowEdit(props: FolderRowEditProps) {
         <TableRow>
             <TableCell align='center'>
                 <TextField  
+                    autoFocus={true}
                     sx={style}
                     size='small' 
                     value={folder.name} 
@@ -98,6 +106,7 @@ function FolderRowEdit(props: FolderRowEditProps) {
                     name="balance" 
                     onChange={handleChange}
                     onFocus={handleFocus}
+                    onKeyDown={handleKeyDown}
                     />
             </TableCell>
             <TableCell align='center'>

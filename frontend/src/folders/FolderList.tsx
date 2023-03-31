@@ -66,7 +66,7 @@ export default function FolderList({folders, onSave, onDelete}: FolderListProps)
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        <FolderRowNew onSave={handleSave} onCancel={handleCancel} hideNewFolder={hideNewFolder}/>
+                        {!hideNewFolder && <FolderRowNew onSave={handleSave} onCancel={handleCancel}/>}
                         {folders.map((folder) => (
                             <React.Fragment key={folder.id}>
                                 {folder === folderBeingEdited ?

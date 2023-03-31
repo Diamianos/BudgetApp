@@ -5,11 +5,10 @@ import { Folder } from './Folder'
 interface FolderRowNewProps{
     onSave: (folder: Folder, newFolder: boolean) => void;
     onCancel: (newFolder: boolean) => void;
-    hideNewFolder: boolean;
 }
 
 function FolderRowNew(props: FolderRowNewProps) {
-    const {onSave, onCancel, hideNewFolder} = props;
+    const {onSave, onCancel} = props;
     const [folder, setFolder] = useState(new Folder())
 
     const handleSave = (folder: Folder) => {
@@ -43,8 +42,13 @@ function FolderRowNew(props: FolderRowNewProps) {
             updatedFolder = new Folder({...p, ...change});
             return updatedFolder;
         });
+    }
 
-        
+    const handleKeyDown = (event: any) => {
+        if (event.key === 'Enter'){
+            console.log("Enter was pressed");
+            handleSave(folder);
+        }
     }
 
     const handleFocus = (event: any) => {
@@ -71,15 +75,15 @@ function FolderRowNew(props: FolderRowNewProps) {
     }
     
     return (
-        <TableRow sx={hideNewFolder ? {display: 'none'}: {display: 'table-row'}}>
+        <TableRow>
             <TableCell align='center'>
-                <TextField sx={style} size='small' value={folder.name} name="name" onChange={handleChange} onFocus={handleFocus}/> 
+                <TextField sx={style} size='small' value={folder.name} name="name" onChange={handleChange} onFocus={handleFocus} autoFocus={true}/> 
             </TableCell>
             <TableCell align='center'>
                 <TextField sx={style} size='small' value={folder.amount} name="amount" type="number" onChange={handleChange} onFocus={handleFocus}/> 
             </TableCell>
             <TableCell align='center'>
-                <TextField sx={style} size='small' value={folder.balance} name="balance" type="number" onChange={handleChange} onFocus={handleFocus}/> 
+                <TextField sx={style} size='small' value={folder.balance} name="balance" type="number" onChange={handleChange} onFocus={handleFocus} onKeyDown={handleKeyDown}/> 
             </TableCell>
             <TableCell align='center'>
                 <Button

@@ -27,18 +27,18 @@ function ConfirmDialog(props: ConfirmDialogProps) {
             <DialogActions>
                 <Button
                     variant="contained"
-                    onClick={() => setOpen(false)}
-                    color="secondary"
-                    >No
-                </Button>
-                <Button
-                    variant="contained"
                     onClick={() => {
                         setOpen(false);
                         onConfirm(folder);
                     }}
-                    color="primary"
+                    color="error"
                     >Yes
+                </Button>
+                <Button
+                    variant="contained"
+                    onClick={() => setOpen(false)}
+                    color="primary"
+                    >No
                 </Button>
             </DialogActions>
         </Dialog>
