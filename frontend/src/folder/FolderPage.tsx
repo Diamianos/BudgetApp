@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Folder } from './Folder'
 import FolderList from './FolderList'
 // import { MOCK_FOLDERS } from './MockFolders'
-import { folderAPI } from './FolderAPI'
+import { folderAPI } from '../apis/FolderAPI'
 
 function FoldersPage(){
 

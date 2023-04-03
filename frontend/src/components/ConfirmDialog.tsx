@@ -4,7 +4,7 @@ import {Dialog} from '@mui/material';
 import {DialogActions} from '@mui/material';
 import {DialogContent} from '@mui/material';
 import {DialogTitle} from '@mui/material';
-import { Folder } from '../folders/Folder';
+import { Folder } from '../folder/Folder';
 
 interface ConfirmDialogProps{
     folder: Folder

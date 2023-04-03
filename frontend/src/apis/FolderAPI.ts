@@ -1,4 +1,4 @@
-import { Folder } from './Folder';
+import { Folder } from '../folder/Folder';
 
 function translateStatusToErrorMessage(status: number) {
   switch (status) {

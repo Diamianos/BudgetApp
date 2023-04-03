@@ -8,10 +8,10 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 
 import { Folder } from './Folder'
-import FolderRow from './FolderRow'
-import FolderRowEdit from './FolderRowEdit';
-import FolderRowNew from './FolderRowNew';
-import FolderTotal from './FolderTotal';
+import FolderRow from './folderRows/FolderRow'
+import FolderRowEdit from './folderRows/FolderRowEdit';
+import FolderRowNew from './folderRows/FolderRowNew';
+import FolderTotal from './folderRows/FolderRowTotal';
 
 // https://minicss.us/docs.htm#tables
 

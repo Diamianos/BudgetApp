@@ -1,7 +1,7 @@
 import { Button, TableCell, TableRow, TextField} from '@mui/material';
 import React, { useState } from 'react'
-import ConfirmDialog from '../components/ConfirmDialog';
-import { Folder } from './Folder'
+import ConfirmDialog from '../../components/ConfirmDialog';
+import { Folder } from '../Folder'
 
 interface FolderRowProps{
     folder:Folder;

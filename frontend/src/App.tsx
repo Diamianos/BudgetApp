@@ -2,7 +2,7 @@ import React from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import { Container } from '@mui/system';
 
-import FoldersPage from './folders/FolderPage';
+import FoldersPage from './folder/FolderPage';
 
 function App() {
   return (

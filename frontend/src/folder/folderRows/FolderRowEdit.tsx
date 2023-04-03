@@ -1,27 +1,28 @@
 import { Button, TableCell, TableRow, TextField } from '@mui/material';
 import React, { useState } from 'react'
-import { Folder } from './Folder'
+import { Folder } from '../Folder';
 
-interface FolderRowNewProps{
+interface FolderRowEditProps {
+    folder: Folder;
     onSave: (folder: Folder, newFolder: boolean) => void;
     onCancel: (newFolder: boolean) => void;
 }
 
-function FolderRowNew(props: FolderRowNewProps) {
-    const {onSave, onCancel} = props;
-    const [folder, setFolder] = useState(new Folder())
 
-    const handleSave = (folder: Folder) => {
-        onSave(folder, true);
-        setFolder(new Folder())
+function FolderRowEdit(props: FolderRowEditProps) {
+    const {folder:initalFolder, onSave, onCancel} = props;
+    const [folder, setFolder] = useState(initalFolder)
+    
+    const handleCancel = () => {
+        onCancel(false);
     }
 
-    const handleCancel = () => {
-        onCancel(true);
+    const handleSave = (folder: Folder) => {
+        onSave(folder, false);
     }
 
     const handleChange = (event: any) => {
-        console.log("handleChange")
+        console.log(event)
         const {type, name, value} = event.target;
 
         let updatedValue = value;
@@ -72,26 +73,43 @@ function FolderRowNew(props: FolderRowNewProps) {
                 borderColor: '#2e7d32',
             }
         },
-    }
+    } 
     
     return (
         <TableRow>
             <TableCell align='center'>
-                <TextField sx={style} size='small' value={folder.name} name="name" onChange={handleChange} onFocus={handleFocus} autoFocus={true}/> 
+                <TextField  
+                    autoFocus={true}
+                    sx={style}
+                    size='small' 
+                    value={folder.name} 
+                    name="name" 
+                    onChange={handleChange}
+                    onFocus={handleFocus}
+                    />
             </TableCell>
             <TableCell align='center'>
-                <TextField sx={style} size='small' value={folder.amount} name="amount" type="number" onChange={handleChange} onFocus={handleFocus} onKeyDown={handleKeyDown}/> 
+                <TextField  
+                    sx={style}
+                    size='small' 
+                    value={folder.amount} 
+                    name="amount" 
+                    onChange={handleChange}
+                    onFocus={handleFocus}
+                    onKeyDown={handleKeyDown}
+                    />
             </TableCell>
             <TableCell align='center'>
                 <Button
-                    color='success'
+                    sx={{minWidth:'36px'}}
                     variant="contained"
+                    color='success'
                     onClick={() => {handleSave(folder)}}>Save
                 </Button> 
                 <Button
                     sx={{marginLeft: 2}}
-                    color='warning'
                     variant="contained"
+                    color='warning'
                     onClick={() => {handleCancel()}}>Cancel
                 </Button> 
             </TableCell>
@@ -99,4 +117,4 @@ function FolderRowNew(props: FolderRowNewProps) {
     )
 }
 
-export default FolderRowNew
+export default FolderRowEdit

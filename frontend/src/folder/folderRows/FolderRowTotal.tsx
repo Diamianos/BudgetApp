@@ -1,14 +1,14 @@
 import { TableCell, TableRow } from '@mui/material'
-import { Folder } from './Folder';
+import { Folder } from '../Folder';
 import React from 'react'
 
 interface FolderTotalProps{
     folders: Folder[];
 }
 
-function FolderTotal({folders}: FolderTotalProps) {
+function FolderRowTotal({folders}: FolderTotalProps) {
 
-    const calculateFolderTotal = (folders: Folder[]) => {
+    const calculateFoldersTotal = (folders: Folder[]) => {
         let values = folders.map((f) => {
             return parseInt(f.amount)
         })
@@ -18,11 +18,11 @@ function FolderTotal({folders}: FolderTotalProps) {
 
     return (
         <TableRow>
-            <TableCell sx={{fontSize:"20px", fontWeight:"bold"}} align='center' colSpan={2}>
-                Total: {calculateFolderTotal(folders)}
+            <TableCell sx={{fontSize:"18px", fontWeight:"bold"}} align='center' colSpan={2}>
+                Total: {calculateFoldersTotal(folders)}
             </TableCell>
         </TableRow>
     )
 }
 
-export default FolderTotal
+export default FolderRowTotal
