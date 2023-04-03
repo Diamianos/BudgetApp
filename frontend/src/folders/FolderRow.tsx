@@ -44,9 +44,6 @@ function FolderRow(props: FolderRowProps) {
                 <TextField sx={style} size='small' InputProps={{readOnly: true}} value={folder.amount}/>
             </TableCell>
             <TableCell align='center'>
-                <TextField sx={style} size='small' InputProps={{readOnly: true}} value={folder.balance}/>
-            </TableCell>
-            <TableCell align='center'>
                 <Button
                     sx={{minWidth:'71px'}}
                     variant="contained"

@@ -62,7 +62,6 @@ export default function FolderList({folders, onSave, onDelete}: FolderListProps)
                         <TableRow>
                             <TableCell sx={{fontSize: 16, fontWeight: 'bold' }} align='center'>Name</TableCell>
                             <TableCell sx={{fontSize: 16, fontWeight: 'bold' }} align='center'>Amount</TableCell>
-                            <TableCell sx={{fontSize: 16, fontWeight: 'bold' }} align='center'>Remaining</TableCell>
                             <TableCell sx={{fontSize: 16, fontWeight: 'bold' }} align='center'>Actions</TableCell>
                         </TableRow>
                     </TableHead>

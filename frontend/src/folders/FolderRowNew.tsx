@@ -82,9 +82,6 @@ function FolderRowNew(props: FolderRowNewProps) {
             <TableCell align='center'>
                 <TextField sx={style} size='small' value={folder.amount} name="amount" type="number" onChange={handleChange} onFocus={handleFocus} onKeyDown={handleKeyDown}/> 
             </TableCell>
-            <TableCell>
-                <TextField sx={{display: 'none'}}/> 
-            </TableCell>
             <TableCell align='center'>
                 <Button
                     color='success'

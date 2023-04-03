@@ -75,20 +75,6 @@ function FolderRowEdit(props: FolderRowEditProps) {
         },
     } 
     
-    const readOnlyStyle = {
-        "& label.Mui-focused": {
-          color: "rgba(0,0,0,0.23)"
-        },
-        "& .MuiOutlinedInput-root": {
-          "&.Mui-focused fieldset": {
-            borderColor: "rgba(0,0,0,0.23)"
-          },
-          '&:hover fieldset': {
-            borderColor: 'rgba(0,0,0,0.23)',
-        }
-        },
-      } 
-    
     return (
         <TableRow>
             <TableCell align='center'>
@@ -111,17 +97,6 @@ function FolderRowEdit(props: FolderRowEditProps) {
                     onChange={handleChange}
                     onFocus={handleFocus}
                     onKeyDown={handleKeyDown}
-                    />
-            </TableCell>
-            <TableCell align='center'>
-                <TextField  
-                    sx={readOnlyStyle}
-                    size='small' 
-                    value={folder.balance} 
-                    name="balance" 
-                    onChange={handleChange}
-                    onFocus={handleFocus}
-                    InputProps={{readOnly: true}}
                     />
             </TableCell>
             <TableCell align='center'>

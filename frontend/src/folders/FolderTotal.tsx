@@ -18,7 +18,9 @@ function FolderTotal({folders}: FolderTotalProps) {
 
     return (
         <TableRow>
-            <TableCell>FolderTotal: {calculateFolderTotal(folders)}</TableCell>
+            <TableCell sx={{fontSize:"20px", fontWeight:"bold"}} align='center' colSpan={2}>
+                Total: {calculateFolderTotal(folders)}
+            </TableCell>
         </TableRow>
     )
 }
