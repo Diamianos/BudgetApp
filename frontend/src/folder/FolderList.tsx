@@ -49,7 +49,6 @@ export default function FolderList({folders, onSave, onDelete}: FolderListProps)
 
     return (
             <TableContainer>
-                <h2 className='table-header'>Folders</h2>
                 <div className='new-folder-div'>
                     <Button variant="contained"
                         onClick={() => {handleNewFolder(false)}}

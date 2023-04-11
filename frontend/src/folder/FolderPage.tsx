@@ -3,11 +3,14 @@ import { Folder } from './Folder'
 import FolderList from './FolderList'
 // import { MOCK_FOLDERS } from './MockFolders'
 import { folderAPI } from '../apis/FolderAPI'
+import { Box } from '@mui/system'
+import { CircularProgress } from '@mui/material'
 
 function FoldersPage(){
 
     // const [folders, setFolders] = useState<Folder[]>(MOCK_FOLDERS)
     const [folders, setFolders] = useState<Folder[]>([])
+    const [loading, setLoading] = useState(false)
 
     const handleSave = async (folder: Folder, newFolder: boolean) => {
         let updatedFolders: React.SetStateAction<Folder[]> = [];
@@ -32,6 +35,7 @@ function FoldersPage(){
 
     useEffect(() => {
         async function loadFolders() {
+          setLoading(true)
           try {
             const data = await folderAPI.get();
             setFolders(data);
@@ -40,16 +44,28 @@ function FoldersPage(){
             if (e instanceof Error) {
               console.log(e.message);
             }}
+            finally{
+                setLoading(false)
+            }
         }
         loadFolders();
       }, []);
 
     return (
-        <FolderList 
-            folders={folders} 
-            onSave={handleSave}
-            onDelete={handleDelete}
-        />
+        <>
+            <h2 className='table-header'>Folders</h2>
+            {loading ? 
+                (<Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <CircularProgress />
+                </Box>) 
+                : 
+                (<FolderList 
+                folders={folders} 
+                onSave={handleSave}
+                onDelete={handleDelete}
+                /> )
+            }
+        </>
     )
 }
 

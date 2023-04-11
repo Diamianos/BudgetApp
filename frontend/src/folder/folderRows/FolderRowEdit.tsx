@@ -90,6 +90,7 @@ function FolderRowEdit(props: FolderRowEditProps) {
             </TableCell>
             <TableCell align='center'>
                 <TextField  
+                    type="number"
                     sx={style}
                     size='small' 
                     value={folder.amount} 
