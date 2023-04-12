@@ -10,8 +10,31 @@ interface FolderRowNewProps{
 function FolderRowNew(props: FolderRowNewProps) {
     const {onSave, onCancel} = props;
     const [folder, setFolder] = useState(new Folder())
+    const [errors, setErrors] = useState({
+        name: false,
+        amount: false
+    })
+
+    function validate(folder: Folder) {
+        let errors: any = {name: false, amount: false};
+        if (folder.name.length <= 3){
+            errors.name = true;
+        }
+        if (parseInt(folder.amount) < 0 || folder.amount === ''){
+            errors.amount = true;
+        }
+        return errors;
+
+    }
+    
+    function isValid(){
+        return (
+            errors.name === false && errors.amount === false
+        )
+    }
 
     const handleSave = (folder: Folder) => {
+        if (!isValid()) return;
         onSave(folder, true);
         setFolder(new Folder())
     }
@@ -32,16 +55,14 @@ function FolderRowNew(props: FolderRowNewProps) {
         const change = {
             [name]: updatedValue
         };
-        let updatedFolder: Folder;
         // need to do functional updated b/c
         // the new project state is based on the previous project state
         // so we can keep the project properties that aren't being edited like project.id
         // the spread operator (...) is used to 
         // spread the previous project properties and the new change
-        setFolder((p) => {
-            updatedFolder = new Folder({...p, ...change});
-            return updatedFolder;
-        });
+        let updatedFolder: Folder = new Folder({...folder, ...change});
+        setFolder(updatedFolder);
+        setErrors(() => validate(updatedFolder))
     }
 
     const handleKeyDown = (event: any) => {
@@ -77,10 +98,28 @@ function FolderRowNew(props: FolderRowNewProps) {
     return (
         <TableRow>
             <TableCell align='center'>
-                <TextField sx={style} size='small' value={folder.name} name="name" onChange={handleChange} onFocus={handleFocus} autoFocus={true}/> 
+                <TextField 
+                    error={errors.name ? true : false}
+                    label={errors.name ? 'error' : ''}
+                    sx={errors.name ? null : style}
+                    size='small' 
+                    value={folder.name} 
+                    name="name" 
+                    onChange={handleChange} 
+                    onFocus={handleFocus} autoFocus={true}/> 
             </TableCell>
             <TableCell align='center'>
-                <TextField sx={style} size='small' value={folder.amount} name="amount" type="number" onChange={handleChange} onFocus={handleFocus} onKeyDown={handleKeyDown}/> 
+                <TextField 
+                    error={errors.amount ? true : false}
+                    label={errors.amount ? 'error' : ''}
+                    sx={errors.amount ? null : style}
+                    size='small' 
+                    value={folder.amount} 
+                    name="amount" 
+                    type="number" 
+                    onChange={handleChange} 
+                    onFocus={handleFocus} 
+                    onKeyDown={handleKeyDown}/> 
             </TableCell>
             <TableCell align='center'>
                 <Button

@@ -12,17 +12,39 @@ interface FolderRowEditProps {
 function FolderRowEdit(props: FolderRowEditProps) {
     const {folder:initalFolder, onSave, onCancel} = props;
     const [folder, setFolder] = useState(initalFolder)
+    const [errors, setErrors] = useState({
+        name: false,
+        amount: false
+    })
+
+    function validate(folder: Folder) {
+        let errors: any = {name: false, amount: false};
+        if (folder.name.length <= 3){
+            errors.name = true;
+        }
+        if (parseInt(folder.amount) < 0 || folder.amount === ''){
+            errors.amount = true;
+        }
+        return errors;
+
+    }
     
+    function isValid(){
+        return (
+            errors.name === false && errors.amount === false
+        )
+    }
+
     const handleCancel = () => {
         onCancel(false);
     }
 
     const handleSave = (folder: Folder) => {
+        if (!isValid()) return;
         onSave(folder, false);
     }
 
     const handleChange = (event: any) => {
-        console.log(event)
         const {type, name, value} = event.target;
 
         let updatedValue = value;
@@ -33,21 +55,19 @@ function FolderRowEdit(props: FolderRowEditProps) {
         const change = {
             [name]: updatedValue
         };
-        let updatedFolder: Folder;
+
         // need to do functional updated b/c
         // the new project state is based on the previous project state
         // so we can keep the project properties that aren't being edited like project.id
         // the spread operator (...) is used to 
         // spread the previous project properties and the new change
-        setFolder((p) => {
-            updatedFolder = new Folder({...p, ...change});
-            return updatedFolder;
-        });
+        let updatedFolder: Folder = new Folder({...folder, ...change});
+        setFolder(updatedFolder);
+        setErrors(() => validate(updatedFolder))
     }
 
     const handleKeyDown = (event: any) => {
         if (event.key === 'Enter'){
-            console.log("Enter was pressed");
             handleSave(folder);
         }
     }
@@ -78,27 +98,31 @@ function FolderRowEdit(props: FolderRowEditProps) {
     return (
         <TableRow>
             <TableCell align='center'>
-                <TextField  
-                    autoFocus={true}
-                    sx={style}
-                    size='small' 
-                    value={folder.name} 
-                    name="name" 
-                    onChange={handleChange}
-                    onFocus={handleFocus}
-                    />
+                <TextField 
+                error={errors.name ? true : false}
+                label={errors.name ? 'error' : ''}
+                sx={errors.name ? null : style}
+                autoFocus={true}
+                size='small' 
+                value={folder.name} 
+                name="name" 
+                onChange={handleChange}
+                onFocus={handleFocus}
+                />       
             </TableCell>
             <TableCell align='center'>
-                <TextField  
-                    type="number"
-                    sx={style}
-                    size='small' 
-                    value={folder.amount} 
-                    name="amount" 
-                    onChange={handleChange}
-                    onFocus={handleFocus}
-                    onKeyDown={handleKeyDown}
-                    />
+                <TextField 
+                error={errors.amount ? true : false}
+                label={errors.amount ? 'error' : ''}
+                sx={errors.amount ? null : style}
+                type="number"
+                size='small' 
+                value={folder.amount} 
+                name="amount" 
+                onChange={handleChange}
+                onFocus={handleFocus}
+                onKeyDown={handleKeyDown}
+                />        
             </TableCell>
             <TableCell align='center'>
                 <Button
