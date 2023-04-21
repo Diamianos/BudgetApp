@@ -56,12 +56,7 @@ export default function FolderList({folders, onSave, onDelete}: FolderListProps)
                         color='success'
                         >New Folder
                     </Button>
-                    <Button
-                        href='/subfolders' 
-                        variant="contained"
-                        color='secondary'
-                        >To Sub Folders
-                    </Button>
+                    
                 </div> 
                 <Table aria-label="simple table">
                     <TableHead>
@@ -91,6 +86,14 @@ export default function FolderList({folders, onSave, onDelete}: FolderListProps)
                         <FolderTotal folders={folders}/>
                     </TableBody>
                 </Table>
+                <div className='create-subfolders-div'>
+                    <Button
+                    href='/create_subfolders' 
+                    variant="contained"
+                    color='secondary'
+                    >Create Sub Folders
+                    </Button>
+                </div>
             </TableContainer>
     )
 }

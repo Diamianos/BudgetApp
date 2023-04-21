@@ -6,6 +6,7 @@ import { Container } from '@mui/system';
 import FoldersPage from './folder/FolderPage';
 import SubFoldersPage from './folder/subFolder/SubFoldersPage'
 import Navbar from './components/Navbar';
+import CreateSubFoldersPage from './folder/subFolder/CreateSubFoldersPage';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Container>
           <Routes>
             <Route path="/" element={<FoldersPage />}></Route>
+            <Route path="/create_subfolders" element={<CreateSubFoldersPage />}></Route>
             <Route path="/subfolders" element={<SubFoldersPage />}></Route>
           </Routes>
         </Container>
