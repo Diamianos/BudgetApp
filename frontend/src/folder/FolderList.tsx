@@ -14,6 +14,7 @@ import FolderRowNew from './folderRows/FolderRowNew';
 import FolderTotal from './folderRows/FolderRowTotal';
 
 // https://minicss.us/docs.htm#tables
+// Beautiful React DND tutorial for drag-and-drop list functionality: https://egghead.io/lessons/react-set-up-a-react-environment-with-create-react-app
 
 interface FolderListProps {
     folders: Folder[];
@@ -54,6 +55,12 @@ export default function FolderList({folders, onSave, onDelete}: FolderListProps)
                         onClick={() => {handleNewFolder(false)}}
                         color='success'
                         >New Folder
+                    </Button>
+                    <Button
+                        href='/subfolders' 
+                        variant="contained"
+                        color='secondary'
+                        >To Sub Folders
                     </Button>
                 </div> 
                 <Table aria-label="simple table">
