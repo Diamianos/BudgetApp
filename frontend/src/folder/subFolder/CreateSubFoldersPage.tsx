@@ -1,14 +1,50 @@
 import React, { useState } from 'react'
 import { InitialData } from './InitialData'
 import Column from './Column'
-import {DragDropContext} from 'react-beautiful-dnd'
+import {DragDropContext, DropResult} from 'react-beautiful-dnd'
 
 function CreateSubFoldersPage() {
 
     const [foldersAndColumns, setFoldersAndColumns] = useState(InitialData)
 
-    const handleOnDragEnd = (result:any) =>
-        console.log('handleOnDragEnd()')
+    const handleOnDragEnd = (result: DropResult) => {
+
+        const {destination, source, draggableId } = result;
+
+        if (!destination) {
+            return;
+        }
+
+        if (destination.droppableId === source.droppableId &&
+            destination.index === source.index
+        ){
+            return;
+        }
+
+
+
+        const column = foldersAndColumns.columns[source.droppableId as keyof typeof foldersAndColumns.columns];
+        const newFolderIds = Array.from(column.folderIds)
+
+        newFolderIds.splice(source.index, 1);
+        newFolderIds.splice(destination.index, 0, draggableId);
+
+
+        const newColumn = {
+            ...column,
+            folderIds: newFolderIds,
+        };
+
+        const newState = {
+            ...foldersAndColumns,
+            columns: {
+                ...foldersAndColumns.columns,
+                [newColumn.id]: newColumn
+            },
+        };
+
+        setFoldersAndColumns(newState);
+    };
 
     return (
         <DragDropContext

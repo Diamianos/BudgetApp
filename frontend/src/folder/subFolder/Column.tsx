@@ -18,7 +18,10 @@ function Column({column, folders}: ColumnProps) {
                 {(provided) => (    
                     <FolderList 
                     provided={provided}
-                    folders={folders}></FolderList> 
+                    folders={folders}
+                    column={column}
+                    ></FolderList> 
+                    
                 )}
             </Droppable>
     </Container>
