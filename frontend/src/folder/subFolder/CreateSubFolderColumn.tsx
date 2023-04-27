@@ -1,9 +1,9 @@
 import React from 'react'
 import {Folder} from '../Folder'
 import Container from '@mui/material/Container';
-import { Typography } from '@mui/material';
-import { StrictModeDroppable } from './StrictModeDroppable';
-import FolderList from './FolderList';
+import { Box, Typography } from '@mui/material';
+import { StrictModeDroppable } from '../../components/StrictModeDroppable';
+import CreateSubFolderList from './CreateSubFolderList';
 
 interface ColumnProps{
     column: {id: string; title: string; folderIds: string[]};
@@ -16,13 +16,11 @@ function Column({column, folders}: ColumnProps) {
         <Typography variant='h4' sx={{padding:'8px'}}>{column.title}</Typography>
             <StrictModeDroppable droppableId={column.id}>
                 {(provided, snapshot) => (    
-                    <FolderList 
+                    <CreateSubFolderList 
                     provided={provided}
                     snapshot={snapshot}
                     folders={folders}
-                    
-                    ></FolderList> 
-                    
+                    ></CreateSubFolderList> 
                 )}
             </StrictModeDroppable>
     </Container>

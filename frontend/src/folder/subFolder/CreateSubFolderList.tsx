@@ -10,14 +10,13 @@ interface FolderListProps{
   snapshot: DroppableStateSnapshot,
 }
 
-function FolderList({ folders, provided, snapshot}: FolderListProps) {
+function CreateSubFolderList({ folders, provided, snapshot}: FolderListProps) {
   return (
     <Container 
     ref={provided.innerRef}
     {...provided.droppableProps}
     disableGutters 
-    sx={{padding: '8px', transition: 'background-color 0.2s ease', backgroundColor: snapshot.isDraggingOver ? 'aquamarine' : 'white', flexGrow: '1'}}
-    >
+    sx={{padding: '8px', transition: 'background-color 0.2s ease', backgroundColor: snapshot.isDraggingOver ? 'aquamarine' : 'white', flexGrow: '1'}}>
     {folders.map((folder, index) => 
       <Draggable key={folder.id} draggableId={folder.id.toString()} index={index}>
         {(provided, snapshot) => (
@@ -37,4 +36,4 @@ function FolderList({ folders, provided, snapshot}: FolderListProps) {
   )
 }
 
-export default FolderList
+export default CreateSubFolderList
