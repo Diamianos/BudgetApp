@@ -34,6 +34,7 @@ export const InitialData  = {
             amount: "200",
             balance: "200",
         }),
+
     },
     columns: {
         'column-1': {

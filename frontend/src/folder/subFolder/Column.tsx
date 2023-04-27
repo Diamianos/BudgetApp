@@ -14,8 +14,13 @@ function Column({column, folders}: ColumnProps) {
   return (
     <Container sx={{border: '1px solid grey', marginTop:'8px'}}>
         <Typography variant='h4' sx={{padding:'8px'}}>{column.title}</Typography>
-                <FolderList     
-                folders={folders}></FolderList> 
+            <Droppable droppableId={column.id}>
+                {(provided) => (    
+                    <FolderList 
+                    provided={provided}
+                    folders={folders}></FolderList> 
+                )}
+            </Droppable>
     </Container>
   )
 }

@@ -1,5 +1,5 @@
 export class Folder{
-    id: number | undefined;
+    id: number | any;
     created_at: Date = new Date();
     updated_at: Date = new Date();
     name: string = '';
