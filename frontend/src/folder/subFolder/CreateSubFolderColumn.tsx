@@ -20,6 +20,7 @@ function Column({column, folders}: ColumnProps) {
                     provided={provided}
                     snapshot={snapshot}
                     folders={folders}
+                    column = {column}
                     ></CreateSubFolderList> 
                 )}
             </StrictModeDroppable>
