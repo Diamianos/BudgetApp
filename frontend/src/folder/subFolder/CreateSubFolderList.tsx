@@ -14,11 +14,15 @@ interface FolderListProps{
 
 function CreateSubFolderList({ folders, column, provided, snapshot}: FolderListProps) {
 
-  const [splitFolder, setSplitFolder] = useState(false);
-
+  const [dialogInformation, setDialogInformation] = React.useState({
+    "folderName": '',
+    "folderAmount": ''
+  })
   const [open, setOpen] = React.useState(false);
 
-  const handleClickOpen = () => {
+  const handleClickOpen = (folder:Folder) => {
+    const newDialogInformation = {"folderName": folder.name, "folderAmount": folder.amount}
+    setDialogInformation(newDialogInformation)
     setOpen(true);
   };
 
@@ -46,27 +50,48 @@ function CreateSubFolderList({ folders, column, provided, snapshot}: FolderListP
             </Box>
             <Typography sx={{marginRight:'10px'}} variant='body1'>{folder.name}</Typography>
             <Typography variant='body1'>{folder.amount}</Typography>
-            <Button variant='contained' size='small' sx={{marginLeft: 'auto'}} onClick={handleClickOpen}>Split</Button>
+            <Button variant='contained' size='small' sx={{marginLeft: 'auto'}} onClick={() => {handleClickOpen(folder)}}>Split</Button>
             <Dialog open={open} onClose={handleClose}>
-            <DialogTitle>Subscribe</DialogTitle>
+            <DialogTitle sx={{textAlign: 'center'}}>Split Folder</DialogTitle>
             <DialogContent>
-              <DialogContentText>
-                To subscribe to this website, please enter your email address here. We
-                will send updates occasionally.
+              <DialogContentText sx={{textAlign: 'center'}}>
+                Please indicate below the amount to put in each folder. The total between both folder amounts must equal {dialogInformation.folderAmount}
               </DialogContentText>
               <TextField
                 autoFocus
                 margin="dense"
-                id="name"
-                label="Email Address"
+                id="folderName"
+                label="Folder Name"
                 type="email"
+                fullWidth
+                variant="standard"
+                value={dialogInformation.folderName}
+                InputProps={{
+                  readOnly: true,
+                }}
+              />
+              <TextField
+                autoFocus
+                margin="dense"
+                id="firstFolderAmount"
+                label="First Folder Amount"
+                type="number"
+                fullWidth
+                variant="standard"
+              />
+              <TextField
+                autoFocus
+                margin="dense"
+                id="secondFolderAmount"
+                label="Second Folder Amount"
+                type="number"
                 fullWidth
                 variant="standard"
               />
             </DialogContent>
             <DialogActions>
               <Button onClick={handleClose}>Cancel</Button>
-              <Button onClick={handleClose}>Subscribe</Button>
+              <Button onClick={handleClose}>Split</Button>
             </DialogActions>
           </Dialog>
           </Box>
