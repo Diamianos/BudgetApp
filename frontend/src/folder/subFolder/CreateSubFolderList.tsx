@@ -14,21 +14,33 @@ interface FolderListProps{
 
 function CreateSubFolderList({ folders, column, provided, snapshot}: FolderListProps) {
 
-  const [dialogInformation, setDialogInformation] = React.useState({
-    "folderName": '',
-    "folderAmount": ''
+  const [dialogContentInformation, setDialogContentInformation] = React.useState({
+    folderName: '',
+    folderAmount: '',
+    days1_14Amount: 0,
+    days15_30Amount: 0
   })
   const [open, setOpen] = React.useState(false);
 
+
   const handleClickOpen = (folder:Folder) => {
-    const newDialogInformation = {"folderName": folder.name, "folderAmount": folder.amount}
-    setDialogInformation(newDialogInformation)
+    const newDialogViewInformation = {folderName: folder.name, folderAmount: folder.amount, days1_14Amount: 0, days15_30Amount: 0}
+    setDialogContentInformation(newDialogViewInformation)
     setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleDialogTextFieldChange = (event: any) => {
+    console.log(event)
+  }
+
+  const handleSplitSubmit = () => {
+    console.log("Split submit button pressed")
+    setOpen(false)
+  }
 
   return (
     <Container 
@@ -50,12 +62,12 @@ function CreateSubFolderList({ folders, column, provided, snapshot}: FolderListP
             </Box>
             <Typography sx={{marginRight:'10px'}} variant='body1'>{folder.name}</Typography>
             <Typography variant='body1'>{folder.amount}</Typography>
-            <Button variant='contained' size='small' sx={{marginLeft: 'auto'}} onClick={() => {handleClickOpen(folder)}}>Split</Button>
+            {column.title === 'Distribute' && <Button variant='contained' size='small' sx={{marginLeft: 'auto'}} onClick={() => {handleClickOpen(folder)}}>Split</Button>}
             <Dialog open={open} onClose={handleClose}>
             <DialogTitle sx={{textAlign: 'center'}}>Split Folder</DialogTitle>
             <DialogContent>
               <DialogContentText sx={{textAlign: 'center'}}>
-                Please indicate below the amount to put in each folder. The total between both folder amounts must equal {dialogInformation.folderAmount}
+                Please indicate below the amount to put in each folder. The total between both folder amounts must equal {dialogContentInformation.folderAmount}
               </DialogContentText>
               <TextField
                 autoFocus
@@ -65,7 +77,7 @@ function CreateSubFolderList({ folders, column, provided, snapshot}: FolderListP
                 type="email"
                 fullWidth
                 variant="standard"
-                value={dialogInformation.folderName}
+                value={dialogContentInformation.folderName}
                 InputProps={{
                   readOnly: true,
                 }}
@@ -74,24 +86,26 @@ function CreateSubFolderList({ folders, column, provided, snapshot}: FolderListP
                 autoFocus
                 margin="dense"
                 id="firstFolderAmount"
-                label="First Folder Amount"
+                label="Days 1-14 Folder Amount"
                 type="number"
                 fullWidth
                 variant="standard"
+                onChange={handleDialogTextFieldChange}
               />
               <TextField
                 autoFocus
                 margin="dense"
                 id="secondFolderAmount"
-                label="Second Folder Amount"
+                label="Days 15-30 Folder Amount"
                 type="number"
                 fullWidth
                 variant="standard"
+                onChange={handleDialogTextFieldChange}
               />
             </DialogContent>
             <DialogActions>
               <Button onClick={handleClose}>Cancel</Button>
-              <Button onClick={handleClose}>Split</Button>
+              <Button onClick={handleSplitSubmit}>Split</Button>
             </DialogActions>
           </Dialog>
           </Box>

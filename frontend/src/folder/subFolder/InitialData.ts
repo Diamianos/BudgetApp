@@ -49,7 +49,7 @@ export const InitialData  = {
         },
         'column-3': {
             id: 'column-3',
-            title: 'Days 15 - EOM',
+            title: 'Days 15 - 30',
             folderIds: [],
         },
     },

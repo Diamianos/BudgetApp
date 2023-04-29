@@ -13,7 +13,7 @@ interface ColumnProps{
 function Column({column, folders}: ColumnProps) {
   return (
     <Container sx={{border: '1px solid grey', marginTop:'8px', display:'flex', flexDirection:'column'}}>
-        <Typography variant='h4' sx={{padding:'8px'}}>{column.title}</Typography>
+        <Typography variant='h4' sx={{padding:'8px', textAlign:'center'}}>{column.title}</Typography>
             <StrictModeDroppable droppableId={column.id}>
                 {(provided, snapshot) => (    
                     <CreateSubFolderList 
