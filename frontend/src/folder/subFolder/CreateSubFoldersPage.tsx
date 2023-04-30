@@ -89,7 +89,12 @@ function CreateSubFoldersPage() {
                 {foldersAndColumns.columnOrder.map(columnId => {
                     const column = foldersAndColumns.columns[columnId as keyof typeof foldersAndColumns.columns];
                     const initialFolders = column.folderIds.map(folderId => foldersAndColumns.folders[folderId as keyof typeof foldersAndColumns.folders]);
-                    return <CreateSubFolderColumn key={column.id} column={column} folders={initialFolders} />
+                    return <CreateSubFolderColumn 
+                        key={column.id} 
+                        column={column} 
+                        folders={initialFolders} 
+                        
+                        />
                 })}
                 </Container>
             </DragDropContext>

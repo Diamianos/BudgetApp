@@ -21,6 +21,7 @@ function CreateSubFolderList({ folders, column, provided, snapshot}: FolderListP
     days15_30Amount: 0
   })
   const [open, setOpen] = React.useState(false);
+  const [splitFolderHistory, setSplitFolderHistory] = React.useState({})
 
 
   const handleClickOpen = (folder:Folder) => {
@@ -34,11 +35,16 @@ function CreateSubFolderList({ folders, column, provided, snapshot}: FolderListP
   };
 
   const handleDialogTextFieldChange = (event: any) => {
-    console.log(event)
+    const {name, value} = event.target;
+
+    const newDialogContentInformation = {...dialogContentInformation, [name]: value};
+
+    setDialogContentInformation(newDialogContentInformation);
+
   }
 
   const handleSplitSubmit = () => {
-    console.log("Split submit button pressed")
+    console.log(dialogContentInformation);
     setOpen(false)
   }
 
@@ -85,7 +91,7 @@ function CreateSubFolderList({ folders, column, provided, snapshot}: FolderListP
               <TextField
                 autoFocus
                 margin="dense"
-                id="firstFolderAmount"
+                name="days1_14Amount"
                 label="Days 1-14 Folder Amount"
                 type="number"
                 fullWidth
@@ -95,7 +101,7 @@ function CreateSubFolderList({ folders, column, provided, snapshot}: FolderListP
               <TextField
                 autoFocus
                 margin="dense"
-                id="secondFolderAmount"
+                name="days15_30Amount"
                 label="Days 15-30 Folder Amount"
                 type="number"
                 fullWidth
