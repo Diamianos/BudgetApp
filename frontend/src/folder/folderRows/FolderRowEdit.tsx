@@ -6,6 +6,8 @@ interface FolderRowEditProps {
     folder: Folder;
     onSave: (folder: Folder, newFolder: boolean) => void;
     onCancel: (newFolder: boolean) => void;
+    
+
 }
 
 

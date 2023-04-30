@@ -93,7 +93,8 @@ function CreateSubFoldersPage() {
                         key={column.id} 
                         column={column} 
                         folders={initialFolders} 
-                        
+                        foldersAndColumns={foldersAndColumns}
+                        setFoldersAndColumns={setFoldersAndColumns}
                         />
                 })}
                 </Container>
