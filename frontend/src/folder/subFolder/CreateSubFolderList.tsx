@@ -1,4 +1,4 @@
-import { Box, Button, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Typography } from '@mui/material'
+import { Alert, Box, Button, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Typography } from '@mui/material'
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import React from 'react'
 
@@ -15,6 +15,14 @@ interface FolderListProps{
   setFoldersAndColumns: (data: typeof InitialData) => void;
 }
 
+interface dialogContentInterface{
+  folderName: string,
+  folderAmount: string,
+  folderDraggableId: number,
+  days1_14Amount: number,
+  days15_30Amount: number,
+}
+
 function CreateSubFolderList({ folders, column, provided, snapshot, foldersAndColumns, setFoldersAndColumns}: FolderListProps) {
 
   const [dialogContentInformation, setDialogContentInformation] = React.useState({
@@ -25,7 +33,11 @@ function CreateSubFolderList({ folders, column, provided, snapshot, foldersAndCo
     days15_30Amount: 0
   })
   const [open, setOpen] = React.useState(false);
-  const [splitFolderHistory, setSplitFolderHistory] = React.useState({})
+  const [splitFolderHistory, setSplitFolderHistory] = React.useState({});
+  const [showDialogError, setShowDialogError] = React.useState({
+    showError: false,
+    errorMessage: '',
+  });
 
 
   const handleSplitButton = (folder:Folder) => {
@@ -44,16 +56,16 @@ function CreateSubFolderList({ folders, column, provided, snapshot, foldersAndCo
 
     const newDialogContentInformation = {...dialogContentInformation, [name]: value};
 
+    setShowDialogError({showError:false, errorMessage:''});
+
     setDialogContentInformation(newDialogContentInformation);
 
   }
 
   const handleSplitSubmit = () => {
 
-    // If one of the dialog text fields are blank when clicking the Split button on the dialog, close dialog and return without changes
-    if (dialogContentInformation.days1_14Amount <= 0 || dialogContentInformation.days15_30Amount <= 0){
-      setOpen(false);
-      console.log("At least one field is blank or negative, returning");
+    // Check dialog text fields for errors
+    if (checkDialogFieldsForErrors(dialogContentInformation, setShowDialogError)){
       return;
     }
 
@@ -185,6 +197,9 @@ function CreateSubFolderList({ folders, column, provided, snapshot, foldersAndCo
                 onChange={handleDialogTextFieldChange}
               />
             </DialogContent>
+            {showDialogError.showError && <Alert variant="filled" severity="error">
+              {showDialogError.errorMessage}
+            </Alert>}
             <DialogActions>
               <Button onClick={handleClose}>Cancel</Button>
               <Button onClick={handleSplitSubmit}>Split</Button>
@@ -197,6 +212,29 @@ function CreateSubFolderList({ folders, column, provided, snapshot, foldersAndCo
       {provided.placeholder}
     </Container>
   )
+}
+
+function checkDialogFieldsForErrors(
+    dialogContentInformation: dialogContentInterface, 
+    setShowDialogError: React.Dispatch<React.SetStateAction<{
+      showError: boolean;
+      errorMessage: string;
+      }>>)
+{
+  const {folderAmount, days1_14Amount, days15_30Amount } = dialogContentInformation;
+
+  // If one of the dialog text fields are blank when clicking the Split button on the dialog, close dialog and return without changes
+  if (Number(days1_14Amount) < 0 || Number(days15_30Amount) < 0){
+    const newError = {showError: true, errorMessage: 'Values cannot be negatives.'}
+    setShowDialogError(newError);
+    return true;
+  }
+  if (Number(days1_14Amount) + Number(days15_30Amount) !== Number(folderAmount)){
+    const newError = {showError: true, errorMessage: 'Both folder amounts must equal ' + folderAmount.toString()}
+    setShowDialogError(newError);
+    return true;
+  };
+  return false;
 }
 
 function determineNextDraggableId(foldersAndColumns: typeof InitialData){
