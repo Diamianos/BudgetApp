@@ -106,7 +106,8 @@ function FolderRowNew(props: FolderRowNewProps) {
                     value={folder.name} 
                     name="name" 
                     onChange={handleChange} 
-                    onFocus={handleFocus} autoFocus={true}/> 
+                    onFocus={handleFocus} 
+                    autoFocus={true}/> 
             </TableCell>
             <TableCell align='center'>
                 <TextField 

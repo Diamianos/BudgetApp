@@ -1,6 +1,6 @@
 import { Alert, Box, Button, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Typography } from '@mui/material'
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import {Folder} from '../Folder'
 import { Draggable, DroppableProvided, DroppableStateSnapshot } from 'react-beautiful-dnd'
@@ -12,7 +12,9 @@ interface FolderListProps{
   provided: DroppableProvided,
   snapshot: DroppableStateSnapshot,
   foldersAndColumns: typeof InitialData;
+  splitFolders: number[],
   setFoldersAndColumns: (data: typeof InitialData) => void;
+  setSplitFolders: (data:number[]) => void;
 }
 
 interface dialogContentInterface{
@@ -23,8 +25,11 @@ interface dialogContentInterface{
   days15_30Amount: number,
 }
 
-function CreateSubFolderList({ folders, column, provided, snapshot, foldersAndColumns, setFoldersAndColumns}: FolderListProps) {
+function CreateSubFolderList({ folders, column, provided, snapshot, foldersAndColumns, splitFolders, setFoldersAndColumns, setSplitFolders}: FolderListProps) {
 
+  /****
+   * States
+   */
   const [dialogContentInformation, setDialogContentInformation] = React.useState({
     folderName: '',
     folderAmount: '',
@@ -32,23 +37,46 @@ function CreateSubFolderList({ folders, column, provided, snapshot, foldersAndCo
     days1_14Amount: 0,
     days15_30Amount: 0
   })
-  const [open, setOpen] = React.useState(false);
-  const [splitFolderHistory, setSplitFolderHistory] = React.useState({});
   const [showDialogError, setShowDialogError] = React.useState({
     showError: false,
     errorMessage: '',
   });
+  const [open, setOpen] = React.useState(false);
+  const [openPopup, setOpenPopup] = React.useState(false);
 
+  /****
+   * Refs
+   */
+  const inputRef = React.useRef<HTMLInputElement>(null);
+  
+
+  /****
+   * Effects
+   */
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (openPopup && inputRef.current){
+        inputRef.current.focus();
+      }
+    }, 0);
+    return () => clearTimeout(timeout)
+  }, [openPopup]);
+
+  /****
+   * Functions
+   */
 
   const handleSplitButton = (folder:Folder) => {
     // Assigning information from folder that had its "Split" button clicked to the dialog information state for display
     const newDialogViewInformation = {folderName: folder.name, folderAmount: folder.amount, folderDraggableId:folder.draggable_id, days1_14Amount: 0, days15_30Amount: 0}
     setDialogContentInformation(newDialogViewInformation)
     setOpen(true);
+    setOpenPopup(true)
   };
 
   const handleClose = () => {
     setOpen(false);
+    setOpenPopup(false)
   };
 
   const handleDialogTextFieldChange = (event: any) => {
@@ -61,6 +89,12 @@ function CreateSubFolderList({ folders, column, provided, snapshot, foldersAndCo
     setDialogContentInformation(newDialogContentInformation);
 
   }
+
+  const handleKeyDown = (event: any) => {
+    if (event.key === 'Enter'){
+        handleSplitSubmit();
+    }
+}
 
   const handleSplitSubmit = () => {
 
@@ -94,7 +128,7 @@ function CreateSubFolderList({ folders, column, provided, snapshot, foldersAndCo
       column2FolderIds.splice(index, 1);
     }
 
-    // Pushong one of the split folders to the second "Day 15-20" column
+    // Pushing one of the split folders to the second "Day 15-20" column
     const column3FolderIds: String[] = Array.from(column3.folderIds)
     column3FolderIds.push(days15_30Folder.draggable_id);
 
@@ -131,9 +165,13 @@ function CreateSubFolderList({ folders, column, provided, snapshot, foldersAndCo
       }
     }
 
-    setFoldersAndColumns(newFoldersAndColumns);
-    
+    // Adding draggable Ids to the splitFolderHistory state for hidding drag handle div
+    const newSplitFolders = [...splitFolders, nextDraggableId, nextDraggableId+1]
+
+    setSplitFolders(newSplitFolders);
+    setFoldersAndColumns(newFoldersAndColumns); 
     setOpen(false)
+    setOpenPopup(false)
   }
 
   return (
@@ -152,19 +190,23 @@ function CreateSubFolderList({ folders, column, provided, snapshot, foldersAndCo
           sx={{display: 'flex', border: '1px solid grey', borderRadius: '15px', padding: '8px', marginBottom: '8px', backgroundColor: snapshot.isDragging ? 'lightblue' : 'white'}}
           >
             <Box {...provided.dragHandleProps} sx={{marginRight:'15px'}}>
+              { !splitFolders.includes(folder.draggable_id) &&
               <DragIndicatorIcon></DragIndicatorIcon>
+              }
             </Box>
             <Typography sx={{marginRight:'10px'}} variant='body1'>{folder.name}</Typography>
             <Typography variant='body1'>{folder.amount}</Typography>
-            {column.title === 'Distribute' && <Button variant='contained' size='small' sx={{marginLeft: 'auto'}} onClick={() => {handleSplitButton(folder)}}>Split</Button>}
-            <Dialog open={open} onClose={handleClose}>
+            {
+              column.title === 'Distribute' && 
+              <Button variant='contained' size='small' sx={{marginLeft: 'auto'}} onClick={() => {handleSplitButton(folder)}}>Split</Button>
+            }
+            <Dialog disableRestoreFocus={true} open={open} onClose={handleClose}>
             <DialogTitle sx={{textAlign: 'center'}}>Split Folder</DialogTitle>
             <DialogContent>
               <DialogContentText sx={{textAlign: 'center'}}>
                 Please indicate below the amount to put in each folder. The total between both folder amounts must equal {dialogContentInformation.folderAmount}
               </DialogContentText>
               <TextField
-                autoFocus
                 margin="dense"
                 id="folderName"
                 label="Folder Name"
@@ -177,17 +219,16 @@ function CreateSubFolderList({ folders, column, provided, snapshot, foldersAndCo
                 }}
               />
               <TextField
-                autoFocus
                 margin="dense"
                 name="days1_14Amount"
                 label="Days 1-14 Folder Amount"
                 type="number"
                 fullWidth
                 variant="standard"
+                inputRef={inputRef}
                 onChange={handleDialogTextFieldChange}
               />
               <TextField
-                autoFocus
                 margin="dense"
                 name="days15_30Amount"
                 label="Days 15-30 Folder Amount"
@@ -195,6 +236,7 @@ function CreateSubFolderList({ folders, column, provided, snapshot, foldersAndCo
                 fullWidth
                 variant="standard"
                 onChange={handleDialogTextFieldChange}
+                onKeyDown={handleKeyDown}
               />
             </DialogContent>
             {showDialogError.showError && <Alert variant="filled" severity="error">
@@ -225,7 +267,7 @@ function checkDialogFieldsForErrors(
 
   // If one of the dialog text fields are blank when clicking the Split button on the dialog, close dialog and return without changes
   if (Number(days1_14Amount) < 0 || Number(days15_30Amount) < 0){
-    const newError = {showError: true, errorMessage: 'Values cannot be negatives.'}
+    const newError = {showError: true, errorMessage: 'Neither value can be a negative'}
     setShowDialogError(newError);
     return true;
   }

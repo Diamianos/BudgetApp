@@ -7,6 +7,7 @@ import { Button, Container } from '@mui/material'
 function CreateSubFoldersPage() {
 
     const [foldersAndColumns, setFoldersAndColumns] = useState(InitialData)
+    const [splitFolders, setSplitFolders] = React.useState<number[]>([]);
 
     const handleSplitFolders = (event: any) => {
         console.log(JSON.stringify(foldersAndColumns.columns))
@@ -94,7 +95,9 @@ function CreateSubFoldersPage() {
                         column={column} 
                         folders={initialFolders} 
                         foldersAndColumns={foldersAndColumns}
+                        splitFolders={splitFolders}
                         setFoldersAndColumns={setFoldersAndColumns}
+                        setSplitFolders={setSplitFolders}
                         />
                 })}
                 </Container>
