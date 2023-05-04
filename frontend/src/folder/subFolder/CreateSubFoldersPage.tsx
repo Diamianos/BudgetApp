@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { InitialData } from './InitialData'
+import { SplitFolderHistoryInterface } from '../../interfaces/SplitFolderHistoryInterface'
 import CreateSubFolderColumn from './CreateSubFolderColumn'
 import {DragDropContext, DropResult} from 'react-beautiful-dnd'
 import { Button, Container } from '@mui/material'
@@ -7,7 +8,7 @@ import { Button, Container } from '@mui/material'
 function CreateSubFoldersPage() {
 
     const [foldersAndColumns, setFoldersAndColumns] = useState(InitialData)
-    const [splitFolders, setSplitFolders] = React.useState<number[]>([]);
+    const [splitFolderHistory, setSplitFolderHistory] = React.useState<SplitFolderHistoryInterface[]>([]);
 
     const handleSplitFolders = (event: any) => {
         console.log(JSON.stringify(foldersAndColumns.columns))
@@ -95,9 +96,9 @@ function CreateSubFoldersPage() {
                         column={column} 
                         folders={initialFolders} 
                         foldersAndColumns={foldersAndColumns}
-                        splitFolders={splitFolders}
+                        splitFolderHistory={splitFolderHistory}
                         setFoldersAndColumns={setFoldersAndColumns}
-                        setSplitFolders={setSplitFolders}
+                        setSplitFolderHistory={setSplitFolderHistory}
                         />
                 })}
                 </Container>

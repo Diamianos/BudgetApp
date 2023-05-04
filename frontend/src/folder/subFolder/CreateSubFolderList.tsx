@@ -1,7 +1,7 @@
 import { Alert, Box, Button, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Typography } from '@mui/material'
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import React, { useEffect } from 'react'
-
+import { SplitFolderHistoryInterface } from '../../interfaces/SplitFolderHistoryInterface';
 import {Folder} from '../Folder'
 import { Draggable, DroppableProvided, DroppableStateSnapshot } from 'react-beautiful-dnd'
 import { InitialData } from './InitialData';
@@ -12,12 +12,12 @@ interface FolderListProps{
   provided: DroppableProvided,
   snapshot: DroppableStateSnapshot,
   foldersAndColumns: typeof InitialData;
-  splitFolders: number[],
+  splitFolderHistory: SplitFolderHistoryInterface[],
   setFoldersAndColumns: (data: typeof InitialData) => void;
-  setSplitFolders: (data:number[]) => void;
+  setSplitFolderHistory: (data:SplitFolderHistoryInterface[]) => void;
 }
 
-interface dialogContentInterface{
+interface DialogContentInterface{
   folderName: string,
   folderAmount: string,
   folderDraggableId: number,
@@ -25,7 +25,9 @@ interface dialogContentInterface{
   days15_30Amount: number,
 }
 
-function CreateSubFolderList({ folders, column, provided, snapshot, foldersAndColumns, splitFolders, setFoldersAndColumns, setSplitFolders}: FolderListProps) {
+function CreateSubFolderList({ 
+  folders, column, provided, snapshot, foldersAndColumns, 
+  splitFolderHistory, setFoldersAndColumns, setSplitFolderHistory}: FolderListProps) {
 
   /****
    * States
@@ -57,18 +59,31 @@ function CreateSubFolderList({ folders, column, provided, snapshot, foldersAndCo
     const timeout = setTimeout(() => {
       if (openPopup && inputRef.current){
         inputRef.current.focus();
+        inputRef.current.select();
       }
     }, 0);
     return () => clearTimeout(timeout)
   }, [openPopup]);
 
   /****
-   * Functions
+   * Arrow Functions
    */
 
   const handleSplitButton = (folder:Folder) => {
     // Assigning information from folder that had its "Split" button clicked to the dialog information state for display
     const newDialogViewInformation = {folderName: folder.name, folderAmount: folder.amount, folderDraggableId:folder.draggable_id, days1_14Amount: 0, days15_30Amount: 0}
+    setDialogContentInformation(newDialogViewInformation)
+    setOpen(true);
+    setOpenPopup(true)
+  };
+
+  const handleSplitEditButton = (folder: Folder) => {
+    
+    const splitFolder = retrieveSplitFolderInformation(splitFolderHistory, folder);
+
+    // Assigning information from folder that had its "Edit Split" button clicked to the dialog information state for display
+    const newDialogViewInformation = {folderName: folder.name, folderAmount: folder.amount, folderDraggableId:0, 
+                                      days1_14Amount: splitFolder.folderOneAmount, days15_30Amount: splitFolder.folderTwoAmount}
     setDialogContentInformation(newDialogViewInformation)
     setOpen(true);
     setOpenPopup(true)
@@ -88,13 +103,13 @@ function CreateSubFolderList({ folders, column, provided, snapshot, foldersAndCo
 
     setDialogContentInformation(newDialogContentInformation);
 
-  }
+  };
 
   const handleKeyDown = (event: any) => {
     if (event.key === 'Enter'){
         handleSplitSubmit();
     }
-}
+  };
 
   const handleSplitSubmit = () => {
 
@@ -166,13 +181,21 @@ function CreateSubFolderList({ folders, column, provided, snapshot, foldersAndCo
     }
 
     // Adding draggable Ids to the splitFolderHistory state for hidding drag handle div
-    const newSplitFolders = [...splitFolders, nextDraggableId, nextDraggableId+1]
+    const newSplitFolder = {
+      folderName: dialogContentInformation.folderName,
+      folderAmountTotal: dialogContentInformation.folderAmount,
+      folderOneAmount: dialogContentInformation.days1_14Amount,
+      folderOneDraggableId: days1_14Folder.draggable_id,
+      folderTwoAmount: dialogContentInformation.days15_30Amount,
+      folderTwoDraggableId: days15_30Folder.draggable_id
+    }
+    const newSplitFolderHistory = [...splitFolderHistory, newSplitFolder]
 
-    setSplitFolders(newSplitFolders);
+    setSplitFolderHistory(newSplitFolderHistory);
     setFoldersAndColumns(newFoldersAndColumns); 
     setOpen(false)
     setOpenPopup(false)
-  }
+  };
 
   return (
     <Container 
@@ -190,15 +213,16 @@ function CreateSubFolderList({ folders, column, provided, snapshot, foldersAndCo
           sx={{display: 'flex', border: '1px solid grey', borderRadius: '15px', padding: '8px', marginBottom: '8px', backgroundColor: snapshot.isDragging ? 'lightblue' : 'white'}}
           >
             <Box {...provided.dragHandleProps} sx={{marginRight:'15px'}}>
-              { !splitFolders.includes(folder.draggable_id) &&
+              { !determineFolderIsSplitFolder(splitFolderHistory ,folder.draggable_id) &&
               <DragIndicatorIcon></DragIndicatorIcon>
               }
             </Box>
             <Typography sx={{marginRight:'10px'}} variant='body1'>{folder.name}</Typography>
             <Typography variant='body1'>{folder.amount}</Typography>
             {
-              column.title === 'Distribute' && 
-              <Button variant='contained' size='small' sx={{marginLeft: 'auto'}} onClick={() => {handleSplitButton(folder)}}>Split</Button>
+              column.title === 'Distribute' ?
+              <Button variant='contained' size='small' sx={{marginLeft: 'auto'}} onClick={() => {handleSplitButton(folder)}}>Split</Button>:
+              <Button variant='contained' color='secondary' size='small' sx={{marginLeft: 'auto'}} onClick={() => {handleSplitEditButton(folder)}}>Edit Split</Button>
             }
             <Dialog disableRestoreFocus={true} open={open} onClose={handleClose}>
             <DialogTitle sx={{textAlign: 'center'}}>Split Folder</DialogTitle>
@@ -225,6 +249,7 @@ function CreateSubFolderList({ folders, column, provided, snapshot, foldersAndCo
                 type="number"
                 fullWidth
                 variant="standard"
+                value={dialogContentInformation.days1_14Amount}
                 inputRef={inputRef}
                 onChange={handleDialogTextFieldChange}
               />
@@ -235,6 +260,7 @@ function CreateSubFolderList({ folders, column, provided, snapshot, foldersAndCo
                 type="number"
                 fullWidth
                 variant="standard"
+                value={dialogContentInformation.days15_30Amount}
                 onChange={handleDialogTextFieldChange}
                 onKeyDown={handleKeyDown}
               />
@@ -256,8 +282,38 @@ function CreateSubFolderList({ folders, column, provided, snapshot, foldersAndCo
   )
 }
 
+function retrieveSplitFolderInformation(splitFolderHistory: SplitFolderHistoryInterface[], folder: Folder){
+  for (let i = 0; i < splitFolderHistory.length; i++){
+    const splitFolder = splitFolderHistory[i];
+    if (splitFolder.folderOneDraggableId === folder.draggable_id || splitFolder.folderTwoDraggableId === folder.draggable_id){
+      return splitFolder;
+    }
+  }
+  const emptySplitFolder = {
+    folderName: '',
+    folderAmountTotal: '',
+    folderOneAmount: 0,
+    folderOneDraggableId: 0,
+    folderTwoAmount: 0,
+    folderTwoDraggableId: 0
+  };
+  return emptySplitFolder;
+
+}
+
+function determineFolderIsSplitFolder(splitFolderHistory: SplitFolderHistoryInterface[], draggableId: number){
+  for (let i = 0; i < splitFolderHistory.length; i++){
+    const splitFolder = splitFolderHistory[i];
+    if (splitFolder.folderOneDraggableId === draggableId || splitFolder.folderTwoDraggableId === draggableId){
+      return true;
+    }
+  }
+  return false;
+
+}
+
 function checkDialogFieldsForErrors(
-    dialogContentInformation: dialogContentInterface, 
+    dialogContentInformation: DialogContentInterface, 
     setShowDialogError: React.Dispatch<React.SetStateAction<{
       showError: boolean;
       errorMessage: string;
