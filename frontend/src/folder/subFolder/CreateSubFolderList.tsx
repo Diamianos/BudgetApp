@@ -222,6 +222,7 @@ function CreateSubFolderList({
             {
               column.title === 'Distribute' ?
               <Button variant='contained' size='small' sx={{marginLeft: 'auto'}} onClick={() => {handleSplitButton(folder)}}>Split</Button>:
+              determineFolderIsSplitFolder(splitFolderHistory, folder.draggable_id) &&
               <Button variant='contained' color='secondary' size='small' sx={{marginLeft: 'auto'}} onClick={() => {handleSplitEditButton(folder)}}>Edit Split</Button>
             }
             <Dialog disableRestoreFocus={true} open={open} onClose={handleClose}>
