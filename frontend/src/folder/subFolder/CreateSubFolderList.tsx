@@ -82,7 +82,7 @@ function CreateSubFolderList({
     const splitFolder = retrieveSplitFolderInformation(splitFolderHistory, folder);
 
     // Assigning information from folder that had its "Edit Split" button clicked to the dialog information state for display
-    const newDialogViewInformation = {folderName: folder.name, folderAmount: folder.amount, folderDraggableId:0, 
+    const newDialogViewInformation = {folderName: folder.name, folderAmount: splitFolder.folderAmountTotal, folderDraggableId:0, 
                                       days1_14Amount: splitFolder.folderOneAmount, days15_30Amount: splitFolder.folderTwoAmount}
     setDialogContentInformation(newDialogViewInformation)
     setOpen(true);
