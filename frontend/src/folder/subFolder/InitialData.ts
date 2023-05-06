@@ -8,8 +8,8 @@ export const InitialData  = {
             created_at: '2023-02-14 17:38:39',
             modified_at: '2023-02-14 17:38:39',
             name: "John",
-            amount: "100",
-            balance: "100",
+            amount: 100,
+            balance: 100,
         }),
         '2': new Folder({
             id: 2,
@@ -17,8 +17,8 @@ export const InitialData  = {
             created_at: '2023-02-14 17:38:39',
             modified_at: '2023-02-14 17:38:39',
             name: "Emily",
-            amount: "300",
-            balance: "300",
+            amount: 300,
+            balance: 300,
         }),
         '3': new Folder({
             id: 3,
@@ -26,8 +26,8 @@ export const InitialData  = {
             created_at: '2023-02-14 17:38:39',
             modified_at: '2023-02-14 17:38:39',
             name: "Isabella",
-            amount: "100",
-            balance: "100",
+            amount: 100,
+            balance: 100,
         }),
         '4': new Folder({
             id: 4,
@@ -35,8 +35,8 @@ export const InitialData  = {
             created_at: '2023-02-14 17:38:39',
             modified_at: '2023-02-14 17:38:39',
             name: "Elizabeth",
-            amount: "200",
-            balance: "200",
+            amount: 200,
+            balance: 200,
         }),
 
     },

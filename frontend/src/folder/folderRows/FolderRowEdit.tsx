@@ -24,7 +24,7 @@ function FolderRowEdit(props: FolderRowEditProps) {
         if (folder.name.length <= 3){
             errors.name = true;
         }
-        if (parseInt(folder.amount) < 0 || folder.amount === ''){
+        if (folder.amount <= 0 ){
             errors.amount = true;
         }
         return errors;

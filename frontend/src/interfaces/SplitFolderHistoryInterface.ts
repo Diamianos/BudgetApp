@@ -1,6 +1,6 @@
 export interface SplitFolderHistoryInterface{
     folderName: string;
-    folderAmountTotal: string;
+    folderAmountTotal: number;
     folderOneAmount: number;
     folderOneDraggableId: number;
     folderTwoAmount: number;

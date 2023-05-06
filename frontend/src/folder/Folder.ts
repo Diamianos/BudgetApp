@@ -4,8 +4,8 @@ export class Folder{
     created_at: Date = new Date();
     updated_at: Date = new Date();
     name: string = '';
-    amount: string = '';
-    balance: string = '';
+    amount: number = 0;
+    balance: number = 0;
 
     constructor(initializer?: any){
         if (!initializer) return;

@@ -10,7 +10,7 @@ function FolderRowTotal({folders}: FolderTotalProps) {
 
     const calculateFoldersTotal = (folders: Folder[]) => {
         let values = folders.map((f) => {
-            return parseInt(f.amount)
+            return f.amount
         })
         return values.reduce((partialSum, a) => partialSum + a, 0)
         

@@ -19,7 +19,7 @@ interface FolderListProps{
 
 interface DialogContentInterface{
   folderName: string,
-  folderAmount: string,
+  folderAmount: number,
   folderDraggableId: number,
   days1_14Amount: number,
   days15_30Amount: number,
@@ -34,7 +34,7 @@ function CreateSubFolderList({
    */
   const [dialogContentInformation, setDialogContentInformation] = React.useState({
     folderName: '',
-    folderAmount: '',
+    folderAmount: 0,
     folderDraggableId: 0,
     days1_14Amount: 0,
     days15_30Amount: 0
@@ -98,9 +98,15 @@ function CreateSubFolderList({
   };
 
   const handleDialogTextFieldChange = (event: any) => {
-    const {name, value} = event.target;
+    const {name, value, type} = event.target;
 
-    const newDialogContentInformation = {...dialogContentInformation, [name]: value};
+    let updatedValue = value;
+      // if input type is number, convert the updatedValue string to a number
+      if (type === 'number') {
+          updatedValue = Number(updatedValue);
+      }
+
+    const newDialogContentInformation = {...dialogContentInformation, [name]: updatedValue};
 
     setShowDialogError({showError:false, errorMessage:''});
 
@@ -115,6 +121,8 @@ function CreateSubFolderList({
   };
 
   const handleSplitSubmit = () => {
+
+    console.log(dialogContentInformation);
     // Check dialog text fields for errors
     if (checkDialogFieldsForErrors(dialogContentInformation, setShowDialogError)){
       return;
@@ -227,7 +235,7 @@ function retrieveSplitFolderInformation(splitFolderHistory: SplitFolderHistoryOb
   }
   const emptySplitFolder = {
     folderName: '',
-    folderAmountTotal: '',
+    folderAmountTotal: 0,
     folderOneAmount: 0,
     folderOneDraggableId: 0,
     folderTwoAmount: 0,
@@ -255,17 +263,18 @@ function checkDialogFieldsForErrors(
 {
   const {folderAmount, days1_14Amount, days15_30Amount } = dialogContentInformation;
 
-  // If one of the dialog text fields are blank when clicking the Split button on the dialog, close dialog and return without changes
-  if (Number(days1_14Amount) < 0 || Number(days15_30Amount) < 0){
+  if (days1_14Amount < 0 || days15_30Amount < 0){
     const newError = {showError: true, errorMessage: 'Neither value can be a negative'}
     setShowDialogError(newError);
     return true;
   }
-  if (Number(days1_14Amount) + Number(days15_30Amount) !== Number(folderAmount)){
+  if (days1_14Amount + days15_30Amount !== folderAmount){
     const newError = {showError: true, errorMessage: 'Both folder amounts must equal ' + folderAmount.toString()}
     setShowDialogError(newError);
     return true;
   };
+
+
   return false;
 }
 
@@ -341,9 +350,15 @@ function handleRegularFolderSubmit(
     const nextDraggableId = determineNextDraggableId(foldersAndColumns);
 
     // Creating the two new folders from the split with the new draggable IDs
-    const days1_14Folder = new Folder({draggable_id:nextDraggableId, name:dialogContentInformation.folderName, amount:dialogContentInformation.days1_14Amount})
+    let days1_14Folder = new Folder()
+    if (dialogContentInformation.days1_14Amount !== 0){
+      days1_14Folder = new Folder({draggable_id:nextDraggableId, name:dialogContentInformation.folderName, amount:dialogContentInformation.days1_14Amount})
+    }
     // Just incremeting the draggable ID by one for next folder
-    const days15_30Folder = new Folder({draggable_id:nextDraggableId+1, name:dialogContentInformation.folderName, amount:dialogContentInformation.days15_30Amount})
+    let days15_30Folder = new Folder();
+    if (dialogContentInformation.days15_30Amount !== 0){
+      days15_30Folder = new Folder({draggable_id:nextDraggableId+1, name:dialogContentInformation.folderName, amount:dialogContentInformation.days15_30Amount})
+    }
   
     // Getting the columns from the folderAndColumn state for mutating the state
     // TODO: I'm sure theres a better way to do this with deconstruction, need to fix this.
@@ -353,7 +368,9 @@ function handleRegularFolderSubmit(
 
     // Pushing one of the split folders to the first "Day 1-14" column
     const column1FolderIds: String[] = Array.from(column1.folderIds)
-    column1FolderIds.push(days1_14Folder.draggable_id);
+    if (dialogContentInformation.days1_14Amount !== 0){
+      column1FolderIds.push(days1_14Folder.draggable_id);
+    }
 
     // Removing the original folder by index
     const column2FolderIds: String[] = Array.from(column2.folderIds)
@@ -364,7 +381,9 @@ function handleRegularFolderSubmit(
 
     // Pushing one of the split folders to the second "Day 15-20" column
     const column3FolderIds: String[] = Array.from(column3.folderIds)
-    column3FolderIds.push(days15_30Folder.draggable_id);
+    if (dialogContentInformation.days15_30Amount !== 0){
+      column3FolderIds.push(days15_30Folder.draggable_id);
+    }
 
     // Creating the new 1-3 columns with the new folder IDs
     const newColumn1 = {
@@ -380,13 +399,20 @@ function handleRegularFolderSubmit(
       folderIds: column3FolderIds 
     };
 
+    const newFolders:any = {};
+    if (days1_14Folder.amount !== 0){
+      newFolders[days1_14Folder.draggable_id] = days1_14Folder;
+    }
+    if (days15_30Folder.amount !== 0){
+      newFolders[days15_30Folder.draggable_id] = days15_30Folder;
+    }
+
     // Creating the new state for the foldersAndColumns
     const newFoldersAndColumns= {
       ...foldersAndColumns,
       folders:{
         ...foldersAndColumns.folders,
-        [days1_14Folder.draggable_id]: days1_14Folder,
-        [days15_30Folder.draggable_id]: days15_30Folder,
+        ...newFolders,
       },
       columns:{
         ...foldersAndColumns.columns,
@@ -397,18 +423,21 @@ function handleRegularFolderSubmit(
     }
 
     // Adding draggable Ids to the splitFolderHistory state for hidding drag handle div
-  
-    const newSplitFolder = {
-      folderName: dialogContentInformation.folderName,
-      folderAmountTotal: dialogContentInformation.folderAmount,
-      folderOneAmount: dialogContentInformation.days1_14Amount,
-      folderOneDraggableId: days1_14Folder.draggable_id,
-      folderTwoAmount: dialogContentInformation.days15_30Amount,
-      folderTwoDraggableId: days15_30Folder.draggable_id
-    }
-    const newSplitFolderHistory = {...splitFolderHistory, [newSplitFolder.folderName]: newSplitFolder}
 
-    setSplitFolderHistory(newSplitFolderHistory);
+    if (days1_14Folder.amount !== 0 && days15_30Folder.amount !== 0){
+      const newSplitFolder = {
+        folderName: dialogContentInformation.folderName,
+        folderAmountTotal: dialogContentInformation.folderAmount,
+        folderOneAmount: dialogContentInformation.days1_14Amount,
+        folderOneDraggableId: days1_14Folder.draggable_id,
+        folderTwoAmount: dialogContentInformation.days15_30Amount,
+        folderTwoDraggableId: days15_30Folder.draggable_id
+      }
+      const newSplitFolderHistory = {...splitFolderHistory, [newSplitFolder.folderName]: newSplitFolder}
+  
+      setSplitFolderHistory(newSplitFolderHistory);
+    }
+  
     setFoldersAndColumns(newFoldersAndColumns); 
     setOpen(false)
     setOpenPopup(false)
