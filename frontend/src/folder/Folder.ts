@@ -1,6 +1,6 @@
 export class Folder{
     id: number | undefined;
-    draggable_id: number | any;
+    draggable_id: string | any;
     created_at: Date = new Date();
     updated_at: Date = new Date();
     name: string = '';

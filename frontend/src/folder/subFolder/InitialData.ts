@@ -4,7 +4,7 @@ export const InitialData  = {
     folders: {
         '1': new Folder({
             id: 1,
-            draggable_id: 1,
+            draggable_id: '1',
             created_at: '2023-02-14 17:38:39',
             modified_at: '2023-02-14 17:38:39',
             name: "John",
@@ -13,7 +13,7 @@ export const InitialData  = {
         }),
         '2': new Folder({
             id: 2,
-            draggable_id: 2,
+            draggable_id: '2',
             created_at: '2023-02-14 17:38:39',
             modified_at: '2023-02-14 17:38:39',
             name: "Emily",
@@ -22,7 +22,7 @@ export const InitialData  = {
         }),
         '3': new Folder({
             id: 3,
-            draggable_id: 3,
+            draggable_id: '3',
             created_at: '2023-02-14 17:38:39',
             modified_at: '2023-02-14 17:38:39',
             name: "Isabella",
@@ -31,7 +31,7 @@ export const InitialData  = {
         }),
         '4': new Folder({
             id: 4,
-            draggable_id: 4,
+            draggable_id: '4',
             created_at: '2023-02-14 17:38:39',
             modified_at: '2023-02-14 17:38:39',
             name: "Elizabeth",
