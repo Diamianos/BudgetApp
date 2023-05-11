@@ -12,6 +12,7 @@ import FolderRow from './folderRows/FolderRow'
 import FolderRowEdit from './folderRows/FolderRowEdit';
 import FolderRowNew from './folderRows/FolderRowNew';
 import FolderTotal from './folderRows/FolderRowTotal';
+import { Link } from 'react-router-dom';
 
 // https://minicss.us/docs.htm#tables
 // Beautiful React DND tutorial for drag-and-drop list functionality: https://egghead.io/lessons/react-set-up-a-react-environment-with-create-react-app
@@ -26,6 +27,8 @@ export default function FolderList({folders, onSave, onDelete}: FolderListProps)
 
     const [folderBeingEdited, setFolderBeingEdited] = useState({});
     const [hideNewFolder, setHideNewFolder] = useState(true);
+
+    const date = '05_05_2023';
 
     const handleEdit = (folder: Folder) => {
         setHideNewFolder(true)
@@ -87,12 +90,13 @@ export default function FolderList({folders, onSave, onDelete}: FolderListProps)
                     </TableBody>
                 </Table>
                 <div className='create-subfolders-div'>
+                    <Link to={`/create_subfolders/${date}`} >
                     <Button
-                    href='/create_subfolders' 
                     variant="contained"
                     color='secondary'
                     >Create Sub Folders
                     </Button>
+                    </Link>
                 </div>
             </TableContainer>
     )

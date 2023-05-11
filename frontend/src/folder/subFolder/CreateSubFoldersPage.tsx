@@ -1,17 +1,24 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import {useParams} from 'react-router-dom'
 import { InitialData } from './InitialData'
 import { SplitFolderHistoryObject } from '../../interfaces/SplitFolderHistoryObject'
 import CreateSubFolderColumn from './CreateSubFolderColumn'
 import {DragDropContext, DropResult} from 'react-beautiful-dnd'
 import { Button, Container } from '@mui/material'
+import { folderAPI } from '../../apis/FolderAPI'
+import { Folder } from '../Folder'
+
 
 function CreateSubFoldersPage() {
 
     const [foldersAndColumns, setFoldersAndColumns] = useState(InitialData)
     const [splitFolderHistory, setSplitFolderHistory] = React.useState<SplitFolderHistoryObject>({});
 
+    // URI params from react router 
+    const params = useParams()
+
     const handleSplitFolders = (event: any) => {
-        console.log(JSON.stringify(foldersAndColumns.columns))
+        console.log(params)
     }
 
     const handleOnDragEnd = (result: DropResult) => {
@@ -83,6 +90,24 @@ function CreateSubFoldersPage() {
         setFoldersAndColumns(newState);
     };
 
+    useEffect(() => {
+        async function loadFolders() {
+        //   setLoading(true)
+          try {
+            const data = await folderAPI.get();
+            parseDataToColumnsAndFolders(data, foldersAndColumns, setFoldersAndColumns);
+          }
+           catch (e) {
+            if (e instanceof Error) {
+              console.log(e.message);
+            }}
+            finally{
+                // setLoading(false)
+            }
+        }
+        loadFolders();
+      }, []);
+
     return (
         <>
             <DragDropContext
@@ -109,8 +134,55 @@ function CreateSubFoldersPage() {
             color='success'
             sx={{marginTop:'15px'}}>Split Folders
             </Button>
+            
         </>
     )
+}
+
+function parseDataToColumnsAndFolders(data: Folder[], foldersAndColumn: typeof InitialData, setFoldersAndColumns: (data: typeof InitialData) => void){
+
+    const columnFolderIds: string[] = [];
+    const newFolderState:any = {};
+    let index = 1;
+    for (let i = 0; i < data.length; i++){
+        const folder = data[i];
+        folder.draggable_id = index.toString();
+        index = index + 1;
+        newFolderState[folder.draggable_id.toString()]=folder
+        columnFolderIds.push(folder.draggable_id);
+    }
+
+    console.log(newFolderState);
+    console.log(foldersAndColumn.folders)
+
+
+    const newColumnState:any = {
+        'column-1': {
+            id: 'column-1',
+            title: 'Days 1-14',
+            folderIds: [],
+        },
+        'column-2': {
+            id: 'column-2',
+            title: 'Distribute',
+            folderIds: columnFolderIds,
+        },
+        'column-3': {
+            id: 'column-3',
+            title: 'Days 15 - 30',
+            folderIds: [],
+        },
+    };
+
+    const newColumnAndFolderState:any = {
+        folders:newFolderState,
+        columns:newColumnState,
+        columnOrder:[...InitialData.columnOrder]
+    }
+
+    setFoldersAndColumns(newColumnAndFolderState);
+
+    
 }
 
 export default CreateSubFoldersPage
