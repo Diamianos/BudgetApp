@@ -17,7 +17,7 @@ public class FolderService {
     }
 
     public List<Folder> findAllFolders(){
-        return folderRepository.findAll();
+        return folderRepository.findAllByOrderByName();
     }
 
     public Optional<Folder> findFolderById(int folderId){

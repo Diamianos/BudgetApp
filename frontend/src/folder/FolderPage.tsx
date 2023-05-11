@@ -18,6 +18,7 @@ function FoldersPage(){
             const newFolder = await folderAPI.post(folder)
             updatedFolders = [...folders];
             updatedFolders.push(new Folder(newFolder));
+            updatedFolders.sort((a, b) => a.name.localeCompare(b.name)); // Sorting alphabetically by name
         } else {
             const updatedFolder = await folderAPI.put(folder)
             updatedFolders = folders.map((f:Folder) => {

@@ -1,11 +1,10 @@
 import React from 'react'
-import {Folder} from '../Folder'
-import { SplitFolderHistoryObject } from '../../interfaces/SplitFolderHistoryObject';
 import Container from '@mui/material/Container';
 import { Typography } from '@mui/material';
+import {Folder} from '../Folder'
+import { SplitFolderHistoryObject } from '../../interfaces/SplitFolderHistoryObject';
 import { StrictModeDroppable } from '../../components/StrictModeDroppable';
 import CreateSubFolderList from './CreateSubFolderList';
-
 import { FolderAndColumnStateInterface } from '../../interfaces/FolderAndColumnStateInterface'
 
 interface ColumnProps{

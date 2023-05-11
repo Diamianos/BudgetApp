@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import {useParams} from 'react-router-dom'
-import { InitialData } from './InitialData'
 import {BlankInitialData} from './BlankInitialData'
 import { SplitFolderHistoryObject } from '../../interfaces/SplitFolderHistoryObject'
 import CreateSubFolderColumn from './CreateSubFolderColumn'
@@ -186,7 +185,7 @@ function parseDataToColumnsAndFolders(data: Folder[], setFoldersAndColumns: (dat
     const newColumnAndFolderState:FolderAndColumnStateInterface = {
         folders:newFolderState,
         columns:newColumnState,
-        columnOrder:[...InitialData.columnOrder]
+        columnOrder:[...BlankInitialData.columnOrder]
     }
 
     setFoldersAndColumns(newColumnAndFolderState);
