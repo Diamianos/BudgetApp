@@ -1,18 +1,24 @@
 import React, { useEffect, useState } from 'react'
 import {useParams} from 'react-router-dom'
 import { InitialData } from './InitialData'
+import {BlankInitialData} from './BlankInitialData'
 import { SplitFolderHistoryObject } from '../../interfaces/SplitFolderHistoryObject'
 import CreateSubFolderColumn from './CreateSubFolderColumn'
 import {DragDropContext, DropResult} from 'react-beautiful-dnd'
-import { Button, Container } from '@mui/material'
+import { Box, Button, CircularProgress, Container } from '@mui/material'
 import { folderAPI } from '../../apis/FolderAPI'
 import { Folder } from '../Folder'
+
+import { FolderStateInterface } from '../../interfaces/FolderStateInterface'
+import { ColumnStateInterface } from '../../interfaces/ColumnStateInterface'
+import { FolderAndColumnStateInterface } from '../../interfaces/FolderAndColumnStateInterface'
 
 
 function CreateSubFoldersPage() {
 
-    const [foldersAndColumns, setFoldersAndColumns] = useState(InitialData)
-    const [splitFolderHistory, setSplitFolderHistory] = React.useState<SplitFolderHistoryObject>({});
+    const [foldersAndColumns, setFoldersAndColumns] = useState<FolderAndColumnStateInterface>(BlankInitialData)
+    const [splitFolderHistory, setSplitFolderHistory] = useState<SplitFolderHistoryObject>({});
+    const [loading, setLoading] = useState(false);
 
     // URI params from react router 
     const params = useParams()
@@ -92,39 +98,45 @@ function CreateSubFoldersPage() {
 
     useEffect(() => {
         async function loadFolders() {
-        //   setLoading(true)
+          setLoading(true)
           try {
             const data = await folderAPI.get();
-            parseDataToColumnsAndFolders(data, foldersAndColumns, setFoldersAndColumns);
+            parseDataToColumnsAndFolders(data, setFoldersAndColumns);
           }
            catch (e) {
             if (e instanceof Error) {
               console.log(e.message);
             }}
             finally{
-                // setLoading(false)
+                setLoading(false)
             }
-        }
+        };
         loadFolders();
       }, []);
 
     return (
         <>
+            { loading ? 
+            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                <CircularProgress />
+            </Box>
+            :
+            <>
             <DragDropContext
-                onDragEnd={handleOnDragEnd}>
+            onDragEnd={handleOnDragEnd}>
                 <Container sx={{display: 'flex'}} disableGutters>
                 {foldersAndColumns.columnOrder.map(columnId => {
                     const column = foldersAndColumns.columns[columnId as keyof typeof foldersAndColumns.columns];
                     const initialFolders = column.folderIds.map(folderId => foldersAndColumns.folders[folderId as keyof typeof foldersAndColumns.folders]);
                     return <CreateSubFolderColumn 
-                        key={column.id} 
-                        column={column} 
-                        folders={initialFolders} 
-                        foldersAndColumns={foldersAndColumns}
-                        splitFolderHistory={splitFolderHistory}
-                        setFoldersAndColumns={setFoldersAndColumns}
-                        setSplitFolderHistory={setSplitFolderHistory}
-                        />
+                    key={column.id} 
+                    column={column} 
+                    folders={initialFolders} 
+                    foldersAndColumns={foldersAndColumns}
+                    splitFolderHistory={splitFolderHistory}
+                    setFoldersAndColumns={setFoldersAndColumns}
+                    setSplitFolderHistory={setSplitFolderHistory}
+                    />
                 })}
                 </Container>
             </DragDropContext>
@@ -134,15 +146,16 @@ function CreateSubFoldersPage() {
             color='success'
             sx={{marginTop:'15px'}}>Split Folders
             </Button>
-            
+            </>
+        }
         </>
     )
 }
 
-function parseDataToColumnsAndFolders(data: Folder[], foldersAndColumn: typeof InitialData, setFoldersAndColumns: (data: typeof InitialData) => void){
+function parseDataToColumnsAndFolders(data: Folder[], setFoldersAndColumns: (data: FolderAndColumnStateInterface) => void){
 
     const columnFolderIds: string[] = [];
-    const newFolderState:any = {};
+    const newFolderState:FolderStateInterface = {};
     let index = 1;
     for (let i = 0; i < data.length; i++){
         const folder = data[i];
@@ -152,11 +165,7 @@ function parseDataToColumnsAndFolders(data: Folder[], foldersAndColumn: typeof I
         columnFolderIds.push(folder.draggable_id);
     }
 
-    console.log(newFolderState);
-    console.log(foldersAndColumn.folders)
-
-
-    const newColumnState:any = {
+    const newColumnState:ColumnStateInterface = {
         'column-1': {
             id: 'column-1',
             title: 'Days 1-14',
@@ -174,7 +183,7 @@ function parseDataToColumnsAndFolders(data: Folder[], foldersAndColumn: typeof I
         },
     };
 
-    const newColumnAndFolderState:any = {
+    const newColumnAndFolderState:FolderAndColumnStateInterface = {
         folders:newFolderState,
         columns:newColumnState,
         columnOrder:[...InitialData.columnOrder]

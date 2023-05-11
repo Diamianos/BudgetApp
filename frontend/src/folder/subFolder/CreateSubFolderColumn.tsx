@@ -1,18 +1,19 @@
 import React from 'react'
 import {Folder} from '../Folder'
-import { InitialData } from './InitialData';
 import { SplitFolderHistoryObject } from '../../interfaces/SplitFolderHistoryObject';
 import Container from '@mui/material/Container';
 import { Typography } from '@mui/material';
 import { StrictModeDroppable } from '../../components/StrictModeDroppable';
 import CreateSubFolderList from './CreateSubFolderList';
 
+import { FolderAndColumnStateInterface } from '../../interfaces/FolderAndColumnStateInterface'
+
 interface ColumnProps{
     column: {id: string; title: string; folderIds: string[]};
     folders: Folder[];
-    foldersAndColumns: typeof InitialData;
+    foldersAndColumns: FolderAndColumnStateInterface;
     splitFolderHistory: SplitFolderHistoryObject,
-    setFoldersAndColumns: (data: typeof InitialData) => void;
+    setFoldersAndColumns: (data: FolderAndColumnStateInterface) => void;
     setSplitFolderHistory: (data:SplitFolderHistoryObject) => void;
     
 }

@@ -4,16 +4,18 @@ import React, { useEffect } from 'react'
 import { SplitFolderHistoryObject } from '../../interfaces/SplitFolderHistoryObject';
 import {Folder} from '../Folder'
 import { Draggable, DroppableProvided, DroppableStateSnapshot } from 'react-beautiful-dnd'
-import { InitialData } from './InitialData';
+
+import { FolderStateInterface } from '../../interfaces/FolderStateInterface';
+import { FolderAndColumnStateInterface } from '../../interfaces/FolderAndColumnStateInterface'
 
 interface FolderListProps{
   folders: Folder[],
   column: { id: string; title: string; folderIds: string[]},
   provided: DroppableProvided,
   snapshot: DroppableStateSnapshot,
-  foldersAndColumns: typeof InitialData;
+  foldersAndColumns: FolderAndColumnStateInterface;
   splitFolderHistory: SplitFolderHistoryObject,
-  setFoldersAndColumns: (data: typeof InitialData) => void;
+  setFoldersAndColumns: (data: FolderAndColumnStateInterface) => void;
   setSplitFolderHistory: (data:SplitFolderHistoryObject) => void;
 }
 
@@ -278,13 +280,13 @@ function checkDialogFieldsForErrors(
   return false;
 }
 
-function determineNextDraggableId(foldersAndColumns: typeof InitialData){
+function determineNextDraggableId(foldersAndColumns: FolderAndColumnStateInterface){
   const draggableIds: number[] = [];
   Object.values(foldersAndColumns.folders).forEach(f => draggableIds.push(f.draggable_id));
   return(Math.max(...draggableIds) +1);
 }
 
-function retrieveFoldersByDraggableId(folderIds: string[], foldersAndColumns:typeof InitialData){
+function retrieveFoldersByDraggableId(folderIds: string[], foldersAndColumns: FolderAndColumnStateInterface){
   const folders: Folder[] = []
 
   const existingFolders = foldersAndColumns.folders;
@@ -296,11 +298,11 @@ function retrieveFoldersByDraggableId(folderIds: string[], foldersAndColumns:typ
 }
 
 function handleSplitFolderSubmit(
-  foldersAndColumns: typeof InitialData, 
+  foldersAndColumns: FolderAndColumnStateInterface, 
   dialogContentInformation: DialogContentInterface, 
   splitFolderHistory: SplitFolderHistoryObject, 
   setSplitFolderHistory: (data:SplitFolderHistoryObject) => void, 
-  setFoldersAndColumns: (data: typeof InitialData) => void, 
+  setFoldersAndColumns: (data: FolderAndColumnStateInterface) => void, 
   setOpen: (data: boolean) => void,
   setOpenPopup: (data: boolean) => void){
 
@@ -396,11 +398,11 @@ function handleSplitFolderSubmit(
 }
 
 function handleRegularFolderSubmit(
-  foldersAndColumns: typeof InitialData, 
+  foldersAndColumns: FolderAndColumnStateInterface, 
   dialogContentInformation: DialogContentInterface, 
   splitFolderHistory: SplitFolderHistoryObject, 
   setSplitFolderHistory: (data:SplitFolderHistoryObject) => void, 
-  setFoldersAndColumns: (data: typeof InitialData) => void, 
+  setFoldersAndColumns: (data: FolderAndColumnStateInterface) => void, 
   setOpen: (data: boolean) => void,
   setOpenPopup: (data: boolean) => void){
 
@@ -425,20 +427,20 @@ function handleRegularFolderSubmit(
     const column3 = foldersAndColumns.columns['column-3'];
 
     // Pushing one of the split folders to the first "Day 1-14" column
-    const column1FolderIds: String[] = Array.from(column1.folderIds)
+    const column1FolderIds: string[] = Array.from(column1.folderIds)
     if (dialogContentInformation.days1_14Amount !== 0){
       column1FolderIds.push(days1_14Folder.draggable_id);
     }
 
     // Removing the original folder by index
-    const column2FolderIds: String[] = Array.from(column2.folderIds)
+    const column2FolderIds: string[] = Array.from(column2.folderIds)
     let index = column2FolderIds.indexOf(dialogContentInformation.folderDraggableId.toString())
     if (index !== -1){
       column2FolderIds.splice(index, 1);
     }
 
     // Pushing one of the split folders to the second "Day 15-20" column
-    const column3FolderIds: String[] = Array.from(column3.folderIds)
+    const column3FolderIds: string[] = Array.from(column3.folderIds)
     if (dialogContentInformation.days15_30Amount !== 0){
       column3FolderIds.push(days15_30Folder.draggable_id);
     }
@@ -457,7 +459,7 @@ function handleRegularFolderSubmit(
       folderIds: column3FolderIds 
     };
 
-    const newFolders:any = {};
+    const newFolders:FolderStateInterface = {};
     if (days1_14Folder.amount !== 0){
       newFolders[days1_14Folder.draggable_id] = days1_14Folder;
     }
