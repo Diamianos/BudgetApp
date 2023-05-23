@@ -11,4 +11,6 @@ public interface FolderRepository extends JpaRepository<Folder, Integer> {
 
     public List<Folder> findAllByOrderByName();
 
+    public Folder findByName(String name);
+
 }

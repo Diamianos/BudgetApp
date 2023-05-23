@@ -6,6 +6,7 @@ USE `budget-app`;
 --
 DROP TABLE IF EXISTS `time_period`;
 DROP TABLE IF EXISTS `expense`;
+DROP TABLE IF EXISTS `sub_folder`;
 DROP TABLE IF EXISTS `folder`;
 
 --
@@ -18,8 +19,27 @@ CREATE TABLE `folder` (
                           `updated_at` DATETIME,
                           `name` varchar(45),
                           `amount` decimal,
-                          `balance` decimal,
+                          `balance` decimal, 
                           PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
+--
+-- Table structure for table `subfoler`
+--
+
+CREATE TABLE `sub_folder` (
+                          `id` int(11) NOT NULL AUTO_INCREMENT,
+                          `created_at` DATETIME,
+                          `updated_at` DATETIME,
+                          `name` varchar(45),
+                          `amount` decimal,
+                          `balance` decimal,
+                          `folder_id` int,
+                          INDEX `folder_idx` (folder_id),
+                          PRIMARY KEY (`id`),
+                          CONSTRAINT `FK_FOLDER`
+                          FOREIGN KEY (`folder_id`) 
+                          REFERENCES `folder`(`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 --

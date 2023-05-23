@@ -5,6 +5,7 @@ import javax.persistence.*;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
 import java.math.BigDecimal;
 
 @Entity
@@ -14,6 +15,7 @@ public class Folder extends AuditModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    
     @NotNull
     @Size(max = 45)
     @Column(name="name")
@@ -70,11 +72,9 @@ public class Folder extends AuditModel {
 
     @Override
     public String toString() {
-        return "Folder{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", amount=" + amount +
-                ", balance=" + balance +
-                '}';
-    }
+        return "Folder [id=" + id + ", name=" + name + ", amount=" + amount + ", balance=" + balance + "]";
+    }  
+
+    
+
 }

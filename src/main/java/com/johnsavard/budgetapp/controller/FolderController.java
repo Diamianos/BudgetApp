@@ -57,7 +57,7 @@ public class FolderController {
      * @return Response entity of the newly created folder
      */
     @PostMapping()
-    public ResponseEntity createFolder(@RequestBody Folder folder) throws URISyntaxException {
+    public ResponseEntity<Folder> createFolder(@RequestBody Folder folder) throws URISyntaxException {
 
         Folder savedFolder = folderService.saveFolder(folder);
 
@@ -72,7 +72,7 @@ public class FolderController {
      * @throws Exception
      */
     @PutMapping("/{id}")
-    public ResponseEntity updateFolder(@PathVariable Integer id, @RequestBody Folder folder) throws Exception {
+    public ResponseEntity<Folder> updateFolder(@PathVariable Integer id, @RequestBody Folder folder) throws Exception {
         Optional<Folder> currentFolder = folderService.findFolderById(id);
         currentFolder.ifPresent(f -> {
                 f.setName(folder.getName());
@@ -88,7 +88,7 @@ public class FolderController {
      * @return - Response entity with an "okay" build
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteClient(@PathVariable Integer id){
+    public ResponseEntity<String> deleteClient(@PathVariable Integer id){
         folderService.deleteFolder(id);
         return ResponseEntity.ok().build();
     }

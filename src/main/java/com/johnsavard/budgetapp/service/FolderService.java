@@ -20,6 +20,10 @@ public class FolderService {
         return folderRepository.findAllByOrderByName();
     }
 
+    public Folder findFolderByName(String folderName){
+        return folderRepository.findByName(folderName);
+    }
+
     public Optional<Folder> findFolderById(int folderId){
         return folderRepository.findById(folderId);
     }
