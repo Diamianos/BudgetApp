@@ -5,6 +5,8 @@ import java.math.BigDecimal;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,6 +16,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import com.johnsavard.budgetapp.enums.MonthPeriod;
 
 @Entity
 @Table(name="sub_folder")
@@ -37,6 +41,11 @@ public class SubFolder extends AuditModel {
     @Column(name="balance")
     private BigDecimal balance;
 
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name="month_period")
+    private MonthPeriod monthPeriod;
+
     // Great article about one to many mappings with Spring Boot: https://www.callicoder.com/hibernate-spring-boot-jpa-one-to-many-mapping-example/
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "folder_id")
@@ -46,10 +55,11 @@ public class SubFolder extends AuditModel {
 
     public SubFolder(@NotNull @Size(max = 45) String name,
             @NotNull @DecimalMin(value = "0.0", inclusive = false) BigDecimal amount,
-            @DecimalMin(value = "0.0", inclusive = true) BigDecimal balance) {
+            @DecimalMin(value = "0.0", inclusive = true) BigDecimal balance, @NotNull MonthPeriod monthPeriod) {
         this.name = name;
         this.amount = amount;
         this.balance = balance;
+        this.monthPeriod = monthPeriod;
     }
 
     public int getId() {
@@ -92,9 +102,18 @@ public class SubFolder extends AuditModel {
         this.folder = folder;
     }
 
+    public MonthPeriod getMonthPeriod() {
+        return monthPeriod;
+    }
+
+    public void setMonthPeriod(MonthPeriod monthPeriod) {
+        this.monthPeriod = monthPeriod;
+    }
+
     @Override
     public String toString() {
-        return "SubFolder [id=" + id + ", name=" + name + ", amount=" + amount + ", balance=" + balance + ", folder="
-                + folder + "]";
+        return "SubFolder [id=" + id + ", name=" + name + ", amount=" + amount + ", balance=" + balance
+                + ", monthPeriod=" + monthPeriod + ", folder=" + folder + "]";
     }
+    
 }

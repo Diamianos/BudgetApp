@@ -1,7 +1,6 @@
 package com.johnsavard.budgetapp.controller;
 
 import com.johnsavard.budgetapp.entity.Folder;
-import com.johnsavard.budgetapp.service.ExpenseService;
 import com.johnsavard.budgetapp.service.FolderService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,16 +16,14 @@ public class FolderController {
 
 
     private final FolderService folderService;
-    private final ExpenseService expenseService;
 
     /**
      *
      * @param folderService - Injected property
      * @param expenseService - Injected property
      */
-    public FolderController(FolderService folderService, ExpenseService expenseService){
+    public FolderController(FolderService folderService){
         this.folderService = folderService;
-        this.expenseService = expenseService;
     };
 
 

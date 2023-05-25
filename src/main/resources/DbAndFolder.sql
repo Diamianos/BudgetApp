@@ -34,6 +34,7 @@ CREATE TABLE `sub_folder` (
                           `name` varchar(45),
                           `amount` decimal,
                           `balance` decimal,
+                          `month_period` ENUM('FIRST_HALF', 'SECOND_HALF'),
                           `folder_id` int,
                           INDEX `folder_idx` (folder_id),
                           PRIMARY KEY (`id`),
