@@ -25,6 +25,7 @@ function FoldersPage(){
                 return f.id === updatedFolder.id ? updatedFolder : f
             })}
         setFolders(updatedFolders);
+        console.log(folders);
     }
     const handleDelete = async (folder: Folder) => {
         const response = await folderAPI.delete(folder)
@@ -46,7 +47,7 @@ function FoldersPage(){
               console.log(e.message);
             }}
             finally{
-                setLoading(false)
+                setLoading(false);
             }
         }
         loadFolders();
