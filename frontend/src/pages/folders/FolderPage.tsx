@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Folder } from './Folder'
 import FolderList from './FolderList'
 // import { MOCK_FOLDERS } from './MockFolders'
-import { folderAPI } from '../apis/FolderAPI'
+import { folderAPI } from '../../apis/FolderAPI'
 import { Box } from '@mui/system'
 import { CircularProgress } from '@mui/material'
 

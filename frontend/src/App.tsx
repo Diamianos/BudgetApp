@@ -3,10 +3,10 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import { Container } from '@mui/system';
 
-import FoldersPage from './folder/FolderPage';
-import SubFoldersPage from './folder/subFolder/SubFoldersPage'
+import FoldersPage from './pages/folders/FolderPage';
+import SubFoldersPage from './pages/subFolders/SubFoldersPage'
 import Navbar from './components/Navbar';
-import CreateSubFoldersPage from './folder/subFolder/CreateSubFoldersPage';
+import CreateSubFoldersPage from './pages/createSubFolders/CreateSubFoldersPage';
 
 function App() {
   return (

@@ -2,7 +2,7 @@ import { Alert, Box, Button, Container, Dialog, DialogActions, DialogContent, Di
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import React, { useEffect } from 'react'
 import { SplitFolderHistoryObject } from '../../interfaces/SplitFolderHistoryObject';
-import {Folder} from '../Folder'
+import {Folder} from '../folders/Folder'
 import { Draggable, DroppableProvided, DroppableStateSnapshot } from 'react-beautiful-dnd'
 
 import { FolderStateInterface } from '../../interfaces/FolderStateInterface';

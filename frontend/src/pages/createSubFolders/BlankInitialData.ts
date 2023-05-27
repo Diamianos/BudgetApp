@@ -1,4 +1,4 @@
-import {Folder} from '../Folder'
+import {Folder} from '../folders/Folder'
 
 export const BlankInitialData  = {
     folders: {

@@ -6,7 +6,7 @@ import CreateSubFolderColumn from './CreateSubFolderColumn'
 import {DragDropContext, DropResult} from 'react-beautiful-dnd'
 import { Box, Button, CircularProgress, Container } from '@mui/material'
 import { folderAPI } from '../../apis/FolderAPI'
-import { Folder } from '../Folder'
+import { Folder } from '../folders/Folder'
 
 import { FolderStateInterface } from '../../interfaces/FolderStateInterface'
 import { ColumnStateInterface } from '../../interfaces/ColumnStateInterface'

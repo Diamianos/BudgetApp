@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import { MOCK_SUB_FOLDERS } from '../MockSubFolders'
+import { MOCK_SUB_FOLDERS } from './MockSubFolders'
 import { SubFolder } from './SubFolder'
 import { Container, ToggleButton, ToggleButtonGroup } from '@mui/material'
 
