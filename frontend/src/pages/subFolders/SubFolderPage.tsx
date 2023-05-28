@@ -2,7 +2,12 @@ import React, { useState } from "react";
 
 import { MOCK_SUB_FOLDERS } from "./MockSubFolders";
 import { SubFolder } from "./SubFolder";
-import { Container, ToggleButton, ToggleButtonGroup } from "@mui/material";
+import {
+	Container,
+	Grid,
+	ToggleButton,
+	ToggleButtonGroup,
+} from "@mui/material";
 import SubFolderList from "./SubFolderList";
 import ExpenseList from "./ExpenseList";
 
@@ -27,7 +32,7 @@ function SubFoldersPage() {
 			<h2 className="table-header">Sub Folders</h2>
 			<Container
 				disableGutters
-				sx={{ display: "flex", justifyContent: "center" }}
+				sx={{ display: "flex", justifyContent: "center", marginBottom: "2rem" }}
 			>
 				<ToggleButtonGroup
 					size="large"
@@ -42,8 +47,17 @@ function SubFoldersPage() {
 				</ToggleButtonGroup>
 			</Container>
 
-			<SubFolderList subFolders={subFolders}></SubFolderList>
-			<ExpenseList></ExpenseList>
+			<Grid container spacing={2}>
+				<Grid item md={7}>
+					<SubFolderList
+						subFolders={subFolders}
+						monthPeriod={monthPeriod}
+					></SubFolderList>
+				</Grid>
+				<Grid item md={5}>
+					<ExpenseList></ExpenseList>
+				</Grid>
+			</Grid>
 		</div>
 	);
 }

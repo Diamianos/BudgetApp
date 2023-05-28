@@ -1,15 +1,19 @@
 /* @import '../node_modules/mini.css/dist/mini-default.min.css'; */
 
-.new-folder-div{
-  margin-top:10px;
-  width:100%;
-  text-align: right;
+.new-folder-div {
+	margin-top: 10px;
+	width: 100%;
+	text-align: right;
 }
 
-.table-header{
-  text-align: center;
+.table-header {
+	text-align: center;
 }
 
-.create-subfolders-div{
-  margin-top:1rem;
+.create-subfolders-div {
+	margin-top: 1rem;
+}
+
+.sub-folder-item {
+	max-width: 100%;
 }
