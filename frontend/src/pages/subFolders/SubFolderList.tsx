@@ -35,7 +35,7 @@ function SubFolderList({ subFolders, monthPeriod }: SubFolderListProps) {
 				<TableBody>
 					{subFolders.map((subFolder) => (
 						<React.Fragment key={subFolder.id}>
-							{monthPeriod?.toUpperCase() == subFolder.month_period ? (
+							{monthPeriod?.toUpperCase() === subFolder.month_period ? (
 								<SubFolderRow subFolder={subFolder} />
 							) : null}
 						</React.Fragment>
