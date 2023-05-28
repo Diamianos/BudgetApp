@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import { SubFolder } from "./SubFolder";
 import SubFolderRow from "./SubFolderRow";
 import {
@@ -13,9 +13,16 @@ import {
 interface SubFolderListProps {
 	subFolders: SubFolder[];
 	monthPeriod: string | null;
+	selectedRow: SubFolder | undefined;
+	setSelectedRow: Dispatch<SetStateAction<SubFolder | undefined>>;
 }
 
-function SubFolderList({ subFolders, monthPeriod }: SubFolderListProps) {
+function SubFolderList({
+	subFolders,
+	monthPeriod,
+	selectedRow,
+	setSelectedRow,
+}: SubFolderListProps) {
 	return (
 		<TableContainer>
 			<Table aria-label="simple table">
@@ -36,7 +43,11 @@ function SubFolderList({ subFolders, monthPeriod }: SubFolderListProps) {
 					{subFolders.map((subFolder) => (
 						<React.Fragment key={subFolder.id}>
 							{monthPeriod?.toUpperCase() === subFolder.month_period ? (
-								<SubFolderRow subFolder={subFolder} />
+								<SubFolderRow
+									selectedRow={selectedRow}
+									setSelectedRow={setSelectedRow}
+									subFolder={subFolder}
+								/>
 							) : null}
 						</React.Fragment>
 					))}

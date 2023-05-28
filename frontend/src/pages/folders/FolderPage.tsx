@@ -18,16 +18,14 @@ function FoldersPage() {
 	// const [folders, setFolders] = useState<Folder[]>(MOCK_FOLDERS)
 	const [folders, setFolders] = useState<Folder[]>([]);
 	const [loading, setLoading] = useState(false);
-	const [openDialog, setOpenDialog] = React.useState(false);
+	const [openDialog, setOpenDialog] = useState(false);
 
 	const handleSave = async (folder: Folder, newFolder: boolean) => {
 		if (checkForDuplicateFolderName(folder, folders)) {
-			console.log("Duplicate");
 			setOpenDialog(true);
 			return;
 		}
 
-		console.log("No duplicate");
 		let updatedFolders: React.SetStateAction<Folder[]> = [];
 		if (newFolder) {
 			const newFolder = await folderAPI.post(folder);
@@ -93,7 +91,7 @@ function FoldersPage() {
 				aria-describedby="alert-dialog-description"
 			>
 				<DialogTitle id="alert-dialog-title">
-					{"Duplicate Folder Found"}
+					{"Duplicate Folder Name Found"}
 				</DialogTitle>
 				<DialogContent>
 					<DialogContentText id="alert-dialog-description">

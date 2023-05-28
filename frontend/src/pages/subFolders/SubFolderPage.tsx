@@ -13,7 +13,7 @@ import ExpenseList from "./ExpenseList";
 
 function SubFoldersPage() {
 	const [subFolders, setSubFolders] = useState<SubFolder[]>(MOCK_SUB_FOLDERS);
-
+	const [selectedRow, setSelectedRow] = useState<SubFolder>();
 	const [monthPeriod, setMonthPeriod] = React.useState<string | null>(
 		"first_half"
 	);
@@ -52,10 +52,12 @@ function SubFoldersPage() {
 					<SubFolderList
 						subFolders={subFolders}
 						monthPeriod={monthPeriod}
+						selectedRow={selectedRow}
+						setSelectedRow={setSelectedRow}
 					></SubFolderList>
 				</Grid>
 				<Grid item md={5}>
-					<ExpenseList></ExpenseList>
+					<ExpenseList selectedRow={selectedRow}></ExpenseList>
 				</Grid>
 			</Grid>
 		</div>

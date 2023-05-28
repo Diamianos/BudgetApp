@@ -1,35 +1,27 @@
 import { TableCell, TableRow, TextField } from "@mui/material";
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { SubFolder } from "./SubFolder";
 
 interface SubFolderRowProps {
 	subFolder: SubFolder;
+	selectedRow: SubFolder | undefined;
+	setSelectedRow: Dispatch<SetStateAction<SubFolder | undefined>>;
 }
 
-function SubFolderRow({ subFolder }: SubFolderRowProps) {
+function SubFolderRow({
+	subFolder,
+	selectedRow,
+	setSelectedRow,
+}: SubFolderRowProps) {
 	return (
-		<TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-			<TableCell align="center">
-				<TextField
-					size="small"
-					InputProps={{ readOnly: true }}
-					value={subFolder.name}
-				/>
-			</TableCell>
-			<TableCell align="center">
-				<TextField
-					size="small"
-					InputProps={{ readOnly: true }}
-					value={subFolder.amount}
-				/>
-			</TableCell>
-			<TableCell align="center">
-				<TextField
-					size="small"
-					InputProps={{ readOnly: true }}
-					value={subFolder.balance}
-				/>
-			</TableCell>
+		<TableRow
+			onClick={() => setSelectedRow(subFolder)}
+			selected={subFolder.id === selectedRow?.id ? true : false}
+			sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+		>
+			<TableCell align="center">{subFolder.name}</TableCell>
+			<TableCell align="center">{subFolder.amount}</TableCell>
+			<TableCell align="center">{subFolder.balance}</TableCell>
 		</TableRow>
 	);
 }
