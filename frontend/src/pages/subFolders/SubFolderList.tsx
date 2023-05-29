@@ -28,13 +28,13 @@ function SubFolderList({
 			<Table aria-label="simple table">
 				<TableHead>
 					<TableRow>
-						<TableCell sx={{ fontSize: 16, fontWeight: "bold" }} align="center">
+						<TableCell sx={{ fontSize: 17, fontWeight: "bold" }} align="center">
 							Name
 						</TableCell>
-						<TableCell sx={{ fontSize: 16, fontWeight: "bold" }} align="center">
+						<TableCell sx={{ fontSize: 17, fontWeight: "bold" }} align="center">
 							Amount
 						</TableCell>
-						<TableCell sx={{ fontSize: 16, fontWeight: "bold" }} align="center">
+						<TableCell sx={{ fontSize: 17, fontWeight: "bold" }} align="center">
 							Balance
 						</TableCell>
 					</TableRow>

@@ -1,4 +1,4 @@
-import { TableCell, TableRow, TextField } from "@mui/material";
+import { TableCell, TableRow, TextField, makeStyles } from "@mui/material";
 import React, { Dispatch, SetStateAction } from "react";
 import { SubFolder } from "./SubFolder";
 
@@ -17,11 +17,19 @@ function SubFolderRow({
 		<TableRow
 			onClick={() => setSelectedRow(subFolder)}
 			selected={subFolder.id === selectedRow?.id ? true : false}
-			sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+			sx={{
+				"&:last-child td, &:last-child th": { border: 0 },
+			}}
 		>
-			<TableCell align="center">{subFolder.name}</TableCell>
-			<TableCell align="center">{subFolder.amount}</TableCell>
-			<TableCell align="center">{subFolder.balance}</TableCell>
+			<TableCell sx={{ fontSize: "17px" }} align="center">
+				{subFolder.name}
+			</TableCell>
+			<TableCell sx={{ fontSize: "17px" }} align="center">
+				{subFolder.amount}
+			</TableCell>
+			<TableCell sx={{ fontSize: "17px" }} align="center">
+				{subFolder.balance}
+			</TableCell>
 		</TableRow>
 	);
 }
