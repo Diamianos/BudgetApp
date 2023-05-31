@@ -41,6 +41,10 @@ public class SubFolder extends AuditModel {
     @Column(name="balance")
     private BigDecimal balance;
 
+    @Size(max=50)
+    @Column(name="description")
+    private String description;
+
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name="month_period")
@@ -68,6 +72,14 @@ public class SubFolder extends AuditModel {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getName() {
@@ -113,7 +125,7 @@ public class SubFolder extends AuditModel {
     @Override
     public String toString() {
         return "SubFolder [id=" + id + ", name=" + name + ", amount=" + amount + ", balance=" + balance
-                + ", monthPeriod=" + monthPeriod + ", folder=" + folder + "]";
+                + ", description=" + description + ", monthPeriod=" + monthPeriod + ", folder=" + folder + "]";
     }
     
 }

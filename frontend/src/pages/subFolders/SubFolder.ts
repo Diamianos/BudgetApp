@@ -5,6 +5,7 @@ export class SubFolder {
 	name: string = "";
 	amount: number = 0;
 	balance: number = 0;
+	description: string = "";
 	monthPeriod: string = "";
 
 	constructor(initializer?: any) {
@@ -15,6 +16,7 @@ export class SubFolder {
 		if (initializer.name) this.name = initializer.name;
 		if (initializer.amount) this.amount = initializer.amount;
 		if (initializer.balance) this.balance = initializer.balance;
+		if (initializer.description) this.description = initializer.description;
 		if (initializer.monthPeriod) this.monthPeriod = initializer.monthPeriod;
 	}
 }
