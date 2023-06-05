@@ -1,14 +1,14 @@
 package com.johnsavard.budgetapp.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 @Entity
 @Table(name = "expense")
@@ -19,6 +19,7 @@ public class Expense extends AuditModel {
   @Column(name = "id")
   private int id;
 
+  @JsonFormat(pattern = "yyyy-MM-dd' 'HH:mm:ss")
   @Column(name = "date_of_transaction")
   private Date dateOfTransaction;
 
@@ -111,20 +112,6 @@ public class Expense extends AuditModel {
 
   @Override
   public String toString() {
-    return (
-      "Expense [id=" +
-      id +
-      ", dateOfTransaction=" +
-      dateOfTransaction +
-      ", merchant=" +
-      merchant +
-      ", amount=" +
-      amount +
-      ", description=" +
-      description +
-      ", subFolder=" +
-      subFolder +
-      "]"
-    );
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
   }
 }

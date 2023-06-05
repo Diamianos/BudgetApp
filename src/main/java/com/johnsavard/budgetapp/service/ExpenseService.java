@@ -4,6 +4,7 @@ import com.johnsavard.budgetapp.dao.ExpenseRepository;
 import com.johnsavard.budgetapp.dao.FolderRepository;
 import com.johnsavard.budgetapp.entity.Expense;
 import com.johnsavard.budgetapp.entity.Folder;
+import com.johnsavard.budgetapp.entity.SubFolder;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
@@ -31,16 +32,9 @@ public class ExpenseService {
     return expenseRepository.findById(expenseId);
   }
 
-  public void saveExpense(int folderId, Expense expense) {
-    expenseRepository.save(expense);
-
-    // Update folder to reflect the new balance
-    Optional<Folder> tempFolder = folderRepository.findById(folderId);
-    tempFolder.ifPresent(folder -> {
-      BigDecimal newBalance = folder.getBalance().subtract(expense.getAmount());
-      folder.setBalance(newBalance);
-      folderRepository.save(folder);
-    });
+  public Expense saveExpense(SubFolder subFolder, Expense expense) {
+    expense.setSubFolder(subFolder);
+    return expenseRepository.save(expense);
   }
 
   public void deleteExpense(int expenseId, int folderId) {

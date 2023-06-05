@@ -5,6 +5,8 @@ import javax.persistence.*;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 @Entity
 @Table(name = "folder")
@@ -70,16 +72,6 @@ public class Folder extends AuditModel {
 
   @Override
   public String toString() {
-    return (
-      "Folder [id=" +
-      id +
-      ", name=" +
-      name +
-      ", amount=" +
-      amount +
-      ", balance=" +
-      balance +
-      "]"
-    );
+    return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
   }
 }

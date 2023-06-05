@@ -2,12 +2,16 @@ package com.johnsavard.budgetapp.controller;
 
 import com.johnsavard.budgetapp.entity.Expense;
 import com.johnsavard.budgetapp.entity.Folder;
+import com.johnsavard.budgetapp.entity.SubFolder;
 import com.johnsavard.budgetapp.exception.CustomException;
 import com.johnsavard.budgetapp.service.ExpenseService;
 import com.johnsavard.budgetapp.service.FolderService;
 import com.johnsavard.budgetapp.service.SubFolderService;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,8 +43,8 @@ public class ExpenseController {
   }
 
   /**
-   *
-   * @return All expenses in the database
+   * @param expenseId - The expense to be returned
+   * @return - All expenses in the database
    */
   @GetMapping("/{expenseId}")
   public Optional<Expense> getExpenseById(@PathVariable Integer expenseId) {
@@ -49,30 +53,36 @@ public class ExpenseController {
 
   /**
    *
-   * @param folderId - Passed in path variable, contains the folder id to be updated
+   * @param subFolderId - The subfolder to which attribute this expense to
    * @param expense - Expense object to be saved
    * @return
+   * @throws URISyntaxException
    */
   @PostMapping
-  public void addExpense(
-    @RequestParam("folderId") int folderId,
-    @ModelAttribute("expense") Expense expense
-  ) {
-    Optional<Folder> folder = folderService.findFolderById(folderId);
+  public ResponseEntity<String> addExpense(
+    @RequestParam("subFolderId") int subFolderId,
+    @RequestBody Expense expense
+  ) throws URISyntaxException {
+    Optional<SubFolder> subFolder = subFolderService.findSubFolderById(
+      subFolderId
+    );
 
-    if (folder.get().getBalance().compareTo(expense.getAmount()) < 0) {}
-
-    folder.ifPresent(theFolder -> {
-      if (folder.get().getBalance().compareTo(expense.getAmount()) < 0) {
-        throw new CustomException(
-          "Custom Exception has occured",
-          "CustomException"
+    if (subFolder.isPresent()) {
+      SubFolder tempSubFolder = subFolder.get();
+      Expense savedExpense = expenseService.saveExpense(tempSubFolder, expense);
+      return ResponseEntity
+        .created(new URI("/folder/" + savedExpense.getId()))
+        .body(savedExpense.toString());
+    } else {
+      return ResponseEntity
+        .badRequest()
+        .body(
+          String.format(
+            "Error retrieving subFolder with ID %s. Unable to save expense",
+            subFolderId
+          )
         );
-      }
-      // expense.setFolder(theFolder);
-    });
-
-    expenseService.saveExpense(folderId, expense);
+    }
   }
 
   /**
