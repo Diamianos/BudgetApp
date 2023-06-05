@@ -22,7 +22,7 @@ import { FolderStateInterface } from "../../interfaces/FolderStateInterface";
 import { ColumnStateInterface } from "../../interfaces/ColumnStateInterface";
 import { FolderAndColumnStateInterface } from "../../interfaces/FolderAndColumnStateInterface";
 import { SubFolder } from "../subFolders/SubFolder";
-import { subFolderAPI } from "../../apis/CreateSubFolderApi";
+import { subFolderAPI } from "../../apis/SubFolderAPI";
 
 function CreateSubFoldersPage() {
 	const [foldersAndColumns, setFoldersAndColumns] =

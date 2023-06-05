@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { MOCK_SUB_FOLDERS } from "./MockSubFolders";
 import { SubFolder } from "./SubFolder";
 import {
+	Box,
+	CircularProgress,
 	Container,
 	Grid,
 	ToggleButton,
@@ -10,13 +12,15 @@ import {
 } from "@mui/material";
 import SubFolderList from "./SubFolderList";
 import ExpenseList from "./ExpenseList";
+import { subFolderAPI } from "../../apis/SubFolderAPI";
 
 function SubFoldersPage() {
-	const [subFolders, setSubFolders] = useState<SubFolder[]>(MOCK_SUB_FOLDERS);
+	const [subFolders, setSubFolders] = useState<SubFolder[]>([]);
 	const [selectedRow, setSelectedRow] = useState<SubFolder>();
 	const [monthPeriod, setMonthPeriod] = React.useState<string | null>(
 		"first_half"
 	);
+	const [loading, setLoading] = useState(false);
 
 	const handleMonthPeriodChange = (
 		event: React.MouseEvent<HTMLElement>,
@@ -26,6 +30,23 @@ function SubFoldersPage() {
 			setMonthPeriod(newMonthPeriod);
 		}
 	};
+
+	useEffect(() => {
+		async function loadFolders() {
+			setLoading(true);
+			try {
+				const data = await subFolderAPI.get();
+				setSubFolders(data);
+			} catch (e) {
+				if (e instanceof Error) {
+					console.log(e.message);
+				}
+			} finally {
+				setLoading(false);
+			}
+		}
+		loadFolders();
+	}, []);
 
 	return (
 		<div>
@@ -47,19 +68,25 @@ function SubFoldersPage() {
 				</ToggleButtonGroup>
 			</Container>
 
-			<Grid container spacing={2}>
-				<Grid item md={7}>
-					<SubFolderList
-						subFolders={subFolders}
-						monthPeriod={monthPeriod}
-						selectedRow={selectedRow}
-						setSelectedRow={setSelectedRow}
-					></SubFolderList>
+			{loading ? (
+				<Box sx={{ display: "flex", justifyContent: "center" }}>
+					<CircularProgress />
+				</Box>
+			) : (
+				<Grid container spacing={2}>
+					<Grid item md={7}>
+						<SubFolderList
+							subFolders={subFolders}
+							monthPeriod={monthPeriod}
+							selectedRow={selectedRow}
+							setSelectedRow={setSelectedRow}
+						></SubFolderList>
+					</Grid>
+					<Grid item md={5}>
+						<ExpenseList selectedRow={selectedRow}></ExpenseList>
+					</Grid>
 				</Grid>
-				<Grid item md={5}>
-					<ExpenseList selectedRow={selectedRow}></ExpenseList>
-				</Grid>
-			</Grid>
+			)}
 		</div>
 	);
 }

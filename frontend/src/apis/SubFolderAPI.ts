@@ -5,9 +5,9 @@ function translateStatusToErrorMessage(status: number) {
 		case 401:
 			return "Please login again.";
 		case 403:
-			return "You do not have permission to view the subFolder(s).";
+			return "You do not have permission to view the folder(s).";
 		default:
-			return "There was an error retrieving the subFolder(s). Please try again.";
+			return "There was an error retrieving the folder(s). Please try again.";
 	}
 }
 
@@ -62,10 +62,10 @@ const subFolderAPI = {
 			});
 	},
 
-	post(folder: SubFolder) {
+	post(subFolder: SubFolder) {
 		return fetch("/subfolder", {
 			method: "POST",
-			body: JSON.stringify(folder),
+			body: JSON.stringify(subFolder),
 			headers: {
 				"Content-type": "application/json",
 			},
@@ -80,26 +80,26 @@ const subFolderAPI = {
 			});
 	},
 
-	// put(folder: SubFolder) {
-	// 	return fetch(`/folder/${folder.id}`, {
-	// 		method: "PUT",
-	// 		body: JSON.stringify(folder),
-	// 		headers: {
-	// 			"Content-type": "application/json",
-	// 		},
-	// 	})
-	// 		.then(checkStatus)
-	// 		.then(parseJSON)
-	// 		.catch((error: TypeError) => {
-	// 			console.log("log client error " + error);
-	// 			throw new Error(
-	// 				"There was an error adding the subFolder. Please try again."
-	// 			);
-	// 		});
-	// },
+	put(subFolder: SubFolder) {
+		return fetch(`/subfolder/${subFolder.id}`, {
+			method: "PUT",
+			body: JSON.stringify(subFolder),
+			headers: {
+				"Content-type": "application/json",
+			},
+		})
+			.then(checkStatus)
+			.then(parseJSON)
+			.catch((error: TypeError) => {
+				console.log("log client error " + error);
+				throw new Error(
+					"There was an error adding the subFolder. Please try again."
+				);
+			});
+	},
 
-	delete(folder: SubFolder) {
-		return fetch(`/subfolder/${folder.id}`, {
+	delete(subFolder: SubFolder) {
+		return fetch(`/subfolder/${subFolder.id}`, {
 			method: "DELETE",
 		})
 			.then(checkStatus)
