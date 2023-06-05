@@ -1,7 +1,7 @@
 package com.johnsavard.budgetapp.entity;
 
+import com.johnsavard.budgetapp.enums.MonthPeriod;
 import java.math.BigDecimal;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,115 +17,137 @@ import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import com.johnsavard.budgetapp.enums.MonthPeriod;
-
 @Entity
-@Table(name="sub_folder")
+@Table(name = "sub_folder")
 public class SubFolder extends AuditModel {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id; 
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private int id;
 
-    @NotNull
-    @Size(max=45)
-    @Column(name="name")
-    private String name;
+  @NotNull
+  @Size(max = 45)
+  @Column(name = "name")
+  private String name;
 
-    @NotNull
-    @DecimalMin(value="0.0", inclusive = false)
-    @Column(name="amount")
-    private BigDecimal amount;
+  @NotNull
+  @DecimalMin(value = "0.0", inclusive = false)
+  @Column(name = "amount")
+  private BigDecimal amount;
 
-    @DecimalMin(value="0.0", inclusive = true)
-    @Column(name="balance")
-    private BigDecimal balance;
+  @DecimalMin(value = "0.0", inclusive = true)
+  @Column(name = "balance")
+  private BigDecimal balance;
 
-    @Size(max=50)
-    @Column(name="description")
-    private String description;
+  @Size(max = 50)
+  @Column(name = "description")
+  private String description;
 
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    @Column(name="month_period")
-    private MonthPeriod monthPeriod;
+  @NotNull
+  @Enumerated(EnumType.STRING)
+  @Column(name = "month_period")
+  private MonthPeriod monthPeriod;
 
-    // Great article about one to many mappings with Spring Boot: https://www.callicoder.com/hibernate-spring-boot-jpa-one-to-many-mapping-example/
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
-    @JoinColumn(name = "folder_id")
-    private Folder folder;
-
-    public SubFolder(){}
-
-    public SubFolder(@NotNull @Size(max = 45) String name,
-            @NotNull @DecimalMin(value = "0.0", inclusive = false) BigDecimal amount,
-            @DecimalMin(value = "0.0", inclusive = true) BigDecimal balance, @NotNull MonthPeriod monthPeriod) {
-        this.name = name;
-        this.amount = amount;
-        this.balance = balance;
-        this.monthPeriod = monthPeriod;
+  // Great article about one to many mappings with Spring Boot: https://www.callicoder.com/hibernate-spring-boot-jpa-one-to-many-mapping-example/
+  @ManyToOne(
+    cascade = {
+      CascadeType.PERSIST,
+      CascadeType.MERGE,
+      CascadeType.DETACH,
+      CascadeType.REFRESH,
     }
+  )
+  @JoinColumn(name = "folder_id")
+  private Folder folder;
 
-    public int getId() {
-        return id;
-    }
+  public SubFolder() {}
 
-    public void setId(int id) {
-        this.id = id;
-    }
+  public SubFolder(
+    @NotNull @Size(max = 45) String name,
+    @NotNull @DecimalMin(value = "0.0", inclusive = false) BigDecimal amount,
+    @DecimalMin(value = "0.0", inclusive = true) BigDecimal balance,
+    @NotNull MonthPeriod monthPeriod
+  ) {
+    this.name = name;
+    this.amount = amount;
+    this.balance = balance;
+    this.monthPeriod = monthPeriod;
+  }
 
-    public String getDescription() {
-        return description;
-    }
+  public int getId() {
+    return id;
+  }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+  public void setId(int id) {
+    this.id = id;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public String getDescription() {
+    return description;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-    public BigDecimal getAmount() {
-        return amount;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public BigDecimal getBalance() {
-        return balance;
-    }
+  public BigDecimal getAmount() {
+    return amount;
+  }
 
-    public void setBalance(BigDecimal balance) {
-        this.balance = balance;
-    }
+  public void setAmount(BigDecimal amount) {
+    this.amount = amount;
+  }
 
-    public Folder getFolder() {
-        return folder;
-    }
+  public BigDecimal getBalance() {
+    return balance;
+  }
 
-    public void setFolder(Folder folder) {
-        this.folder = folder;
-    }
+  public void setBalance(BigDecimal balance) {
+    this.balance = balance;
+  }
 
-    public MonthPeriod getMonthPeriod() {
-        return monthPeriod;
-    }
+  public Folder getFolder() {
+    return folder;
+  }
 
-    public void setMonthPeriod(MonthPeriod monthPeriod) {
-        this.monthPeriod = monthPeriod;
-    }
+  public void setFolder(Folder folder) {
+    this.folder = folder;
+  }
 
-    @Override
-    public String toString() {
-        return "SubFolder [id=" + id + ", name=" + name + ", amount=" + amount + ", balance=" + balance
-                + ", description=" + description + ", monthPeriod=" + monthPeriod + ", folder=" + folder + "]";
-    }
-    
+  public MonthPeriod getMonthPeriod() {
+    return monthPeriod;
+  }
+
+  public void setMonthPeriod(MonthPeriod monthPeriod) {
+    this.monthPeriod = monthPeriod;
+  }
+
+  @Override
+  public String toString() {
+    return (
+      "SubFolder [id=" +
+      id +
+      ", name=" +
+      name +
+      ", amount=" +
+      amount +
+      ", balance=" +
+      balance +
+      ", description=" +
+      description +
+      ", monthPeriod=" +
+      monthPeriod +
+      ", folder=" +
+      folder +
+      "]"
+    );
+  }
 }

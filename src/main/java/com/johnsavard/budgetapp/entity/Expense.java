@@ -1,88 +1,130 @@
 package com.johnsavard.budgetapp.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
+import java.math.BigDecimal;
+import java.util.Date;
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.math.BigDecimal;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
-@Table(name="expense")
+@Table(name = "expense")
 public class Expense extends AuditModel {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
-    private int id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id")
+  private int id;
 
-    @NotNull
-    @Size(max=45)
-    @Column(name="merchant")
-    private String merchant;
+  @Column(name = "date_of_transaction")
+  private Date dateOfTransaction;
 
-    @NotNull
-    @DecimalMin(value="0.0", inclusive = false)
-    @Column(name="amount")
-    private BigDecimal amount;
+  @NotNull
+  @Size(max = 45)
+  @Column(name = "merchant")
+  private String merchant;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "folder_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore
-    private Folder folder;
+  @NotNull
+  @DecimalMin(value = "0.0", inclusive = false)
+  @Column(name = "amount")
+  private BigDecimal amount;
 
+  @Size(max = 50)
+  @Column(name = "description")
+  private String description;
 
-
-    public Expense() {
+  @ManyToOne(
+    cascade = {
+      CascadeType.PERSIST,
+      CascadeType.MERGE,
+      CascadeType.DETACH,
+      CascadeType.REFRESH,
     }
+  )
+  @JoinColumn(name = "sub_folder_id", nullable = false)
+  private SubFolder subFolder;
 
-    public Expense(String merchant, BigDecimal amount) {
-        this.merchant = merchant;
-        this.amount = amount;
-    }
+  public Expense() {}
 
-    public int getId() {
-        return id;
-    }
-    public void setId(int id) {
-        this.id = id;
-    }
+  public Expense(
+    Date dateOfTransaction,
+    @NotNull @Size(max = 45) String merchant,
+    @NotNull @DecimalMin(value = "0.0", inclusive = false) BigDecimal amount,
+    @Size(max = 50) String description
+  ) {
+    this.dateOfTransaction = dateOfTransaction;
+    this.merchant = merchant;
+    this.amount = amount;
+    this.description = description;
+  }
 
-    public String getMerchant() {
-        return merchant;
-    }
+  public Date getDateOfTransaction() {
+    return dateOfTransaction;
+  }
 
-    public void setMerchant(String merchant) {
-        this.merchant = merchant;
-    }
+  public void setDateOfTransaction(Date dateOfTransaction) {
+    this.dateOfTransaction = dateOfTransaction;
+  }
 
-    public BigDecimal getAmount() {
-        return amount;
-    }
+  public String getDescription() {
+    return description;
+  }
 
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-    public Folder getFolder() {
-        return folder;
-    }
+  public SubFolder getSubFolder() {
+    return subFolder;
+  }
 
-    public void setFolder (Folder folder) {
-        this.folder = folder;
-    }
+  public void setSubFolder(SubFolder subFolder) {
+    this.subFolder = subFolder;
+  }
 
-    @Override
-    public String toString() {
-        return "Expense{" +
-                "id=" + id +
-                ", merchant='" + merchant + '\'' +
-                ", amount=" + amount +
-                ", folder=" + folder +
-                '}';
-    }
+  public int getId() {
+    return id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
+  }
+
+  public String getMerchant() {
+    return merchant;
+  }
+
+  public void setMerchant(String merchant) {
+    this.merchant = merchant;
+  }
+
+  public BigDecimal getAmount() {
+    return amount;
+  }
+
+  public void setAmount(BigDecimal amount) {
+    this.amount = amount;
+  }
+
+  @Override
+  public String toString() {
+    return (
+      "Expense [id=" +
+      id +
+      ", dateOfTransaction=" +
+      dateOfTransaction +
+      ", merchant=" +
+      merchant +
+      ", amount=" +
+      amount +
+      ", description=" +
+      description +
+      ", subFolder=" +
+      subFolder +
+      "]"
+    );
+  }
 }

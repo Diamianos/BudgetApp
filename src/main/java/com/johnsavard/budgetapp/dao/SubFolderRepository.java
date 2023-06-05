@@ -1,11 +1,9 @@
 package com.johnsavard.budgetapp.dao;
 
+import com.johnsavard.budgetapp.entity.SubFolder;
 import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.johnsavard.budgetapp.entity.SubFolder;
-
-public interface SubFolderRepository extends JpaRepository<SubFolder, Integer>{
-    List<SubFolder> findByFolderId(Integer folderId);
+public interface SubFolderRepository extends JpaRepository<SubFolder, Integer> {
+  List<SubFolder> findByFolderId(Integer folderId);
 }
