@@ -58,13 +58,13 @@ CREATE TABLE `sub_folder` (
 -- Data for table `sub_folder`
 --
 
-INSERT INTO `sub_folder` (name, amount, month_period, description, folder_id) VALUES
-('Tithe',430, 'FIRST_HALF', 'Tithe Folder', 1),
-   ('Tithe',430, 'SECOND_HALF', 'Tithe Folder', 1),
-   ('Emily',150, 'FIRST_HALF', 'Emily Folder', 2),
-   ('Emily',150, 'SECOND_HALF', 'Emily Folder', 2),
-   ('John',100, 'FIRST_HALF', 'John Folder', 3),
-   ('Isabella',100, 'SECOND_HALF', 'Isabella Folder', 4);
+INSERT INTO `sub_folder` (name, amount, balance, month_period, description, folder_id) VALUES
+('Tithe',430, 430, 'FIRST_HALF', 'Tithe Folder', 1),
+   ('Tithe',430, 430, 'SECOND_HALF', 'Tithe Folder', 1),
+   ('Emily',150, 150, 'FIRST_HALF', 'Emily Folder', 2),
+   ('Emily',150, 150, 'SECOND_HALF', 'Emily Folder', 2),
+   ('John',100, 100, 'FIRST_HALF', 'John Folder', 3),
+   ('Isabella',100, 100, 'SECOND_HALF', 'Isabella Folder', 4);
 
 --
 -- Table structure for table `expense`
@@ -84,14 +84,14 @@ CREATE TABLE `expense` (
     FOREIGN KEY (`sub_folder_id`) REFERENCES sub_folder(`id`)
 );
 
-INSERT INTO `expense` (date_of_transaction, merchant, amount, description, sub_folder_id) VALUES
-('2023-06-05 14:40:20', 'Child Impact', 300, 'New well', 1),
-('2023-06-05 14:40:20', 'Church', 200, 'Tithe offering', 2),
-('2023-06-05 14:40:20', 'Nail Salon', 60, 'Nails for trip', 3),
-('2023-06-05 14:40:20', 'Beach Body', 120, 'Supplements', 4),
-('2023-06-05 14:40:20', 'Access Point', 50, 'Ubiquiti Access point', 5),
-('2023-06-05 14:40:20', 'Lowes', 50, 'House items', 5),
-('2023-06-05 14:40:20', 'Dollywood Splash', 10, 'Ice cream', 6);
+-- INSERT INTO `expense` (date_of_transaction, merchant, amount, description, sub_folder_id) VALUES
+-- ('2023-06-05 14:40:20', 'Child Impact', 300, 'New well', 1),
+-- ('2023-06-05 14:40:20', 'Church', 200, 'Tithe offering', 2),
+-- ('2023-06-05 14:40:20', 'Nail Salon', 60, 'Nails for trip', 3),
+-- ('2023-06-05 14:40:20', 'Beach Body', 120, 'Supplements', 4),
+-- ('2023-06-05 14:40:20', 'Access Point', 50, 'Ubiquiti Access point', 5),
+-- ('2023-06-05 14:40:20', 'Lowes', 50, 'House items', 5),
+-- ('2023-06-05 14:40:20', 'Dollywood Splash', 10, 'Ice cream', 6);
 
 
 

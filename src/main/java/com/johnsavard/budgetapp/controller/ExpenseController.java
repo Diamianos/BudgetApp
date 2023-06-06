@@ -68,11 +68,7 @@ public class ExpenseController {
     );
 
     if (subFolder.isPresent()) {
-      SubFolder tempSubFolder = subFolder.get();
-      Expense savedExpense = expenseService.saveExpense(tempSubFolder, expense);
-      return ResponseEntity
-        .created(new URI("/folder/" + savedExpense.getId()))
-        .body(savedExpense.toString());
+      return expenseService.saveExpense(subFolder.get(), expense);
     } else {
       return ResponseEntity
         .badRequest()
