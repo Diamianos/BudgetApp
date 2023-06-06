@@ -1,34 +1,26 @@
 package com.johnsavard.budgetapp.controller;
 
 import com.johnsavard.budgetapp.entity.Expense;
-import com.johnsavard.budgetapp.entity.Folder;
 import com.johnsavard.budgetapp.entity.SubFolder;
-import com.johnsavard.budgetapp.exception.CustomException;
 import com.johnsavard.budgetapp.service.ExpenseService;
-import com.johnsavard.budgetapp.service.FolderService;
 import com.johnsavard.budgetapp.service.SubFolderService;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/expense")
 public class ExpenseController {
 
-  private final FolderService folderService;
   private final ExpenseService expenseService;
   private final SubFolderService subFolderService;
 
   public ExpenseController(
-    FolderService folderService,
     ExpenseService expenseService,
     SubFolderService subFolderService
   ) {
-    this.folderService = folderService;
     this.expenseService = expenseService;
     this.subFolderService = subFolderService;
   }
@@ -74,8 +66,33 @@ public class ExpenseController {
         .badRequest()
         .body(
           String.format(
-            "Error retrieving subFolder with ID %s. Unable to save expense",
+            "Error retrieving subFolder with ID %s. Unable to save expense.",
             subFolderId
+          )
+        );
+    }
+  }
+
+  @PatchMapping
+  public ResponseEntity<String> patchExpense(
+    @RequestParam("subFolderId") int subFolderId,
+    @RequestParam("expenseId") int expenseId,
+    @RequestBody String json
+  ) {
+    Optional<SubFolder> subFolder = subFolderService.findSubFolderById(
+      subFolderId
+    );
+    Optional<Expense> expense = expenseService.findExpenseById(expenseId);
+    if (subFolder.isPresent() && expense.isPresent()) {
+      return expenseService.patchExpense(subFolder.get(), expense.get(), json);
+    } else {
+      return ResponseEntity
+        .badRequest()
+        .body(
+          String.format(
+            "Error retrieving subFolder with ID %s or expense with ID %s. Unable to save expense.",
+            subFolderId,
+            expenseId
           )
         );
     }
@@ -93,24 +110,5 @@ public class ExpenseController {
     @RequestParam("folderId") int folderId
   ) {
     expenseService.deleteExpense(expenseId, folderId);
-  }
-
-  /**
-   *
-   * @param expenseId - Passed in from html page
-   * @param folderId - Passed in from html page
-   * @param theModel - Injected for adding attributes to html page
-   * @return The view to be displayed
-   */
-  @GetMapping("/update")
-  public void updateExpense(
-    @RequestParam("expenseId") int expenseId,
-    @RequestParam("folderId") int folderId,
-    Model theModel
-  ) {
-    Optional<Expense> expense = expenseService.findExpenseById(expenseId);
-
-    theModel.addAttribute("expense", expense);
-    theModel.addAttribute("folderId", folderId);
   }
 }
