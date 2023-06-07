@@ -46,8 +46,8 @@ public class ExpenseController {
   /**
    *
    * @param subFolderId - The subfolder to which attribute this expense to
-   * @param expense - Expense object to be saved
-   * @return
+   * @param expense - [Request Body] Expense object in json format to be saved
+   * @return - Response Entity
    * @throws URISyntaxException
    */
   @PostMapping
@@ -73,6 +73,14 @@ public class ExpenseController {
     }
   }
 
+  /**
+   *
+   * @param subFolderId - The subfolder which the expense is attached to
+   * @param expenseId - The expense to be patched
+   * @param json - [Request Body] Json object containing the fields to be updated
+   * @return - Response Entity
+   * @throws URISyntaxException
+   */
   @PatchMapping
   public ResponseEntity<String> patchExpense(
     @RequestParam("subFolderId") int subFolderId,
@@ -104,11 +112,8 @@ public class ExpenseController {
    * @param folderId - Passed in from html page
    * @return The ModelAndView to be displayed
    */
-  @GetMapping("/delete")
-  public void deleteExpense(
-    @RequestParam("expenseId") int expenseId,
-    @RequestParam("folderId") int folderId
-  ) {
-    expenseService.deleteExpense(expenseId, folderId);
+  @DeleteMapping("/{expenseId}")
+  public void deleteExpense(@PathVariable Integer expenseId) {
+    expenseService.deleteExpense(expenseId);
   }
 }

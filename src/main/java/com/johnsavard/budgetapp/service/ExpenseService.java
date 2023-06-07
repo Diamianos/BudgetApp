@@ -7,6 +7,7 @@ import com.johnsavard.budgetapp.dao.ExpenseRepository;
 import com.johnsavard.budgetapp.dao.SubFolderRepository;
 import com.johnsavard.budgetapp.entity.Expense;
 import com.johnsavard.budgetapp.entity.SubFolder;
+import com.johnsavard.budgetapp.exception.NoRecordFoundException;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -93,17 +94,22 @@ public class ExpenseService {
     }
   }
 
-  public void deleteExpense(int expenseId, int folderId) {
-    Optional<Expense> tempExpense = expenseRepository.findById(expenseId);
-    // Optional<Folder> tempFolder = folderRepository.findById(folderId);
+  public void deleteExpense(int expenseId) {
+    Optional<Expense> existingExpense = expenseRepository.findById(expenseId);
 
-    // // Update folder to add back the balance of the expense
-    // tempFolder.ifPresent(folder -> {
-    //   Expense theExpense = tempExpense.get();
-    //   folder.setBalance(folder.getBalance().add(theExpense.getAmount()));
-    // });
-
-    // expenseRepository.deleteById(expenseId);
+    if (existingExpense.isPresent()) {
+      Expense exp = existingExpense.get();
+      SubFolder existingSubFolder = subFolderRepository
+        .findById(exp.getSubFolder().getId())
+        .get();
+      existingSubFolder.setBalance(
+        existingSubFolder.getBalance().add(exp.getAmount())
+      );
+      expenseRepository.delete(exp);
+      subFolderRepository.save(existingSubFolder);
+    } else {
+      throw new NoRecordFoundException();
+    }
   }
 
   private ResponseEntity<String> handlePatchingExpense(
