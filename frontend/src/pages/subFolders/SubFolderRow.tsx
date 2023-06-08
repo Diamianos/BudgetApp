@@ -13,9 +13,14 @@ function SubFolderRow({
 	selectedRow,
 	setSelectedRow,
 }: SubFolderRowProps) {
+	const handleOnRowClick = (event: any) => {
+		event.stopPropagation();
+		setSelectedRow(subFolder);
+	};
+
 	return (
 		<TableRow
-			onClick={() => setSelectedRow(subFolder)}
+			onClick={handleOnRowClick}
 			selected={subFolder.id === selectedRow?.id ? true : false}
 			sx={{
 				"&:last-child td, &:last-child th": { border: 0 },

@@ -1,4 +1,4 @@
-import { SubFolder } from "./SubFolder";
+import { SubFolder } from "../pages/subFolders/SubFolder";
 
 export const MOCK_SUB_FOLDERS = [
 	new SubFolder({

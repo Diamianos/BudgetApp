@@ -24,36 +24,47 @@ function SubFolderList({
 	setSelectedRow,
 }: SubFolderListProps) {
 	return (
-		<TableContainer>
-			<Table aria-label="simple table">
-				<TableHead>
-					<TableRow>
-						<TableCell sx={{ fontSize: 17, fontWeight: "bold" }} align="center">
-							Name
-						</TableCell>
-						<TableCell sx={{ fontSize: 17, fontWeight: "bold" }} align="center">
-							Amount
-						</TableCell>
-						<TableCell sx={{ fontSize: 17, fontWeight: "bold" }} align="center">
-							Balance
-						</TableCell>
-					</TableRow>
-				</TableHead>
-				<TableBody>
-					{subFolders.map((subFolder) => (
-						<React.Fragment key={subFolder.id}>
-							{monthPeriod?.toUpperCase() === subFolder.monthPeriod ? (
-								<SubFolderRow
-									selectedRow={selectedRow}
-									setSelectedRow={setSelectedRow}
-									subFolder={subFolder}
-								/>
-							) : null}
-						</React.Fragment>
-					))}
-				</TableBody>
-			</Table>
-		</TableContainer>
+		<div data-value="subFolderList">
+			<TableContainer sx={{ backgroundColor: "white" }}>
+				<Table aria-label="simple table">
+					<TableHead>
+						<TableRow>
+							<TableCell
+								sx={{ fontSize: 17, fontWeight: "bold" }}
+								align="center"
+							>
+								Name
+							</TableCell>
+							<TableCell
+								sx={{ fontSize: 17, fontWeight: "bold" }}
+								align="center"
+							>
+								Amount
+							</TableCell>
+							<TableCell
+								sx={{ fontSize: 17, fontWeight: "bold" }}
+								align="center"
+							>
+								Balance
+							</TableCell>
+						</TableRow>
+					</TableHead>
+					<TableBody>
+						{subFolders.map((subFolder) => (
+							<React.Fragment key={subFolder.id}>
+								{monthPeriod?.toUpperCase() === subFolder.monthPeriod ? (
+									<SubFolderRow
+										selectedRow={selectedRow}
+										setSelectedRow={setSelectedRow}
+										subFolder={subFolder}
+									/>
+								) : null}
+							</React.Fragment>
+						))}
+					</TableBody>
+				</Table>
+			</TableContainer>
+		</div>
 	);
 }
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { BlankInitialData } from "./BlankInitialData";
+import { BlankInitialSubFolderData } from "./BlankInitialSubFolderData";
 import { SplitFolderHistoryObject } from "../../interfaces/SplitFolderHistoryObject";
 import CreateSubFolderColumn from "./CreateSubFolderColumn";
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
@@ -26,7 +26,7 @@ import { subFolderAPI } from "../../apis/SubFolderAPI";
 
 function CreateSubFoldersPage() {
 	const [foldersAndColumns, setFoldersAndColumns] =
-		useState<FolderAndColumnStateInterface>(BlankInitialData);
+		useState<FolderAndColumnStateInterface>(BlankInitialSubFolderData);
 	const [splitFolderHistory, setSplitFolderHistory] =
 		useState<SplitFolderHistoryObject>({});
 	const [loading, setLoading] = useState(false);
@@ -285,7 +285,7 @@ function parseDataToColumnsAndFolders(
 	const newColumnAndFolderState: FolderAndColumnStateInterface = {
 		folders: newFolderState,
 		columns: newColumnState,
-		columnOrder: [...BlankInitialData.columnOrder],
+		columnOrder: [...BlankInitialSubFolderData.columnOrder],
 	};
 
 	setFoldersAndColumns(newColumnAndFolderState);
