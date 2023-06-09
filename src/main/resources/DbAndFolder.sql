@@ -46,6 +46,7 @@ CREATE TABLE `sub_folder` (
                           `balance` decimal,
                           `month_period` ENUM('FIRST_HALF', 'SECOND_HALF'),
                           `description` varchar(50),
+                          `tags` json,
                           `folder_id` int,
                           INDEX `folder_idx` (folder_id),
                           PRIMARY KEY (`id`),

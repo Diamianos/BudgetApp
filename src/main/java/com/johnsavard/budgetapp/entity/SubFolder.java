@@ -1,9 +1,12 @@
 package com.johnsavard.budgetapp.entity;
 
 import com.johnsavard.budgetapp.enums.MonthPeriod;
+import com.johnsavard.budgetapp.utilities.TagAttributeConverter;
 import java.math.BigDecimal;
+import java.util.Map;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -50,6 +53,10 @@ public class SubFolder extends AuditModel {
   @Column(name = "month_period")
   private MonthPeriod monthPeriod;
 
+  @Convert(converter = TagAttributeConverter.class)
+  @Column(name = "tags")
+  private Map<String, Integer> tags;
+
   // Great article about one to many mappings with Spring Boot: https://www.callicoder.com/hibernate-spring-boot-jpa-one-to-many-mapping-example/
   @ManyToOne(
     cascade = {
@@ -82,6 +89,14 @@ public class SubFolder extends AuditModel {
 
   public void setId(int id) {
     this.id = id;
+  }
+
+  public Map<String, Integer> getTags() {
+    return tags;
+  }
+
+  public void setTags(Map<String, Integer> tags) {
+    this.tags = tags;
   }
 
   public String getDescription() {
