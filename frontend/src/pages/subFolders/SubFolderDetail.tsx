@@ -1,6 +1,6 @@
 import React from "react";
 import { SubFolder } from "./SubFolder";
-import { Container, Typography } from "@mui/material";
+import { Container, TextField, Typography } from "@mui/material";
 
 interface SubFolderDetailProps {
 	selectedRow: SubFolder | undefined;
@@ -15,6 +15,10 @@ function SubFolderDetail({ selectedRow, subFolders }: SubFolderDetailProps) {
 		return values.reduce((partialSum, a) => partialSum + a, 0);
 	};
 
+	const handleOnRowClick = (event: any) => {
+		event.stopPropagation();
+	};
+
 	return (
 		<Container
 			sx={{
@@ -22,6 +26,7 @@ function SubFolderDetail({ selectedRow, subFolders }: SubFolderDetailProps) {
 				maxHeight: "100vh",
 				overflow: "auto",
 			}}
+			onClick={handleOnRowClick}
 		>
 			{selectedRow ? (
 				<>
@@ -31,6 +36,11 @@ function SubFolderDetail({ selectedRow, subFolders }: SubFolderDetailProps) {
 					<Typography variant="h6" align="center" gutterBottom>
 						{selectedRow.balance} remaning
 					</Typography>
+					<TextField
+						id="outlined-basic"
+						label="Add a description"
+						variant="outlined"
+					/>
 				</>
 			) : (
 				<Typography variant="h6" align="center" gutterBottom>

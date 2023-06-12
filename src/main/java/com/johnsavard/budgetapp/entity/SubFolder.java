@@ -55,7 +55,7 @@ public class SubFolder extends AuditModel {
 
   @Convert(converter = TagAttributeConverter.class)
   @Column(name = "tags")
-  private Map<String, Integer> tags;
+  private Map<String, String> tags;
 
   // Great article about one to many mappings with Spring Boot: https://www.callicoder.com/hibernate-spring-boot-jpa-one-to-many-mapping-example/
   @ManyToOne(
@@ -89,14 +89,6 @@ public class SubFolder extends AuditModel {
 
   public void setId(int id) {
     this.id = id;
-  }
-
-  public Map<String, Integer> getTags() {
-    return tags;
-  }
-
-  public void setTags(Map<String, Integer> tags) {
-    this.tags = tags;
   }
 
   public String getDescription() {
@@ -145,6 +137,14 @@ public class SubFolder extends AuditModel {
 
   public void setMonthPeriod(MonthPeriod monthPeriod) {
     this.monthPeriod = monthPeriod;
+  }
+
+  public Map<String, String> getTags() {
+    return tags;
+  }
+
+  public void setTags(Map<String, String> tags) {
+    this.tags = tags;
   }
 
   @Override

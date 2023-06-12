@@ -7,7 +7,7 @@ import java.util.Map;
 import javax.persistence.AttributeConverter;
 
 public class TagAttributeConverter
-  implements AttributeConverter<Map<String, Integer>, String> {
+  implements AttributeConverter<Map<String, String>, String> {
 
   private ObjectMapper objectMapper;
 
@@ -16,7 +16,7 @@ public class TagAttributeConverter
   }
 
   @Override
-  public String convertToDatabaseColumn(Map<String, Integer> attribute) {
+  public String convertToDatabaseColumn(Map<String, String> attribute) {
     if (attribute == null) {
       return null;
     }
@@ -29,7 +29,7 @@ public class TagAttributeConverter
 
   @Override
   @SuppressWarnings("unchecked")
-  public Map<String, Integer> convertToEntityAttribute(String dbData) {
+  public Map<String, String> convertToEntityAttribute(String dbData) {
     if (dbData == null) {
       return null;
     }

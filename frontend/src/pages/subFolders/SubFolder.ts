@@ -7,6 +7,7 @@ export class SubFolder {
 	balance: number = 0;
 	description: string = "";
 	monthPeriod: string = "";
+	tags: Map<String, String> = new Map();
 
 	constructor(initializer?: any) {
 		if (!initializer) return;
@@ -18,5 +19,6 @@ export class SubFolder {
 		if (initializer.balance) this.balance = initializer.balance;
 		if (initializer.description) this.description = initializer.description;
 		if (initializer.monthPeriod) this.monthPeriod = initializer.monthPeriod;
+		if (initializer.tags) this.tags = initializer.tags;
 	}
 }
