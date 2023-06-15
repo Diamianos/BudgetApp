@@ -122,7 +122,7 @@ public class ExpenseService {
       patch.getAmount() != null &&
       patch.getAmount().compareTo(new BigDecimal(0)) == 1
     ) {
-      // Determine new sub folder balance after minusing existing expense
+      // Determine new sub folder balance after adding existing expense
       BigDecimal newSubFolderBalance = subFolder
         .getBalance()
         .add(existing.getAmount());

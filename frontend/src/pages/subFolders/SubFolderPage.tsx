@@ -15,11 +15,19 @@ import SubFolderDetail from "./SubFolderDetail";
 
 function SubFoldersPage() {
 	const [subFolders, setSubFolders] = useState<SubFolder[]>([]);
-	const [selectedRow, setSelectedRow] = useState<SubFolder>();
+	const [selectedSubFolder, setSelectedSubFolder] = useState<
+		SubFolder | undefined
+	>(undefined);
 	const [monthPeriod, setMonthPeriod] = React.useState<string | null>(
 		"first_half"
 	);
 	const [loading, setLoading] = useState(false);
+	const [showDescriptionSaveButton, setShowDescriptionSaveButton] =
+		useState(false);
+
+	const handleSelectedSubFolderChange = (subFolder: SubFolder) => {
+		setSelectedSubFolder(subFolder);
+	};
 
 	const handleMonthPeriodChange = (
 		event: React.MouseEvent<HTMLElement>,
@@ -28,11 +36,21 @@ function SubFoldersPage() {
 		if (newMonthPeriod !== null) {
 			setMonthPeriod(newMonthPeriod);
 		}
-		setSelectedRow(undefined);
+		setSelectedSubFolder(undefined);
 	};
 
 	const handleClickOnContainer = (event: any) => {
-		setSelectedRow(undefined);
+		setShowDescriptionSaveButton(false);
+		setSelectedSubFolder(undefined);
+	};
+
+	const handleSubFolderUpdate = async (subFolder: SubFolder) => {
+		let updatedSubFolders: SubFolder[] = [];
+		const updatedSubFolder = await subFolderAPI.patch(subFolder);
+		updatedSubFolders = subFolders.map((sf: SubFolder) => {
+			return sf.id == updatedSubFolder.id ? updatedSubFolder : sf;
+		});
+		setShowDescriptionSaveButton(false);
 	};
 
 	useEffect(() => {
@@ -86,14 +104,18 @@ function SubFoldersPage() {
 						<SubFolderList
 							subFolders={subFolders}
 							monthPeriod={monthPeriod}
-							selectedRow={selectedRow}
-							setSelectedRow={setSelectedRow}
+							selectedSubFolder={selectedSubFolder}
+							handleSelectedSubFolderChange={handleSelectedSubFolderChange}
+							setShowDescriptionSaveButton={setShowDescriptionSaveButton}
 						></SubFolderList>
 					</Grid>
 					<Grid item md={5}>
 						<SubFolderDetail
-							selectedRow={selectedRow}
+							selectedSubFolder={selectedSubFolder}
 							subFolders={subFolders}
+							handleSubFolderUpdate={handleSubFolderUpdate}
+							showDescriptionSaveButton={showDescriptionSaveButton}
+							setShowDescriptionSaveButton={setShowDescriptionSaveButton}
 						></SubFolderDetail>
 					</Grid>
 				</Grid>

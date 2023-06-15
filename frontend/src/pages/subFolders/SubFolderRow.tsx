@@ -4,24 +4,27 @@ import { SubFolder } from "./SubFolder";
 
 interface SubFolderRowProps {
 	subFolder: SubFolder;
-	selectedRow: SubFolder | undefined;
-	setSelectedRow: Dispatch<SetStateAction<SubFolder | undefined>>;
+	selectedSubFolder: SubFolder | undefined;
+	handleSelectedSubFolderChange: (subFolder: SubFolder) => void;
+	setShowDescriptionSaveButton: (value: boolean) => void;
 }
 
 function SubFolderRow({
 	subFolder,
-	selectedRow,
-	setSelectedRow,
+	selectedSubFolder,
+	handleSelectedSubFolderChange,
+	setShowDescriptionSaveButton,
 }: SubFolderRowProps) {
 	const handleOnRowClick = (event: any) => {
+		handleSelectedSubFolderChange(subFolder);
+		setShowDescriptionSaveButton(false);
 		event.stopPropagation();
-		setSelectedRow(subFolder);
 	};
 
 	return (
 		<TableRow
 			onClick={handleOnRowClick}
-			selected={subFolder.id === selectedRow?.id ? true : false}
+			selected={subFolder.id === selectedSubFolder?.id ? true : false}
 			sx={{
 				"&:last-child td, &:last-child th": { border: 0 },
 			}}

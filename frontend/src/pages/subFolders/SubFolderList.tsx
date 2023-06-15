@@ -13,15 +13,17 @@ import {
 interface SubFolderListProps {
 	subFolders: SubFolder[];
 	monthPeriod: string | null;
-	selectedRow: SubFolder | undefined;
-	setSelectedRow: Dispatch<SetStateAction<SubFolder | undefined>>;
+	selectedSubFolder: SubFolder | undefined;
+	handleSelectedSubFolderChange: (subFolder: SubFolder) => void;
+	setShowDescriptionSaveButton: (value: boolean) => void;
 }
 
 function SubFolderList({
 	subFolders,
+	selectedSubFolder,
 	monthPeriod,
-	selectedRow,
-	setSelectedRow,
+	handleSelectedSubFolderChange,
+	setShowDescriptionSaveButton,
 }: SubFolderListProps) {
 	return (
 		<div data-value="subFolderList">
@@ -54,9 +56,12 @@ function SubFolderList({
 							<React.Fragment key={subFolder.id}>
 								{monthPeriod?.toUpperCase() === subFolder.monthPeriod ? (
 									<SubFolderRow
-										selectedRow={selectedRow}
-										setSelectedRow={setSelectedRow}
+										handleSelectedSubFolderChange={
+											handleSelectedSubFolderChange
+										}
 										subFolder={subFolder}
+										selectedSubFolder={selectedSubFolder}
+										setShowDescriptionSaveButton={setShowDescriptionSaveButton}
 									/>
 								) : null}
 							</React.Fragment>

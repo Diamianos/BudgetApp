@@ -75,12 +75,16 @@ public class SubFolder extends AuditModel {
     @NotNull @Size(max = 45) String name,
     @NotNull @DecimalMin(value = "0.0", inclusive = false) BigDecimal amount,
     @DecimalMin(value = "0.0", inclusive = true) BigDecimal balance,
-    @NotNull MonthPeriod monthPeriod
+    @Size(max = 50) String description,
+    @NotNull MonthPeriod monthPeriod,
+    Map<String, String> tags
   ) {
     this.name = name;
     this.amount = amount;
     this.balance = balance;
+    this.description = description;
     this.monthPeriod = monthPeriod;
+    this.tags = tags;
   }
 
   public int getId() {

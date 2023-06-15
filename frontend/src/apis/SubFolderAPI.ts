@@ -80,9 +80,9 @@ const subFolderAPI = {
 			});
 	},
 
-	put(subFolder: SubFolder) {
+	patch(subFolder: SubFolder) {
 		return fetch(`/subfolder/${subFolder.id}`, {
-			method: "PUT",
+			method: "PATCH",
 			body: JSON.stringify(subFolder),
 			headers: {
 				"Content-type": "application/json",
