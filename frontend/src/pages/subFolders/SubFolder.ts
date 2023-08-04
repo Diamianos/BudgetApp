@@ -10,6 +10,8 @@ export class SubFolder {
 	tags: Map<String, String> = new Map();
 
 	constructor(initializer?: any) {
+		console.log("initializer", initializer);
+		console.log("tags type", typeof initializer.tags);
 		if (!initializer) return;
 		if (initializer.id) this.id = initializer.id;
 		if (initializer.created_at) this.created_at = initializer.created_at;
@@ -19,6 +21,12 @@ export class SubFolder {
 		if (initializer.balance) this.balance = initializer.balance;
 		if (initializer.description) this.description = initializer.description;
 		if (initializer.monthPeriod) this.monthPeriod = initializer.monthPeriod;
-		if (initializer.tags) this.tags = initializer.tags;
+		if (initializer.tags) {
+			if (initializer.tags instanceof Map) {
+				this.tags = initializer.tags;
+			} else {
+				this.tags = new Map(Object.entries(initializer.tags));
+			}
+		}
 	}
 }

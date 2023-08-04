@@ -5,8 +5,11 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.johnsavard.budgetapp.dao.SubFolderRepository;
 import com.johnsavard.budgetapp.entity.SubFolder;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +18,9 @@ public class SubFolderService {
 
   private SubFolderRepository subFolderRepository;
   private final ObjectMapper objectMapper;
+
+  @Value("#{${tags}}")
+  private Map<String, String> defaultTags;
 
   public SubFolderService(
     SubFolderRepository subFolderRepository,
@@ -43,6 +49,11 @@ public class SubFolderService {
   public SubFolder saveSubFolder(SubFolder subFolder) {
     if (subFolder.getId() == 0) {
       subFolder.setBalance(subFolder.getAmount());
+    }
+    System.out.println();
+    if (subFolder.getTags() == null || subFolder.getTags().isEmpty()) {
+      Map<String, String> map = defaultTags;
+      subFolder.setTags(map);
     }
     return subFolderRepository.save(subFolder);
   }

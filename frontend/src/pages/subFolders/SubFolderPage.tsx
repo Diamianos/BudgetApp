@@ -26,6 +26,7 @@ function SubFoldersPage() {
 		useState(false);
 
 	const handleSelectedSubFolderChange = (subFolder: SubFolder) => {
+		console.log(subFolder);
 		setSelectedSubFolder(subFolder);
 	};
 
@@ -58,6 +59,7 @@ function SubFoldersPage() {
 			setLoading(true);
 			try {
 				const data = await subFolderAPI.get();
+				console.log(data);
 				setSubFolders(data);
 			} catch (e) {
 				if (e instanceof Error) {

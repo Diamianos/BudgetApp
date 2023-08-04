@@ -52,7 +52,7 @@ CREATE TABLE `sub_folder` (
                           PRIMARY KEY (`id`),
                           CONSTRAINT `FK_FOLDER`
                           FOREIGN KEY (`folder_id`) 
-                          REFERENCES `folder`(`id`)
+                          REFERENCES `folder`(`id`) 
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 --
