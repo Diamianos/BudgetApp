@@ -35,7 +35,6 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 	} = props;
 
 	const [subFolder, setSubFolder] = useState<SubFolder | undefined>();
-	const [tempSubFolder, setTempSubfolder] = useState(subFolder);
 
 	useEffect(() => {
 		setSubFolder(selectedSubFolder);
@@ -108,9 +107,7 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 										<ListItemIcon>
 											<AccountBalanceIcon />
 										</ListItemIcon>
-										<ListItemText
-											primary={"Bill " + subFolder.tags.get("BILL")}
-										/>
+										<ListItemText primary={"Bill " + subFolder.tags.bill} />
 									</ListItemButton>
 								</ListItem>
 								<ListItem disablePadding>
@@ -119,7 +116,7 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 											<AttachMoneyIcon />
 										</ListItemIcon>
 										<ListItemText
-											primary={"Take Out " + subFolder.tags.get("TAKE_OUT")}
+											primary={"Take Out " + subFolder.tags.takeOut}
 										/>
 									</ListItemButton>
 								</ListItem>
@@ -128,9 +125,7 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 										<ListItemIcon>
 											<DraftsIcon />
 										</ListItemIcon>
-										<ListItemText
-											primary={"Leave " + subFolder.tags.get("LEAVE")}
-										/>
+										<ListItemText primary={"Leave " + subFolder.tags.leave} />
 									</ListItemButton>
 								</ListItem>
 								<ListItem disablePadding>
@@ -139,7 +134,7 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 											<CurrencyExchangeIcon />
 										</ListItemIcon>
 										<ListItemText
-											primary={"Transfer " + subFolder.tags.get("TRANSFER")}
+											primary={"Transfer " + subFolder.tags.transfer}
 										/>
 									</ListItemButton>
 								</ListItem>

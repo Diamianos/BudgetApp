@@ -1,12 +1,12 @@
 package com.johnsavard.budgetapp.entity;
 
 import com.johnsavard.budgetapp.enums.MonthPeriod;
-import com.johnsavard.budgetapp.utilities.TagAttributeConverter;
 import java.math.BigDecimal;
-import java.util.Map;
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Convert;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -53,9 +53,22 @@ public class SubFolder extends AuditModel {
   @Column(name = "month_period")
   private MonthPeriod monthPeriod;
 
-  @Convert(converter = TagAttributeConverter.class)
-  @Column(name = "tags")
-  private Map<String, String> tags;
+  @Embedded
+  @AttributeOverrides(
+    value = {
+      @AttributeOverride(name = "bill", column = @Column(name = "tags_bill")),
+      @AttributeOverride(
+        name = "takeOut",
+        column = @Column(name = "tags_take_out")
+      ),
+      @AttributeOverride(name = "leave", column = @Column(name = "tags_leave")),
+      @AttributeOverride(
+        name = "transfer",
+        column = @Column(name = "tags_transfer")
+      ),
+    }
+  )
+  private Tags tags;
 
   // Great article about one to many mappings with Spring Boot: https://www.callicoder.com/hibernate-spring-boot-jpa-one-to-many-mapping-example/
   @ManyToOne(
@@ -77,7 +90,7 @@ public class SubFolder extends AuditModel {
     @DecimalMin(value = "0.0", inclusive = true) BigDecimal balance,
     @Size(max = 50) String description,
     @NotNull MonthPeriod monthPeriod,
-    Map<String, String> tags
+    Tags tags
   ) {
     this.name = name;
     this.amount = amount;
@@ -143,11 +156,11 @@ public class SubFolder extends AuditModel {
     this.monthPeriod = monthPeriod;
   }
 
-  public Map<String, String> getTags() {
+  public Tags getTags() {
     return tags;
   }
 
-  public void setTags(Map<String, String> tags) {
+  public void setTags(Tags tags) {
     this.tags = tags;
   }
 

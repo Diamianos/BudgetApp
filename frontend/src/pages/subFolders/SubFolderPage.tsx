@@ -59,7 +59,6 @@ function SubFoldersPage() {
 			setLoading(true);
 			try {
 				const data = await subFolderAPI.get();
-				console.log(data);
 				setSubFolders(data);
 			} catch (e) {
 				if (e instanceof Error) {
@@ -71,6 +70,10 @@ function SubFoldersPage() {
 		}
 		loadFolders();
 	}, []);
+
+	useEffect(() => {
+		console.log(subFolders);
+	}, [subFolders]);
 
 	return (
 		<Container
