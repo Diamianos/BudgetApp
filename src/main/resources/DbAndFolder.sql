@@ -45,8 +45,11 @@ CREATE TABLE `sub_folder` (
                           `amount` decimal,
                           `balance` decimal,
                           `month_period` ENUM('FIRST_HALF', 'SECOND_HALF'),
-                          `description` varchar(50),
-                          `tags` json,
+                          `description` varchar(255),
+                          `tags_bill` int,
+                          `tags_take_out` int,
+                          `tags_leave` int,
+                          `tags_transfer` int,
                           `folder_id` int,
                           INDEX `folder_idx` (folder_id),
                           PRIMARY KEY (`id`),
@@ -59,13 +62,13 @@ CREATE TABLE `sub_folder` (
 -- Data for table `sub_folder`
 --
 
-INSERT INTO `sub_folder` (name, amount, balance, month_period, description, folder_id) VALUES
-('Tithe',430, 430, 'FIRST_HALF', 'Tithe Folder', 1),
-   ('Tithe',430, 430, 'SECOND_HALF', 'Tithe Folder', 1),
-   ('Emily',150, 150, 'FIRST_HALF', 'Emily Folder', 2),
-   ('Emily',150, 150, 'SECOND_HALF', 'Emily Folder', 2),
-   ('John',100, 100, 'FIRST_HALF', 'John Folder', 3),
-   ('Isabella',100, 100, 'SECOND_HALF', 'Isabella Folder', 4);
+-- INSERT INTO `sub_folder` (name, amount, balance, month_period, description, folder_id) VALUES
+-- ('Tithe',430, 430, 'FIRST_HALF', 'Tithe Folder', 1),
+--    ('Tithe',430, 430, 'SECOND_HALF', 'Tithe Folder', 1),
+--    ('Emily',150, 150, 'FIRST_HALF', 'Emily Folder', 2),
+--    ('Emily',150, 150, 'SECOND_HALF', 'Emily Folder', 2),
+--    ('John',100, 100, 'FIRST_HALF', 'John Folder', 3),
+--    ('Isabella',100, 100, 'SECOND_HALF', 'Isabella Folder', 4);
 
 --
 -- Table structure for table `expense`
@@ -93,7 +96,3 @@ CREATE TABLE `expense` (
 -- ('2023-06-05 14:40:20', 'Access Point', 50, 'Ubiquiti Access point', 5),
 -- ('2023-06-05 14:40:20', 'Lowes', 50, 'House items', 5),
 -- ('2023-06-05 14:40:20', 'Dollywood Splash', 10, 'Ice cream', 6);
-
-
-
-

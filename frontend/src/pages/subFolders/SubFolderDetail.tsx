@@ -4,11 +4,13 @@ import {
 	Box,
 	Button,
 	Container,
+	Grid,
 	List,
 	ListItem,
 	ListItemButton,
 	ListItemIcon,
 	ListItemText,
+	Modal,
 	TextField,
 	Typography,
 } from "@mui/material";
@@ -35,6 +37,7 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 	} = props;
 
 	const [subFolder, setSubFolder] = useState<SubFolder | undefined>();
+	const [modifyTags, setModifyTags] = useState(false);
 
 	useEffect(() => {
 		setSubFolder(selectedSubFolder);
@@ -52,12 +55,10 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 	};
 
 	const handleSave = () => {
-		{
-			if (subFolder) {
-				handleSubFolderUpdate(subFolder);
-			} else {
-				return;
-			}
+		if (subFolder) {
+			handleSubFolderUpdate(subFolder);
+		} else {
+			return;
 		}
 	};
 
@@ -78,6 +79,25 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 		});
 		console.log(updatedSubFolder);
 		setSubFolder(updatedSubFolder);
+	};
+
+	const handleModifyTags = () => {
+		setModifyTags(true);
+	};
+	const handleModifyTagsModalClose = () => {
+		setModifyTags(false);
+	};
+
+	const modalStyle = {
+		position: "absolute" as "absolute",
+		top: "50%",
+		left: "50%",
+		transform: "translate(-50%, -50%)",
+		width: 400,
+		bgcolor: "background.paper",
+		border: "2px solid #000",
+		boxShadow: 24,
+		p: 4,
 	};
 
 	return (
@@ -147,10 +167,77 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 								alignItems: "center",
 							}}
 						>
-							<Button size="large" variant="contained">
+							<Button
+								size="large"
+								variant="contained"
+								onClick={handleModifyTags}
+							>
 								Modify Tags
 							</Button>
 						</Box>
+						<Modal
+							open={modifyTags}
+							onClose={handleModifyTagsModalClose}
+							aria-labelledby="modal-modal-title"
+						>
+							<Box sx={modalStyle}>
+								<Typography id="modal-modal-title" variant="h6" component="h2">
+									Modify Tags
+								</Typography>
+								<Box sx={{ flexGrow: 1 }}>
+									<Grid container marginTop={2}>
+										<Grid xs={6} display="flex" alignItems="center">
+											<Typography>Bill</Typography>
+										</Grid>
+										<Grid xs={6}>
+											<TextField
+												name="bill"
+												type="number"
+												value={subFolder.tags.bill}
+												size="small"
+											></TextField>
+										</Grid>
+										<Grid xs={6} display="flex" alignItems="center">
+											<Typography sx={{ mt: 1 }}>Take Out</Typography>
+										</Grid>
+										<Grid xs={6}>
+											<TextField
+												sx={{ mt: 1 }}
+												name="takeOut"
+												type="number"
+												value={subFolder.tags.takeOut}
+												size="small"
+											></TextField>
+										</Grid>
+										<Grid xs={6} display="flex" alignItems="center">
+											<Typography sx={{ mt: 1 }}>Leave</Typography>
+										</Grid>
+										<Grid xs={6}>
+											<TextField
+												sx={{ mt: 1 }}
+												name="leave"
+												type="number"
+												value={subFolder.tags.leave}
+												size="small"
+											></TextField>
+										</Grid>
+
+										<Grid xs={6} display="flex" alignItems="center">
+											<Typography sx={{ mt: 1 }}>Transfer</Typography>
+										</Grid>
+										<Grid xs={6}>
+											<TextField
+												sx={{ mt: 1 }}
+												name="transfer"
+												type="number"
+												value={subFolder.tags.transfer}
+												size="small"
+											></TextField>
+										</Grid>
+									</Grid>
+								</Box>
+							</Box>
+						</Modal>
 					</Box>
 					<Box
 						display="flex"
@@ -160,7 +247,7 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 					>
 						<TextField
 							id="outlined-basic"
-							label="Description"
+							label="Notes"
 							name="description"
 							multiline
 							value={subFolder.description}

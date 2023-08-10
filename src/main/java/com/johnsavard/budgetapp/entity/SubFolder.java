@@ -44,7 +44,7 @@ public class SubFolder extends AuditModel {
   @Column(name = "balance")
   private BigDecimal balance;
 
-  @Size(max = 50)
+  @Size(max = 255)
   @Column(name = "description")
   private String description;
 
