@@ -38,6 +38,7 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 
 	const [subFolder, setSubFolder] = useState<SubFolder | undefined>();
 	const [modifyTags, setModifyTags] = useState(false);
+	const [showTagModifyButton, setShowTagModifyButton] = useState(false);
 
 	useEffect(() => {
 		setSubFolder(selectedSubFolder);
@@ -55,6 +56,7 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 	};
 
 	const handleSave = () => {
+		setModifyTags(false);
 		if (subFolder) {
 			handleSubFolderUpdate(subFolder);
 		} else {
@@ -62,7 +64,7 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 		}
 	};
 
-	const handleChange = (event: any) => {
+	const handleDescriptionChange = (event: any) => {
 		setShowDescriptionSaveButton(true);
 
 		const { name, value } = event.target;
@@ -76,6 +78,28 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 		let updatedSubFolder: SubFolder = new SubFolder({
 			...subFolder,
 			...change,
+		});
+		console.log(updatedSubFolder);
+		setSubFolder(updatedSubFolder);
+	};
+
+	const handleTagsChange = (event: any) => {
+		setShowTagModifyButton(true);
+
+		const { name, value } = event.target;
+
+		let updatedValue = Number(value);
+		const change = {
+			[name]: updatedValue,
+		};
+
+		const tagValues = { ...subFolder?.tags, ...change };
+		const tagChange = { ["tags"]: tagValues };
+
+		console.log(tagChange);
+		let updatedSubFolder: SubFolder = new SubFolder({
+			...subFolder,
+			...tagChange,
 		});
 		console.log(updatedSubFolder);
 		setSubFolder(updatedSubFolder);
@@ -111,7 +135,7 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 		>
 			{subFolder ? (
 				<>
-					<Typography variant="h4" align="center" gutterBottom>
+					<Typography mt={1} variant="h4" align="center" gutterBottom>
 						{subFolder.name}
 					</Typography>
 					<Box sx={{ marginBottom: "2rem" }}>
@@ -127,7 +151,7 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 										<ListItemIcon>
 											<AccountBalanceIcon />
 										</ListItemIcon>
-										<ListItemText primary={"Bill " + subFolder.tags.bill} />
+										<ListItemText primary={"Bill $" + subFolder.tags.bill} />
 									</ListItemButton>
 								</ListItem>
 								<ListItem disablePadding>
@@ -136,7 +160,7 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 											<AttachMoneyIcon />
 										</ListItemIcon>
 										<ListItemText
-											primary={"Take Out " + subFolder.tags.takeOut}
+											primary={"Take Out $" + subFolder.tags.takeOut}
 										/>
 									</ListItemButton>
 								</ListItem>
@@ -145,7 +169,7 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 										<ListItemIcon>
 											<DraftsIcon />
 										</ListItemIcon>
-										<ListItemText primary={"Leave " + subFolder.tags.leave} />
+										<ListItemText primary={"Leave $" + subFolder.tags.leave} />
 									</ListItemButton>
 								</ListItem>
 								<ListItem disablePadding>
@@ -154,7 +178,7 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 											<CurrencyExchangeIcon />
 										</ListItemIcon>
 										<ListItemText
-											primary={"Transfer " + subFolder.tags.transfer}
+											primary={"Transfer $" + subFolder.tags.transfer}
 										/>
 									</ListItemButton>
 								</ListItem>
@@ -186,56 +210,72 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 								</Typography>
 								<Box sx={{ flexGrow: 1 }}>
 									<Grid container marginTop={2}>
-										<Grid xs={6} display="flex" alignItems="center">
+										<Grid xs={6} item={true} display="flex" alignItems="center">
 											<Typography>Bill</Typography>
 										</Grid>
-										<Grid xs={6}>
+										<Grid xs={6} item={true}>
 											<TextField
 												name="bill"
 												type="number"
 												value={subFolder.tags.bill}
 												size="small"
+												onChange={handleTagsChange}
 											></TextField>
 										</Grid>
-										<Grid xs={6} display="flex" alignItems="center">
+										<Grid xs={6} item={true} display="flex" alignItems="center">
 											<Typography sx={{ mt: 1 }}>Take Out</Typography>
 										</Grid>
-										<Grid xs={6}>
+										<Grid xs={6} item={true}>
 											<TextField
 												sx={{ mt: 1 }}
 												name="takeOut"
 												type="number"
 												value={subFolder.tags.takeOut}
 												size="small"
+												onChange={handleTagsChange}
 											></TextField>
 										</Grid>
-										<Grid xs={6} display="flex" alignItems="center">
+										<Grid xs={6} item={true} display="flex" alignItems="center">
 											<Typography sx={{ mt: 1 }}>Leave</Typography>
 										</Grid>
-										<Grid xs={6}>
+										<Grid xs={6} item={true}>
 											<TextField
 												sx={{ mt: 1 }}
 												name="leave"
 												type="number"
 												value={subFolder.tags.leave}
 												size="small"
+												onChange={handleTagsChange}
 											></TextField>
 										</Grid>
 
-										<Grid xs={6} display="flex" alignItems="center">
+										<Grid xs={6} item={true} display="flex" alignItems="center">
 											<Typography sx={{ mt: 1 }}>Transfer</Typography>
 										</Grid>
-										<Grid xs={6}>
+										<Grid xs={6} item={true}>
 											<TextField
 												sx={{ mt: 1 }}
 												name="transfer"
 												type="number"
 												value={subFolder.tags.transfer}
 												size="small"
+												onChange={handleTagsChange}
 											></TextField>
 										</Grid>
 									</Grid>
 								</Box>
+								{showTagModifyButton ? (
+									<Box display="flex" justifyContent="right">
+										<Button
+											sx={{ mt: 2 }}
+											size="small"
+											variant="contained"
+											onClick={handleSave}
+										>
+											Save Tags
+										</Button>
+									</Box>
+								) : null}
 							</Box>
 						</Modal>
 					</Box>
@@ -252,7 +292,7 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 							multiline
 							value={subFolder.description}
 							variant="outlined"
-							onChange={handleChange}
+							onChange={handleDescriptionChange}
 						/>
 						{showDescriptionSaveButton && (
 							<Button
