@@ -1,13 +1,12 @@
 package com.johnsavard.budgetapp.entity;
 
 import com.johnsavard.budgetapp.enums.MonthPeriod;
+import com.johnsavard.budgetapp.utilities.SubFolderTagsConverter;
 import java.math.BigDecimal;
 import java.util.List;
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Embedded;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -55,21 +54,7 @@ public class SubFolder extends AuditModel {
   @Column(name = "month_period")
   private MonthPeriod monthPeriod;
 
-  @Embedded
-  @AttributeOverrides(
-    value = {
-      @AttributeOverride(name = "bill", column = @Column(name = "tags_bill")),
-      @AttributeOverride(
-        name = "takeOut",
-        column = @Column(name = "tags_take_out")
-      ),
-      @AttributeOverride(name = "leave", column = @Column(name = "tags_leave")),
-      @AttributeOverride(
-        name = "transfer",
-        column = @Column(name = "tags_transfer")
-      ),
-    }
-  )
+  @Convert(converter = SubFolderTagsConverter.class)
   private Tags tags;
 
   // Great article about one to many mappings with Spring Boot: https://www.callicoder.com/hibernate-spring-boot-jpa-one-to-many-mapping-example/

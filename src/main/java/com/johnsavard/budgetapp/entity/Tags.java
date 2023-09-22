@@ -1,9 +1,8 @@
 package com.johnsavard.budgetapp.entity;
 
-import javax.persistence.Embeddable;
+import java.io.Serializable;
 
-@Embeddable
-public class Tags {
+public class Tags implements Serializable {
 
   private int bill;
   private int takeOut;
