@@ -45,6 +45,10 @@ public class ExpenseService {
     return expenseRepository.findById(expenseId);
   }
 
+  public List<Expense> findExpensesBySubFolderId(int folderId) {
+    return expenseRepository.findBySubFolderId(folderId);
+  }
+
   public ResponseEntity<String> saveExpense(
     SubFolder subFolder,
     Expense expense

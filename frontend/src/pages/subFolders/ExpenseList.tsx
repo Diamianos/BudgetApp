@@ -1,20 +1,26 @@
-import { Container } from "@mui/material";
+import { Container, Typography } from "@mui/material";
 import React from "react";
 import { SubFolder } from "./SubFolder";
 
 interface ExpenseListProps {
-	selectedRow: SubFolder | undefined;
+	subFolder: SubFolder | undefined;
 }
 
-function ExpenseList({ selectedRow }: ExpenseListProps) {
+function ExpenseList({ subFolder }: ExpenseListProps) {
 	return (
 		<Container
 			sx={{
 				backgroundColor: "rgba(25, 118, 210, 0.08)",
 				maxHeight: "100vh",
+				minHeight: "100px",
 				overflow: "auto",
+				mb: 2,
 			}}
-		></Container>
+		>
+			<Typography fontWeight="bold" variant="h6" align="center">
+				Expenses
+			</Typography>
+		</Container>
 	);
 }
 

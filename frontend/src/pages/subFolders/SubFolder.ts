@@ -1,3 +1,4 @@
+import { Expense } from "./Expense";
 import { Tags } from "./Tags";
 
 export class SubFolder {
@@ -10,6 +11,7 @@ export class SubFolder {
 	description: string = "";
 	monthPeriod: string = "";
 	tags: Tags = new Tags();
+	expenses: Expense[] | undefined;
 
 	constructor(initializer?: any) {
 		if (!initializer) return;
@@ -22,5 +24,6 @@ export class SubFolder {
 		if (initializer.description) this.description = initializer.description;
 		if (initializer.monthPeriod) this.monthPeriod = initializer.monthPeriod;
 		if (initializer.tags) this.tags = initializer.tags;
+		if (initializer.expenses) this.expenses = initializer.expenses;
 	}
 }

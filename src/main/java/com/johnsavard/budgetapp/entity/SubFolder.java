@@ -2,6 +2,7 @@ package com.johnsavard.budgetapp.entity;
 
 import com.johnsavard.budgetapp.enums.MonthPeriod;
 import java.math.BigDecimal;
+import java.util.List;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.CascadeType;
@@ -16,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -81,6 +83,9 @@ public class SubFolder extends AuditModel {
   )
   @JoinColumn(name = "folder_id")
   private Folder folder;
+
+  @Transient
+  private List<Expense> expenses;
 
   public SubFolder() {}
 
@@ -162,6 +167,15 @@ public class SubFolder extends AuditModel {
 
   public void setTags(Tags tags) {
     this.tags = tags;
+  }
+
+  @Transient
+  public List<Expense> getExpenses() {
+    return expenses;
+  }
+
+  public void setExpenses(List<Expense> expenses) {
+    this.expenses = expenses;
   }
 
   @Override

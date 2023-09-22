@@ -18,6 +18,7 @@ import DraftsIcon from "@mui/icons-material/Drafts";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import CurrencyExchangeIcon from "@mui/icons-material/CurrencyExchange";
+import ExpenseList from "./ExpenseList";
 
 interface SubFolderDetailProps {
 	subFolders: SubFolder[];
@@ -305,6 +306,7 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 							</Button>
 						)}
 					</Box>
+					<ExpenseList subFolder={subFolder}></ExpenseList>
 				</>
 			) : (
 				<Typography variant="h6" align="center" gutterBottom>
