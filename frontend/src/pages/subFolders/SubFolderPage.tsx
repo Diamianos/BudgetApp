@@ -42,7 +42,6 @@ function SubFoldersPage() {
 
 	const handleClickOnContainer = (event: any) => {
 		setShowDescriptionSaveButton(false);
-		setSelectedSubFolder(undefined);
 	};
 
 	const handleSubFolderUpdate = async (subFolder: SubFolder) => {
@@ -99,11 +98,7 @@ function SubFoldersPage() {
 				</ToggleButtonGroup>
 			</Container>
 
-			{loading ? (
-				<Box sx={{ display: "flex", justifyContent: "center" }}>
-					<CircularProgress />
-				</Box>
-			) : (
+			{selectedSubFolder ? (
 				<Grid container spacing={2}>
 					<Grid item md={6}>
 						<SubFolderList
@@ -124,6 +119,14 @@ function SubFoldersPage() {
 						></SubFolderDetail>
 					</Grid>
 				</Grid>
+			) : (
+				<SubFolderList
+					subFolders={subFolders}
+					monthPeriod={monthPeriod}
+					selectedSubFolder={selectedSubFolder}
+					handleSelectedSubFolderChange={handleSelectedSubFolderChange}
+					setShowDescriptionSaveButton={setShowDescriptionSaveButton}
+				></SubFolderList>
 			)}
 		</Container>
 	);
