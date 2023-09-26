@@ -104,8 +104,8 @@ function SubFoldersPage() {
 					<CircularProgress />
 				</Box>
 			) : (
-				<Grid container spacing={7}>
-					<Grid item md={7}>
+				<Grid container spacing={2}>
+					<Grid item md={6}>
 						<SubFolderList
 							subFolders={subFolders}
 							monthPeriod={monthPeriod}
@@ -114,7 +114,7 @@ function SubFoldersPage() {
 							setShowDescriptionSaveButton={setShowDescriptionSaveButton}
 						></SubFolderList>
 					</Grid>
-					<Grid item md={5}>
+					<Grid item md={6}>
 						<SubFolderDetail
 							selectedSubFolder={selectedSubFolder}
 							subFolders={subFolders}
