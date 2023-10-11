@@ -192,7 +192,7 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 					name="description"
 					fullWidth
 					multiline
-					value={subFolder?.description}
+					value={subFolder?.description || ""}
 					variant="outlined"
 					onChange={handleDescriptionChange}
 				/>
@@ -207,7 +207,7 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 					</Button>
 				)}
 			</Container>
-			<Container>
+			<Container disableGutters>
 				<ExpenseList subFolder={subFolder}></ExpenseList>
 			</Container>
 			<Modal
