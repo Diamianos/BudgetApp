@@ -39,6 +39,10 @@ function ExpenseList({ subFolder }: ExpenseListProps) {
 		setExpenseModalOpen(false);
 	};
 
+	const handleExpenseButtonClick = () => {
+		console.log("Expense button clicked");
+	};
+
 	const modalStyle = {
 		position: "absolute" as "absolute",
 		top: "50%",
@@ -146,6 +150,15 @@ function ExpenseList({ subFolder }: ExpenseListProps) {
 									slotProps={{ textField: { size: "small" } }}
 								/>
 							</LocalizationProvider>
+							<Box mt={".5rem"}>
+								<Button
+									variant="contained"
+									size="small"
+									onClick={handleExpenseButtonClick}
+								>
+									Submit
+								</Button>
+							</Box>
 						</Box>
 					</Modal>
 				</Table>
