@@ -23,6 +23,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import InfoIcon from "@mui/icons-material/Info";
 import React, { useState } from "react";
 import { SubFolder } from "./SubFolder";
+import { Expense } from "./Expense";
+import { Dayjs } from "dayjs";
 
 interface ExpenseListProps {
 	subFolder: SubFolder | undefined;
@@ -30,6 +32,13 @@ interface ExpenseListProps {
 
 function ExpenseList({ subFolder }: ExpenseListProps) {
 	const [expenseModalOpen, setExpenseModalOpen] = useState(false);
+	const [expenseModalInformation, setExpenseModalInformation] = useState({
+		date_of_transaction: "",
+		merchant: "",
+		amount: "",
+		description: "",
+	});
+	const [datePicker, setDatePicker] = useState<Dayjs | null>(null);
 
 	const handleAddExpenseButton = () => {
 		setExpenseModalOpen(true);
@@ -40,9 +49,51 @@ function ExpenseList({ subFolder }: ExpenseListProps) {
 	};
 
 	const handleExpenseButtonClick = () => {
-		console.log("Expense button clicked");
+		console.log(JSON.stringify(expenseModalInformation));
 	};
 
+	// Handles updating the modal values when a value is changed
+	const handleModalChange = (event: any) => {
+		const { id, value } = event.target;
+
+		let updatedValue = value;
+
+		// Regex to validate input is a number
+		const re = /^[0-9\b]+$/;
+
+		let change = {};
+		if (id === "amount" && (updatedValue === "" || re.test(updatedValue))) {
+			change = {
+				[id]: updatedValue,
+			};
+		} else if (id !== "amount") {
+			change = {
+				[id]: updatedValue,
+			};
+		}
+
+		let updateModalQueueInformation = {
+			...expenseModalInformation,
+			...change,
+		};
+		setExpenseModalInformation(updateModalQueueInformation);
+	};
+
+	const handleDateChange = (date: Dayjs | null) => {
+		setDatePicker(date);
+		if (date) {
+			const updatedValue = date.format("MM/DD/YYYY");
+			const change = {
+				["date_of_transaction"]: updatedValue,
+			};
+
+			let updatedModalQueueInformation = {
+				...expenseModalInformation,
+				...change,
+			};
+			setExpenseModalInformation(updatedModalQueueInformation);
+		}
+	};
 	const modalStyle = {
 		position: "absolute" as "absolute",
 		top: "50%",
@@ -106,6 +157,8 @@ function ExpenseList({ subFolder }: ExpenseListProps) {
 							</TableRow>
 						))}
 					</TableBody>
+
+					{/* Modal for adding an expense */}
 					<Modal
 						open={expenseModalOpen}
 						onClose={handleExpenseModalClose}
@@ -117,35 +170,41 @@ function ExpenseList({ subFolder }: ExpenseListProps) {
 								Add an expense
 							</Typography>
 							<TextField
-								id="outlined-basic"
+								id="merchant"
 								label="Merchant"
 								variant="outlined"
 								size="small"
 								sx={{ margin: ".5rem 0 .5rem 0", width: "100%" }}
 								multiline
+								onChange={handleModalChange}
+								value={expenseModalInformation["merchant"]}
 							/>
 							<FormControl size="small" sx={{ marginBottom: ".5rem" }}>
-								<InputLabel htmlFor="outlined-adornment-amount">
-									Amount
-								</InputLabel>
+								<InputLabel htmlFor="amount">Amount</InputLabel>
 								<OutlinedInput
-									id="outlined-adornment-amount"
+									id="amount"
 									startAdornment={
 										<InputAdornment position="start">$</InputAdornment>
 									}
 									label="Amount"
+									onChange={handleModalChange}
+									value={expenseModalInformation["amount"]}
 								/>
 							</FormControl>
 							<TextField
-								id="outlined-basic"
+								id="description"
 								label="Description"
 								variant="outlined"
 								size="small"
 								sx={{ marginBottom: ".5rem", width: "100%" }}
 								multiline
+								onChange={handleModalChange}
+								value={expenseModalInformation["description"]}
 							/>
 							<LocalizationProvider dateAdapter={AdapterDayjs}>
 								<DatePicker
+									value={datePicker}
+									onChange={(newDate) => handleDateChange(newDate)}
 									label="Date"
 									slotProps={{ textField: { size: "small" } }}
 								/>

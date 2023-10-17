@@ -15,7 +15,7 @@ const expenseAPI = {
 			.catch((error: TypeError) => {
 				console.log("log client error " + error);
 				throw new Error(
-					"There was an error adding the folder. Please try again."
+					"There was an error adding the expense. Please try again."
 				);
 			});
 	},
