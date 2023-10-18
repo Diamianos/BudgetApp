@@ -3,9 +3,9 @@ function translateStatusToErrorMessage(status: number) {
 		case 401:
 			return "Please login again.";
 		case 403:
-			return "You do not have permission to view the folder(s).";
+			return "You do not have permission to view the requested data.";
 		default:
-			return "There was an error retrieving the folder(s). Please try again.";
+			return "There was an error retrieving the requested data. Please try again.";
 	}
 }
 

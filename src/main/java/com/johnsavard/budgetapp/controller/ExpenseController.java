@@ -50,9 +50,9 @@ public class ExpenseController {
    * @return - Response Entity
    * @throws URISyntaxException
    */
-  @PostMapping
+  @PostMapping("/{subFolderId}")
   public ResponseEntity<String> addExpense(
-    @RequestParam("subFolderId") int subFolderId,
+    @PathVariable int subFolderId,
     @RequestBody Expense expense
   ) throws URISyntaxException {
     Optional<SubFolder> subFolder = subFolderService.findSubFolderById(

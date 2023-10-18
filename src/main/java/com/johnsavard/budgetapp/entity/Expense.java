@@ -19,7 +19,7 @@ public class Expense extends AuditModel {
   @Column(name = "id")
   private int id;
 
-  @JsonFormat(pattern = "yyyy-MM-dd' 'HH:mm:ss")
+  @JsonFormat(pattern = "MM-dd-yyyy")
   @Column(name = "date_of_transaction")
   private Date dateOfTransaction;
 

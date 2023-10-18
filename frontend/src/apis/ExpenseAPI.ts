@@ -2,8 +2,8 @@ import { Expense } from "../pages/subFolders/Expense";
 import { apiUtils } from "../utils/APIutils";
 
 const expenseAPI = {
-	post(expense: Expense) {
-		return fetch("/expense", {
+	post(subFolderId: number | undefined, expense: Expense) {
+		return fetch(`/expense/${subFolderId}`, {
 			method: "POST",
 			body: JSON.stringify(expense),
 			headers: {

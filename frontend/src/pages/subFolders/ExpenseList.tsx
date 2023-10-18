@@ -1,4 +1,5 @@
 import {
+	Alert,
 	Box,
 	Button,
 	Container,
@@ -25,6 +26,7 @@ import React, { useState } from "react";
 import { SubFolder } from "./SubFolder";
 import { Expense } from "./Expense";
 import { Dayjs } from "dayjs";
+import { expenseAPI } from "../../apis/ExpenseAPI";
 
 interface ExpenseListProps {
 	subFolder: SubFolder | undefined;
@@ -33,23 +35,44 @@ interface ExpenseListProps {
 function ExpenseList({ subFolder }: ExpenseListProps) {
 	const [expenseModalOpen, setExpenseModalOpen] = useState(false);
 	const [expenseModalInformation, setExpenseModalInformation] = useState({
-		date_of_transaction: "",
+		dateOfTransaction: "",
 		merchant: "",
 		amount: "",
 		description: "",
 	});
 	const [datePicker, setDatePicker] = useState<Dayjs | null>(null);
+	const [modalError, setModalError] = useState({
+		showError: false,
+		errorMsg: "",
+	});
 
 	const handleAddExpenseButton = () => {
 		setExpenseModalOpen(true);
 	};
 
 	const handleExpenseModalClose = () => {
+		const newModalError = {
+			showError: false,
+			errorMsg: "",
+		};
+		setModalError(newModalError);
 		setExpenseModalOpen(false);
 	};
 
-	const handleExpenseButtonClick = () => {
+	const handleExpenseButtonClick = async () => {
 		console.log(JSON.stringify(expenseModalInformation));
+		const newExpense = new Expense(expenseModalInformation);
+		try {
+			const response = await expenseAPI.post(subFolder?.id, newExpense);
+			console.log(response);
+		} catch (Error) {
+			const newModalError = {
+				showError: true,
+				errorMsg:
+					"An error occured, please try again or forward this error to your administrator.",
+			};
+			setModalError(newModalError);
+		}
 	};
 
 	// Handles updating the modal values when a value is changed
@@ -82,9 +105,9 @@ function ExpenseList({ subFolder }: ExpenseListProps) {
 	const handleDateChange = (date: Dayjs | null) => {
 		setDatePicker(date);
 		if (date) {
-			const updatedValue = date.format("MM/DD/YYYY");
+			const updatedValue = date.format("MM-DD-YYYY");
 			const change = {
-				["date_of_transaction"]: updatedValue,
+				["dateOfTransaction"]: updatedValue,
 			};
 
 			let updatedModalQueueInformation = {
@@ -148,7 +171,7 @@ function ExpenseList({ subFolder }: ExpenseListProps) {
 									{expense.merchant}
 								</TableCell>
 								<TableCell align="right">
-									{expense?.date_of_transaction?.toString()}
+									{expense?.dateOfTransaction?.toString()}
 								</TableCell>
 								<TableCell align="right">{expense.amount}</TableCell>
 								<TableCell align="right">
@@ -169,6 +192,10 @@ function ExpenseList({ subFolder }: ExpenseListProps) {
 							<Typography id="modal-modal-title" variant="h6" component="h2">
 								Add an expense
 							</Typography>
+							{modalError.showError ? (
+								<Alert severity="error">{modalError.errorMsg}</Alert>
+							) : null}
+
 							<TextField
 								id="merchant"
 								label="Merchant"
