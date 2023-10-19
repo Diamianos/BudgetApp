@@ -8,6 +8,7 @@ import com.johnsavard.budgetapp.dao.SubFolderRepository;
 import com.johnsavard.budgetapp.entity.Expense;
 import com.johnsavard.budgetapp.entity.SubFolder;
 import com.johnsavard.budgetapp.exception.NoRecordFoundException;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -80,7 +81,7 @@ public class ExpenseService {
     SubFolder subFolder,
     Expense expense,
     String json
-  ) {
+  ) throws IOException {
     // Converting json to expense object
     try {
       Expense patch = objectMapper.readValue(json, Expense.class);

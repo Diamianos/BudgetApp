@@ -4,9 +4,11 @@ import com.johnsavard.budgetapp.entity.Expense;
 import com.johnsavard.budgetapp.entity.SubFolder;
 import com.johnsavard.budgetapp.service.ExpenseService;
 import com.johnsavard.budgetapp.service.SubFolderService;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 public class ExpenseController {
 
   private final ExpenseService expenseService;
+
   private final SubFolderService subFolderService;
 
   public ExpenseController(
@@ -79,6 +82,7 @@ public class ExpenseController {
    * @param expenseId - The expense to be patched
    * @param json - [Request Body] Json object containing the fields to be updated
    * @return - Response Entity
+   * @throws IOException
    * @throws URISyntaxException
    */
   @PatchMapping
@@ -86,7 +90,7 @@ public class ExpenseController {
     @RequestParam("subFolderId") int subFolderId,
     @RequestParam("expenseId") int expenseId,
     @RequestBody String json
-  ) {
+  ) throws IOException {
     Optional<SubFolder> subFolder = subFolderService.findSubFolderById(
       subFolderId
     );

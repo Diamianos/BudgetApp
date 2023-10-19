@@ -4,6 +4,7 @@ import com.johnsavard.budgetapp.entity.Folder;
 import com.johnsavard.budgetapp.entity.SubFolder;
 import com.johnsavard.budgetapp.service.FolderService;
 import com.johnsavard.budgetapp.service.SubFolderService;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -33,7 +35,7 @@ public class SubFolderController {
     this.folderService = folderService;
   }
 
-  @GetMapping
+  @RequestMapping(method = RequestMethod.GET, produces = { "application/json" })
   public List<SubFolder> getAllSubFolders() {
     return subFolderService.findAllSubFolders();
   }
@@ -62,7 +64,7 @@ public class SubFolderController {
   public ResponseEntity<String> patchSubfolder(
     @PathVariable("subFolderId") int subFolderId,
     @RequestBody String json
-  ) {
+  ) throws IOException {
     Optional<SubFolder> existingSubfolder = subFolderService.findSubFolderById(
       subFolderId
     );

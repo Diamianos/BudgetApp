@@ -1,5 +1,6 @@
 package com.johnsavard.budgetapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.johnsavard.budgetapp.enums.MonthPeriod;
 import com.johnsavard.budgetapp.utilities.SubFolderTagsConverter;
 import java.math.BigDecimal;
@@ -67,6 +68,7 @@ public class SubFolder extends AuditModel {
     }
   )
   @JoinColumn(name = "folder_id")
+  @JsonIgnore
   private Folder folder;
 
   @Transient

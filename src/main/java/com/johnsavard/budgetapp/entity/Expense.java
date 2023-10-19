@@ -1,6 +1,7 @@
 package com.johnsavard.budgetapp.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.*;
@@ -46,6 +47,7 @@ public class Expense extends AuditModel {
     }
   )
   @JoinColumn(name = "sub_folder_id", nullable = false)
+  @JsonIgnore
   private SubFolder subFolder;
 
   public Expense() {}

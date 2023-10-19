@@ -73,6 +73,7 @@ function ExpenseList({ subFolder }: ExpenseListProps) {
 			};
 			setModalError(newModalError);
 		}
+		setExpenseModalOpen(false);
 	};
 
 	// Handles updating the modal values when a value is changed

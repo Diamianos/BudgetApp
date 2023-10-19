@@ -7,10 +7,9 @@ import com.johnsavard.budgetapp.dao.SubFolderRepository;
 import com.johnsavard.budgetapp.entity.Expense;
 import com.johnsavard.budgetapp.entity.SubFolder;
 import com.johnsavard.budgetapp.entity.Tags;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -37,16 +36,15 @@ public class SubFolderService {
 
   public List<SubFolder> findAllSubFolders() {
     List<SubFolder> subFolders = subFolderRepository.findAll();
-    List<Expense> testExpense = expenseService.findExpensesBySubFolderId(1);
-    System.out.println(testExpense);
-    // subFolders
-    //   .stream()
-    //   .forEach(f -> {
-    //     List<Expense> expenses = expenseService.findExpensesBySubFolderId(
-    //       f.getId()
-    //     );
-    //     f.setExpenses(expenses);
-    //   });
+    subFolders
+      .stream()
+      .forEach(f -> {
+        List<Expense> expenses = expenseService.findExpensesBySubFolderId(
+          f.getId()
+        );
+        f.setExpenses(expenses);
+      });
+
     return subFolders;
   }
 
@@ -72,7 +70,7 @@ public class SubFolderService {
   public ResponseEntity<String> patchSubFolder(
     SubFolder existingSubfolder,
     String json
-  ) {
+  ) throws IOException {
     // Converting json to expense object
     try {
       SubFolder patch = objectMapper.readValue(json, SubFolder.class);
