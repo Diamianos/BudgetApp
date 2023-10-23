@@ -100,7 +100,7 @@ function SubFoldersPage() {
 
 			{selectedSubFolder ? (
 				<Grid container spacing={2}>
-					<Grid item md={6}>
+					<Grid item md={5}>
 						<SubFolderList
 							subFolders={subFolders}
 							monthPeriod={monthPeriod}
@@ -109,7 +109,7 @@ function SubFoldersPage() {
 							setShowDescriptionSaveButton={setShowDescriptionSaveButton}
 						></SubFolderList>
 					</Grid>
-					<Grid item md={6}>
+					<Grid item md={7}>
 						<SubFolderDetail
 							selectedSubFolder={selectedSubFolder}
 							subFolders={subFolders}

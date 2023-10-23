@@ -4,6 +4,7 @@ import {
 	Button,
 	Container,
 	FormControl,
+	IconButton,
 	InputAdornment,
 	InputLabel,
 	Modal,
@@ -22,11 +23,14 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import InfoIcon from "@mui/icons-material/Info";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import EditIcon from "@mui/icons-material/Edit";
 import React, { useState } from "react";
 import { SubFolder } from "./SubFolder";
 import { Expense } from "./Expense";
 import { Dayjs } from "dayjs";
 import { expenseAPI } from "../../apis/ExpenseAPI";
+import { DeleteForever } from "@mui/icons-material";
 
 interface ExpenseListProps {
 	subFolder: SubFolder | undefined;
@@ -138,6 +142,7 @@ function ExpenseList({ subFolder }: ExpenseListProps) {
 				minHeight: "100px",
 				overflow: "auto",
 				mb: 2,
+				pb: 5,
 			}}
 		>
 			<Typography fontWeight="bold" variant="h6" align="center">
@@ -159,7 +164,7 @@ function ExpenseList({ subFolder }: ExpenseListProps) {
 							<TableCell>Merchant</TableCell>
 							<TableCell>Date</TableCell>
 							<TableCell>Amount</TableCell>
-							<TableCell>Actions</TableCell>
+							<TableCell align="center">Actions</TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
@@ -171,12 +176,22 @@ function ExpenseList({ subFolder }: ExpenseListProps) {
 								<TableCell component="th" scope="row">
 									{expense.merchant}
 								</TableCell>
-								<TableCell align="right">
-									{expense?.dateOfTransaction?.toString()}
-								</TableCell>
-								<TableCell align="right">{expense.amount}</TableCell>
-								<TableCell align="right">
-									<InfoIcon />
+								<TableCell>{expense?.dateOfTransaction?.toString()}</TableCell>
+								<TableCell>{expense.amount}</TableCell>
+								<TableCell
+									sx={{ display: "flex", justifyContent: "space-evenly" }}
+								>
+									<IconButton
+										onClick={(event) => console.log("info icon clicked")}
+									>
+										<InfoIcon />
+									</IconButton>
+									<IconButton>
+										<EditIcon />
+									</IconButton>
+									<IconButton>
+										<DeleteForeverIcon />
+									</IconButton>
 								</TableCell>
 							</TableRow>
 						))}
