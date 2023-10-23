@@ -92,6 +92,8 @@ public class SubFolderService {
     subFolderRepository.deleteById(subFolderId);
   }
 
+  public void deleteSubFolderByFolderId(int folderId) {}
+
   private ResponseEntity<String> handlePatchingSubfolder(
     SubFolder existingSubfolder,
     SubFolder patch

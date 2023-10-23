@@ -10,11 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -40,14 +36,22 @@ public class SubFolderController {
     return subFolderService.findAllSubFolders();
   }
 
-  @GetMapping("/{subFolderId}")
+  @RequestMapping(
+    path = "/{subFolderId}",
+    method = RequestMethod.GET,
+    produces = { "application/json" }
+  )
   public Optional<SubFolder> getSubFolderById(
     @PathVariable Integer subFolderId
   ) {
     return subFolderService.findSubFolderById(subFolderId);
   }
 
-  @PostMapping
+  @RequestMapping(
+    method = RequestMethod.POST,
+    produces = { "application/json" },
+    consumes = { "application/json" }
+  )
   public ResponseEntity<SubFolder> createSubFolder(
     @RequestBody SubFolder subFolder
   ) throws URISyntaxException {
@@ -60,7 +64,12 @@ public class SubFolderController {
     return new ResponseEntity<SubFolder>(savedSubFolder, HttpStatus.CREATED);
   }
 
-  @PatchMapping("/{subFolderId}")
+  @RequestMapping(
+    path = "/{subFolderId}",
+    method = RequestMethod.PATCH,
+    produces = { "application/json" },
+    consumes = { "application/json" }
+  )
   public ResponseEntity<String> patchSubfolder(
     @PathVariable("subFolderId") int subFolderId,
     @RequestBody String json
@@ -82,7 +91,11 @@ public class SubFolderController {
     }
   }
 
-  @DeleteMapping("/{subFolderId}")
+  @RequestMapping(
+    path = "/{subFolderId}",
+    method = RequestMethod.DELETE,
+    produces = { "application/json" }
+  )
   public ResponseEntity<String> deleteSubFolder(
     @PathVariable Integer subFolderId
   ) {

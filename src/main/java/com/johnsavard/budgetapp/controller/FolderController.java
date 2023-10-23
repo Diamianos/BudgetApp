@@ -29,7 +29,7 @@ public class FolderController {
    *
    * @return List of Folder Objects
    */
-  @GetMapping
+  @RequestMapping(method = RequestMethod.GET, produces = { "application/json" })
   public List<Folder> getAllFolders() {
     return folderService.findAllFolders();
   }
@@ -39,7 +39,11 @@ public class FolderController {
    * @param folderId - Passed in with path variable annotation.
    * @return Folder wrapped in an Optional object.
    */
-  @GetMapping("/{folderId}")
+  @RequestMapping(
+    path = "/{folderId}",
+    method = RequestMethod.GET,
+    produces = { "application/json" }
+  )
   public Optional<Folder> getFolderById(@PathVariable Integer folderId) {
     return folderService.findFolderById(folderId);
   }
@@ -49,7 +53,11 @@ public class FolderController {
    * @param folder - Model attribute with data for a new folder.
    * @return Response entity of the newly created folder
    */
-  @PostMapping
+  @RequestMapping(
+    method = RequestMethod.POST,
+    produces = { "application/json" },
+    consumes = { "application/json" }
+  )
   public ResponseEntity<Folder> createFolder(@RequestBody Folder folder)
     throws URISyntaxException {
     Folder savedFolder = folderService.saveFolder(folder);
@@ -66,7 +74,12 @@ public class FolderController {
    * @return - ResponseEntity of the result of saving the folder
    * @throws Exception
    */
-  @PutMapping("/{id}")
+  @RequestMapping(
+    path = "/{id}",
+    method = RequestMethod.PATCH,
+    produces = { "application/json" },
+    consumes = { "application/json" }
+  )
   public ResponseEntity<Folder> updateFolder(
     @PathVariable Integer id,
     @RequestBody Folder folder
@@ -83,10 +96,10 @@ public class FolderController {
   /**
    *
    * @param id - Id of the folder to be deleted
-   * @return - Response entity with an "okay" build
+   * @return - Response entity with an "ok" build
    */
-  @DeleteMapping("/{id}")
-  public ResponseEntity<String> deleteClient(@PathVariable Integer id) {
+  @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
+  public ResponseEntity<String> deleteFolder(@PathVariable Integer id) {
     folderService.deleteFolder(id);
     return ResponseEntity.ok().build();
   }

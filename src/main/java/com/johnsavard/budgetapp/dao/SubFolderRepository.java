@@ -6,4 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SubFolderRepository extends JpaRepository<SubFolder, Integer> {
   List<SubFolder> findByFolderId(Integer folderId);
+
+  void deleteByFolderId(Integer folderId);
 }

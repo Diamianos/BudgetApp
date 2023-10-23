@@ -32,7 +32,7 @@ public class ExpenseController {
    *
    * @return All expenses in the database
    */
-  @GetMapping
+  @RequestMapping(method = RequestMethod.GET, produces = { "application/json" })
   public List<Expense> getAllExpenses() {
     return expenseService.findAllExpenses();
   }
@@ -41,7 +41,11 @@ public class ExpenseController {
    * @param expenseId - The expense to be returned
    * @return - All expenses in the database
    */
-  @GetMapping("/{expenseId}")
+  @RequestMapping(
+    path = "/{expenseId}",
+    method = RequestMethod.GET,
+    produces = { "application/json" }
+  )
   public Optional<Expense> getExpenseById(@PathVariable Integer expenseId) {
     return expenseService.findExpenseById(expenseId);
   }
@@ -53,7 +57,12 @@ public class ExpenseController {
    * @return - Response Entity
    * @throws URISyntaxException
    */
-  @PostMapping("/{subFolderId}")
+  @RequestMapping(
+    path = "/{subFolderId}",
+    method = RequestMethod.POST,
+    produces = { "application/json" },
+    consumes = { "application/json" }
+  )
   public ResponseEntity<String> addExpense(
     @PathVariable int subFolderId,
     @RequestBody Expense expense
@@ -85,7 +94,11 @@ public class ExpenseController {
    * @throws IOException
    * @throws URISyntaxException
    */
-  @PatchMapping
+  @RequestMapping(
+    method = RequestMethod.PATCH,
+    produces = { "application/json" },
+    consumes = { "application/json" }
+  )
   public ResponseEntity<String> patchExpense(
     @RequestParam("subFolderId") int subFolderId,
     @RequestParam("expenseId") int expenseId,
@@ -116,7 +129,7 @@ public class ExpenseController {
    * @param folderId - Passed in from html page
    * @return The ModelAndView to be displayed
    */
-  @DeleteMapping("/{expenseId}")
+  @RequestMapping(path = "/{expenseId}", method = RequestMethod.DELETE)
   public void deleteExpense(@PathVariable Integer expenseId) {
     expenseService.deleteExpense(expenseId);
   }

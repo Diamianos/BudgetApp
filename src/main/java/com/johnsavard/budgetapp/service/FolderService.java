@@ -11,8 +11,14 @@ public class FolderService {
 
   private FolderRepository folderRepository;
 
-  public FolderService(FolderRepository folderRepository) {
+  private SubFolderService subFolderService;
+
+  public FolderService(
+    FolderRepository folderRepository,
+    SubFolderService subFolderService
+  ) {
     this.folderRepository = folderRepository;
+    this.subFolderService = subFolderService;
   }
 
   public List<Folder> findAllFolders() {
