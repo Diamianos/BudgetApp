@@ -1,12 +1,12 @@
 import { SubFolder } from "../pages/subFolders/SubFolder";
 import { apiUtils } from "../utils/APIutils";
 
-function convertToProjectModels(data: any[]): SubFolder[] {
-	let subFolders: SubFolder[] = data.map(convertToFolderModel);
+function convertToSubFolderModels(data: any[]): SubFolder[] {
+	let subFolders: SubFolder[] = data.map(convertToSubFolderModel);
 	return subFolders;
 }
 
-function convertToFolderModel(item: any): SubFolder {
+function convertToSubFolderModel(item: any): SubFolder {
 	return new SubFolder(item);
 }
 
@@ -16,7 +16,7 @@ const subFolderAPI = {
 			.then(apiUtils.delay(600))
 			.then(apiUtils.checkStatus)
 			.then(apiUtils.parseJSON)
-			.then(convertToProjectModels)
+			.then(convertToSubFolderModels)
 			.catch((error: TypeError) => {
 				console.log("log client error " + error);
 				throw new Error(
@@ -53,6 +53,7 @@ const subFolderAPI = {
 		})
 			.then(apiUtils.checkStatus)
 			.then(apiUtils.parseJSON)
+			.then(convertToSubFolderModel)
 			.catch((error: TypeError) => {
 				console.log("log client error " + error);
 				throw new Error(

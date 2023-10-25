@@ -1,6 +1,5 @@
 package com.johnsavard.budgetapp.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.johnsavard.budgetapp.dao.SubFolderRepository;
@@ -10,7 +9,6 @@ import com.johnsavard.budgetapp.entity.Tags;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -67,25 +65,11 @@ public class SubFolderService {
     return subFolderRepository.save(subFolder);
   }
 
-  public ResponseEntity<String> patchSubFolder(
-    SubFolder existingSubfolder,
-    String json
-  ) throws IOException {
+  public SubFolder patchSubFolder(SubFolder existingSubfolder, String json)
+    throws IOException {
     // Converting json to expense object
-    try {
-      SubFolder patch = objectMapper.readValue(json, SubFolder.class);
-      return handlePatchingSubfolder(existingSubfolder, patch);
-    } catch (JsonProcessingException e) {
-      return ResponseEntity
-        .badRequest()
-        .body(
-          String.format(
-            "Json did not match subfolder object format. Please check passed in fields: %s \n %s",
-            json,
-            e.toString()
-          )
-        );
-    }
+    SubFolder patch = objectMapper.readValue(json, SubFolder.class);
+    return handlePatchingSubfolder(existingSubfolder, patch);
   }
 
   public void deleteSubFolder(int subFolderId) {
@@ -94,7 +78,7 @@ public class SubFolderService {
 
   public void deleteSubFolderByFolderId(int folderId) {}
 
-  private ResponseEntity<String> handlePatchingSubfolder(
+  private SubFolder handlePatchingSubfolder(
     SubFolder existingSubfolder,
     SubFolder patch
   ) {
@@ -120,6 +104,6 @@ public class SubFolderService {
 
     // Save the updated subFolder
     SubFolder updatedSubFolder = subFolderRepository.save(existingSubfolder);
-    return ResponseEntity.ok().body(updatedSubFolder.toString());
+    return updatedSubFolder;
   }
 }

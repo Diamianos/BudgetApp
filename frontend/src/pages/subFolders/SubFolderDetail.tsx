@@ -97,12 +97,10 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 		const tagValues = { ...subFolder?.tags, ...change };
 		const tagChange = { ["tags"]: tagValues };
 
-		console.log(tagChange);
 		let updatedSubFolder: SubFolder = new SubFolder({
 			...subFolder,
 			...tagChange,
 		});
-		console.log(updatedSubFolder);
 		setSubFolder(updatedSubFolder);
 	};
 

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/subfolder")
@@ -70,7 +71,7 @@ public class SubFolderController {
     produces = { "application/json" },
     consumes = { "application/json" }
   )
-  public ResponseEntity<String> patchSubfolder(
+  public ResponseEntity<SubFolder> patchSubfolder(
     @PathVariable("subFolderId") int subFolderId,
     @RequestBody String json
   ) throws IOException {
@@ -78,16 +79,16 @@ public class SubFolderController {
       subFolderId
     );
     if (existingSubfolder.isPresent()) {
-      return subFolderService.patchSubFolder(existingSubfolder.get(), json);
+      SubFolder updatedSubFolder = subFolderService.patchSubFolder(
+        existingSubfolder.get(),
+        json
+      );
+      return new ResponseEntity<>(updatedSubFolder, HttpStatus.OK);
     } else {
-      return ResponseEntity
-        .badRequest()
-        .body(
-          String.format(
-            "Error retrieving subFolder with ID %s. Unable to update sub folder.",
-            subFolderId
-          )
-        );
+      throw new ResponseStatusException(
+        HttpStatus.NOT_FOUND,
+        String.format("Subfolder with ID: %d not found", subFolderId)
+      );
     }
   }
 

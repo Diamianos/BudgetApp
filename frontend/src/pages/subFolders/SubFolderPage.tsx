@@ -26,7 +26,6 @@ function SubFoldersPage() {
 		useState(false);
 
 	const handleSelectedSubFolderChange = (subFolder: SubFolder) => {
-		console.log(subFolder);
 		setSelectedSubFolder(subFolder);
 	};
 
@@ -46,10 +45,12 @@ function SubFoldersPage() {
 
 	const handleSubFolderUpdate = async (subFolder: SubFolder) => {
 		let updatedSubFolders: SubFolder[] = [];
-		const updatedSubFolder = await subFolderAPI.patch(subFolder);
+		const updatedSubFolder: SubFolder = await subFolderAPI.patch(subFolder);
+		console.log(updatedSubFolder);
 		updatedSubFolders = subFolders.map((sf: SubFolder) => {
 			return sf.id == updatedSubFolder.id ? updatedSubFolder : sf;
 		});
+		setSubFolders(() => [...updatedSubFolders]);
 		setShowDescriptionSaveButton(false);
 	};
 
@@ -69,10 +70,6 @@ function SubFoldersPage() {
 		}
 		loadFolders();
 	}, []);
-
-	useEffect(() => {
-		console.log(subFolders);
-	}, [subFolders]);
 
 	return (
 		<Container
