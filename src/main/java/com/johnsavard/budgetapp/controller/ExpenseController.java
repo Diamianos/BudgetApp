@@ -2,6 +2,7 @@ package com.johnsavard.budgetapp.controller;
 
 import com.johnsavard.budgetapp.entity.Expense;
 import com.johnsavard.budgetapp.entity.SubFolder;
+import com.johnsavard.budgetapp.exception.InvalidExpenseValueException;
 import com.johnsavard.budgetapp.service.ExpenseService;
 import com.johnsavard.budgetapp.service.SubFolderService;
 import java.io.IOException;
@@ -9,8 +10,10 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/expense")
@@ -63,7 +66,7 @@ public class ExpenseController {
     produces = { "application/json" },
     consumes = { "application/json" }
   )
-  public ResponseEntity<String> addExpense(
+  public ResponseEntity<Expense> addExpense(
     @PathVariable int subFolderId,
     @RequestBody Expense expense
   ) throws URISyntaxException {
@@ -71,17 +74,27 @@ public class ExpenseController {
       subFolderId
     );
 
-    if (subFolder.isPresent()) {
-      return expenseService.saveExpense(subFolder.get(), expense);
-    } else {
-      return ResponseEntity
-        .badRequest()
-        .body(
+    try {
+      if (subFolder.isPresent()) {
+        Expense newExpense = expenseService.saveExpense(
+          subFolder.get(),
+          expense
+        );
+        return new ResponseEntity<>(newExpense, HttpStatus.OK);
+      } else {
+        throw new ResponseStatusException(
+          HttpStatus.NOT_FOUND,
           String.format(
-            "Error retrieving subFolder with ID %s. Unable to save expense.",
+            "Unable to add expense, subfolder with ID %d not found.",
             subFolderId
           )
         );
+      }
+    } catch (InvalidExpenseValueException ex) {
+      throw new ResponseStatusException(
+        HttpStatus.BAD_REQUEST,
+        ex.getMessage()
+      );
     }
   }
 

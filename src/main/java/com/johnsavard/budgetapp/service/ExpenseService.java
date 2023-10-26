@@ -7,6 +7,7 @@ import com.johnsavard.budgetapp.dao.ExpenseRepository;
 import com.johnsavard.budgetapp.dao.SubFolderRepository;
 import com.johnsavard.budgetapp.entity.Expense;
 import com.johnsavard.budgetapp.entity.SubFolder;
+import com.johnsavard.budgetapp.exception.InvalidExpenseValueException;
 import com.johnsavard.budgetapp.exception.NoRecordFoundException;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -50,10 +51,8 @@ public class ExpenseService {
     return expenseRepository.findBySubFolderId(folderId);
   }
 
-  public ResponseEntity<String> saveExpense(
-    SubFolder subFolder,
-    Expense expense
-  ) throws URISyntaxException {
+  public Expense saveExpense(SubFolder subFolder, Expense expense)
+    throws URISyntaxException {
     // Verify the subfolder amount is greater than the expense
     if (subFolder.getBalance().compareTo(expense.getAmount()) >= 0) {
       // Minus the expense from the subFolder
@@ -63,17 +62,15 @@ public class ExpenseService {
       // Save the subfolder and expense
       subFolderRepository.save(subFolder);
       expense.setSubFolder(subFolder);
-      Expense savedExpense = expenseRepository.save(expense);
-
-      return ResponseEntity
-        .created(new URI("/expense/" + savedExpense.getId()))
-        .body(savedExpense.toString());
+      return expenseRepository.save(expense);
     } else {
-      return ResponseEntity
-        .badRequest()
-        .body(
-          "Expense cannot be greater than sub folder amount. Unable to save expense."
-        );
+      throw new InvalidExpenseValueException(
+        String.format(
+          "Expense value %f is greater than sub folder balance of %f",
+          expense.getAmount(),
+          subFolder.getBalance()
+        )
+      );
     }
   }
 
