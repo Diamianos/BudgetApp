@@ -30,13 +30,13 @@ import { SubFolder } from "./SubFolder";
 import { Expense } from "./Expense";
 import { Dayjs } from "dayjs";
 import { expenseAPI } from "../../apis/ExpenseAPI";
-import { DeleteForever } from "@mui/icons-material";
 
 interface ExpenseListProps {
 	subFolder: SubFolder | undefined;
+	handleExpenseUpdate: (expense: Expense) => void;
 }
 
-function ExpenseList({ subFolder }: ExpenseListProps) {
+function ExpenseList({ subFolder, handleExpenseUpdate }: ExpenseListProps) {
 	const [expenseModalOpen, setExpenseModalOpen] = useState(false);
 	const [expenseModalInformation, setExpenseModalInformation] = useState({
 		dateOfTransaction: "",
@@ -65,10 +65,11 @@ function ExpenseList({ subFolder }: ExpenseListProps) {
 
 	const handleExpenseButtonClick = async () => {
 		console.log(JSON.stringify(expenseModalInformation));
-		const newExpense = new Expense(expenseModalInformation);
+		const expense = new Expense(expenseModalInformation);
+		//TODO:  Fix issue with error message not being displayed properly when expense is greater than sub folder amount
 		try {
-			const response = await expenseAPI.post(subFolder?.id, newExpense);
-			console.log(response);
+			const newExpense = await expenseAPI.post(subFolder?.id, expense);
+			handleExpenseUpdate(newExpense);
 		} catch (Error) {
 			const newModalError = {
 				showError: true,

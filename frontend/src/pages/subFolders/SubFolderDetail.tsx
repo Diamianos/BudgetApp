@@ -19,22 +19,23 @@ import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import CurrencyExchangeIcon from "@mui/icons-material/CurrencyExchange";
 import ExpenseList from "./ExpenseList";
+import { Expense } from "./Expense";
 
 interface SubFolderDetailProps {
-	subFolders: SubFolder[];
 	selectedSubFolder: SubFolder | undefined;
 	handleSubFolderUpdate: (subFolder: SubFolder) => void;
 	showDescriptionSaveButton: boolean;
 	setShowDescriptionSaveButton: (value: boolean) => void;
+	handleExpenseUpdate: (expense: Expense) => void;
 }
 
 function SubFolderDetail(props: SubFolderDetailProps) {
 	const {
-		subFolders,
 		selectedSubFolder,
 		handleSubFolderUpdate,
 		showDescriptionSaveButton,
 		setShowDescriptionSaveButton,
+		handleExpenseUpdate,
 	} = props;
 
 	const [subFolder, setSubFolder] = useState<SubFolder | undefined>();
@@ -102,6 +103,7 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 			...tagChange,
 		});
 		setSubFolder(updatedSubFolder);
+		console.log(subFolder);
 	};
 
 	const handleModifyTags = () => {
@@ -206,7 +208,10 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 				)}
 			</Container>
 			<Container disableGutters>
-				<ExpenseList subFolder={subFolder}></ExpenseList>
+				<ExpenseList
+					subFolder={subFolder}
+					handleExpenseUpdate={handleExpenseUpdate}
+				></ExpenseList>
 			</Container>
 			<Modal
 				open={modifyTags}

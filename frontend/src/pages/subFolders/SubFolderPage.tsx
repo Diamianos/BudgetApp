@@ -12,6 +12,7 @@ import {
 import SubFolderList from "./SubFolderList";
 import { subFolderAPI } from "../../apis/SubFolderAPI";
 import SubFolderDetail from "./SubFolderDetail";
+import { Expense } from "./Expense";
 
 function SubFoldersPage() {
 	const [subFolders, setSubFolders] = useState<SubFolder[]>([]);
@@ -54,6 +55,18 @@ function SubFoldersPage() {
 		setShowDescriptionSaveButton(false);
 	};
 
+	const handleExpenseUpdate = (expense: Expense) => {
+		// Update the current folder
+		let newSelectedSubFolder: SubFolder = new SubFolder({
+			...selectedSubFolder,
+		});
+		newSelectedSubFolder.expenses?.push(expense);
+		newSelectedSubFolder.balance =
+			newSelectedSubFolder.balance - expense.amount;
+
+		setSelectedSubFolder(newSelectedSubFolder);
+	};
+
 	useEffect(() => {
 		async function loadFolders() {
 			setLoading(true);
@@ -69,7 +82,7 @@ function SubFoldersPage() {
 			}
 		}
 		loadFolders();
-	}, []);
+	}, [selectedSubFolder]);
 
 	return (
 		<Container
@@ -109,10 +122,10 @@ function SubFoldersPage() {
 					<Grid item md={7}>
 						<SubFolderDetail
 							selectedSubFolder={selectedSubFolder}
-							subFolders={subFolders}
 							handleSubFolderUpdate={handleSubFolderUpdate}
 							showDescriptionSaveButton={showDescriptionSaveButton}
 							setShowDescriptionSaveButton={setShowDescriptionSaveButton}
+							handleExpenseUpdate={handleExpenseUpdate}
 						></SubFolderDetail>
 					</Grid>
 				</Grid>
