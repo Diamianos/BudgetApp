@@ -66,19 +66,20 @@ function ExpenseList({ subFolder, handleExpenseUpdate }: ExpenseListProps) {
 	const handleExpenseButtonClick = async () => {
 		console.log(JSON.stringify(expenseModalInformation));
 		const expense = new Expense(expenseModalInformation);
-		//TODO:  Fix issue with error message not being displayed properly when expense is greater than sub folder amount
 		try {
 			const newExpense = await expenseAPI.post(subFolder?.id, expense);
-			handleExpenseUpdate(newExpense);
-		} catch (Error) {
+			if (newExpense) {
+				handleExpenseUpdate(newExpense);
+				setExpenseModalOpen(false);
+			}
+		} catch (error: any) {
+			const jsonError = JSON.parse(error.message);
 			const newModalError = {
 				showError: true,
-				errorMsg:
-					"An error occured, please try again or forward this error to your administrator.",
+				errorMsg: jsonError.message,
 			};
 			setModalError(newModalError);
 		}
-		setExpenseModalOpen(false);
 	};
 
 	// Handles updating the modal values when a value is changed

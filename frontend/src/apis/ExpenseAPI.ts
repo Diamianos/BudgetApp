@@ -16,13 +16,7 @@ const expenseAPI = {
 		})
 			.then(apiUtils.checkStatus)
 			.then(apiUtils.parseJSON)
-			.then(convertToExpenseModel)
-			.catch((error: TypeError) => {
-				console.log("log client error " + error);
-				throw new Error(
-					"There was an error adding the expense. Please try again."
-				);
-			});
+			.then(convertToExpenseModel);
 	},
 };
 

@@ -11,7 +11,6 @@ import com.johnsavard.budgetapp.exception.InvalidExpenseValueException;
 import com.johnsavard.budgetapp.exception.NoRecordFoundException;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
@@ -66,9 +65,9 @@ public class ExpenseService {
     } else {
       throw new InvalidExpenseValueException(
         String.format(
-          "Expense value %f is greater than sub folder balance of %f",
-          expense.getAmount(),
-          subFolder.getBalance()
+          "Expense value %s is greater than sub folder balance of %s",
+          expense.getAmount().stripTrailingZeros().toPlainString(),
+          subFolder.getBalance().stripTrailingZeros().toPlainString()
         )
       );
     }
