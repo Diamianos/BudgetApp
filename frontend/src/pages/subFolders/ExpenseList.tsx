@@ -44,9 +44,14 @@ import { BlankExpenseDisplayInformation } from "../../static_data/BlankExpenseDi
 interface ExpenseListProps {
 	subFolder: SubFolder | undefined;
 	handleExpenseUpdate: (expense: Expense) => void;
+	handleExpenseDelete: (expense: Expense) => void;
 }
 
-function ExpenseList({ subFolder, handleExpenseUpdate }: ExpenseListProps) {
+function ExpenseList({
+	subFolder,
+	handleExpenseUpdate,
+	handleExpenseDelete,
+}: ExpenseListProps) {
 	const [expenseModalOpen, setExpenseModalOpen] = useState(false);
 	const [expenseDialogOpen, setExpenseDialogOpen] = useState(false);
 	const [expenseModalInformation, setExpenseModalInformation] =
@@ -80,24 +85,6 @@ function ExpenseList({ subFolder, handleExpenseUpdate }: ExpenseListProps) {
 
 	const handleDialogClose = () => {
 		setExpenseDialogOpen(false);
-	};
-
-	const handleExpenseButtonClick = async () => {
-		const expense = new Expense(expenseModalInformation);
-		try {
-			const newExpense = await expenseAPI.post(subFolder?.id, expense);
-			if (newExpense) {
-				handleExpenseUpdate(newExpense);
-				setExpenseModalOpen(false);
-			}
-		} catch (error: any) {
-			const jsonError = JSON.parse(error.message);
-			const newModalError = {
-				showError: true,
-				errorMsg: jsonError.message,
-			};
-			setModalError(newModalError);
-		}
 	};
 
 	// Handles updating the modal values when a value is changed
@@ -143,6 +130,24 @@ function ExpenseList({ subFolder, handleExpenseUpdate }: ExpenseListProps) {
 		}
 	};
 
+	const handleExpenseButtonClick = async () => {
+		const expense = new Expense(expenseModalInformation);
+		try {
+			const newExpense = await expenseAPI.post(subFolder?.id, expense);
+			if (newExpense) {
+				handleExpenseUpdate(newExpense);
+				handleExpenseModalClose();
+			}
+		} catch (error: any) {
+			const jsonError = JSON.parse(error.message);
+			const newModalError = {
+				showError: true,
+				errorMsg: jsonError.message,
+			};
+			setModalError(newModalError);
+		}
+	};
+
 	const handleInfoButtonClick = (expense: Expense) => {
 		const newExpenseDialogInformation = {
 			dateOfTransaction: expense.dateOfTransaction,
@@ -152,6 +157,21 @@ function ExpenseList({ subFolder, handleExpenseUpdate }: ExpenseListProps) {
 		};
 		setExpenseDialogInformation(newExpenseDialogInformation);
 		handleDialogOpen();
+	};
+
+	const handleDeleteButtonClick = async (expense: Expense) => {
+		try {
+			await expenseAPI.delete(expense);
+			handleExpenseDelete(expense);
+		} catch (error: any) {
+			console.log(error);
+			const newModalError = {
+				showError: true,
+				errorMsg:
+					"An error occured deleting the expense, please consult the administrator",
+			};
+			setModalError(newModalError);
+		}
 	};
 	const modalStyle = {
 		position: "absolute" as "absolute",
@@ -218,7 +238,7 @@ function ExpenseList({ subFolder, handleExpenseUpdate }: ExpenseListProps) {
 									<IconButton>
 										<EditIcon />
 									</IconButton>
-									<IconButton>
+									<IconButton onClick={() => handleDeleteButtonClick(expense)}>
 										<DeleteForeverIcon />
 									</IconButton>
 								</TableCell>

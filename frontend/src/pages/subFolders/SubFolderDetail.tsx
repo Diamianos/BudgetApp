@@ -27,6 +27,7 @@ interface SubFolderDetailProps {
 	showDescriptionSaveButton: boolean;
 	setShowDescriptionSaveButton: (value: boolean) => void;
 	handleExpenseUpdate: (expense: Expense) => void;
+	handleExpenseDelete: (expense: Expense) => void;
 }
 
 function SubFolderDetail(props: SubFolderDetailProps) {
@@ -36,6 +37,7 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 		showDescriptionSaveButton,
 		setShowDescriptionSaveButton,
 		handleExpenseUpdate,
+		handleExpenseDelete,
 	} = props;
 
 	const [subFolder, setSubFolder] = useState<SubFolder | undefined>();
@@ -211,6 +213,7 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 				<ExpenseList
 					subFolder={subFolder}
 					handleExpenseUpdate={handleExpenseUpdate}
+					handleExpenseDelete={handleExpenseDelete}
 				></ExpenseList>
 			</Container>
 			<Modal

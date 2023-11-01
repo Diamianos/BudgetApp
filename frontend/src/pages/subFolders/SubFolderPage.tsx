@@ -67,6 +67,21 @@ function SubFoldersPage() {
 		setSelectedSubFolder(newSelectedSubFolder);
 	};
 
+	const handleExpenseDelete = (expense: Expense) => {
+		let newSelectedSubFolder: SubFolder = new SubFolder({
+			...selectedSubFolder,
+		});
+		console.log(expense);
+		const newExpenses = newSelectedSubFolder.expenses?.filter((e) => {
+			return e.id !== expense.id;
+		});
+		newSelectedSubFolder.expenses = newExpenses;
+		console.log(newSelectedSubFolder);
+		newSelectedSubFolder.balance =
+			newSelectedSubFolder.balance + expense.amount;
+		setSelectedSubFolder(newSelectedSubFolder);
+	};
+
 	useEffect(() => {
 		async function loadFolders() {
 			setLoading(true);
@@ -126,6 +141,7 @@ function SubFoldersPage() {
 							showDescriptionSaveButton={showDescriptionSaveButton}
 							setShowDescriptionSaveButton={setShowDescriptionSaveButton}
 							handleExpenseUpdate={handleExpenseUpdate}
+							handleExpenseDelete={handleExpenseDelete}
 						></SubFolderDetail>
 					</Grid>
 				</Grid>

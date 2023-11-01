@@ -18,6 +18,11 @@ const expenseAPI = {
 			.then(apiUtils.parseJSON)
 			.then(convertToExpenseModel);
 	},
+	delete(expense: Expense) {
+		return fetch(`/expense/${expense.id}`, {
+			method: "DELETE",
+		}).then(apiUtils.checkStatus);
+	},
 };
 
 export { expenseAPI };
