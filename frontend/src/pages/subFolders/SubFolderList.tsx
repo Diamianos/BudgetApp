@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction, useState } from "react";
-import { SubFolder } from "./SubFolder";
+import { SubFolder } from "../../components/SubFolder";
 import SubFolderRow from "./SubFolderRow";
 import {
 	Table,

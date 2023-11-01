@@ -1,6 +1,6 @@
 import { TableCell, TableRow, TextField, makeStyles } from "@mui/material";
 import React, { Dispatch, SetStateAction } from "react";
-import { SubFolder } from "./SubFolder";
+import { SubFolder } from "../../components/SubFolder";
 
 interface SubFolderRowProps {
 	subFolder: SubFolder;

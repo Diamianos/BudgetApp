@@ -14,7 +14,7 @@ import {
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import React, { useEffect } from "react";
 import { SplitFolderHistoryObject } from "../../interfaces/SplitFolderHistoryObject";
-import { Folder } from "../folders/Folder";
+import { Folder } from "../../components/Folder";
 import {
 	Draggable,
 	DroppableProvided,

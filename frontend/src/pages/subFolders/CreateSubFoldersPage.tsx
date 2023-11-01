@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { BlankInitialSubFolderData } from "./BlankInitialSubFolderData";
+import { BlankInitialSubFolderData } from "../../static_data/BlankInitialSubFolderData";
 import { SplitFolderHistoryObject } from "../../interfaces/SplitFolderHistoryObject";
 import CreateSubFolderColumn from "./CreateSubFolderColumn";
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
@@ -16,12 +16,12 @@ import {
 	DialogTitle,
 } from "@mui/material";
 import { folderAPI } from "../../apis/FolderAPI";
-import { Folder } from "../folders/Folder";
+import { Folder } from "../../components/Folder";
 
 import { FolderStateInterface } from "../../interfaces/FolderStateInterface";
 import { ColumnStateInterface } from "../../interfaces/ColumnStateInterface";
 import { FolderAndColumnStateInterface } from "../../interfaces/FolderAndColumnStateInterface";
-import { SubFolder } from "../subFolders/SubFolder";
+import { SubFolder } from "../../components/SubFolder";
 import { subFolderAPI } from "../../apis/SubFolderAPI";
 
 function CreateSubFoldersPage() {

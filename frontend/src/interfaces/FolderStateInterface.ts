@@ -1,5 +1,5 @@
-import { Folder } from "../pages/folders/Folder";
+import { Folder } from "../components/Folder";
 
-export interface FolderStateInterface{
-    [index:string]:Folder;
+export interface FolderStateInterface {
+	[index: string]: Folder;
 }

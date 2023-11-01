@@ -7,7 +7,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 
-import { Folder } from "./Folder";
+import { Folder } from "../../components/Folder";
 import FolderRow from "./folderRows/FolderRow";
 import FolderRowEdit from "./folderRows/FolderRowEdit";
 import FolderRowNew from "./folderRows/FolderRowNew";

@@ -1,4 +1,4 @@
-import { Folder } from "../folders/Folder";
+import { Folder } from "../components/Folder";
 
 export const BlankInitialSubFolderData = {
 	folders: {

@@ -1,7 +1,7 @@
 import React from "react";
 import Container from "@mui/material/Container";
 import { Typography } from "@mui/material";
-import { Folder } from "../folders/Folder";
+import { Folder } from "../../components/Folder";
 import { SplitFolderHistoryObject } from "../../interfaces/SplitFolderHistoryObject";
 import { StrictModeDroppable } from "../../components/StrictModeDroppable";
 import CreateSubFolderList from "./CreateSubFolderList";

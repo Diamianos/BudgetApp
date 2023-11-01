@@ -1,4 +1,4 @@
-import { Folder } from "../pages/folders/Folder";
+import { Folder } from "../components/Folder";
 
 export const MOCK_FOLDERS = [
 	new Folder({

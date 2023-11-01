@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { SubFolder } from "./SubFolder";
+import { SubFolder } from "../../components/SubFolder";
 import {
 	Box,
 	CircularProgress,
@@ -12,7 +12,7 @@ import {
 import SubFolderList from "./SubFolderList";
 import { subFolderAPI } from "../../apis/SubFolderAPI";
 import SubFolderDetail from "./SubFolderDetail";
-import { Expense } from "./Expense";
+import { Expense } from "../../components/Expense";
 
 function SubFoldersPage() {
 	const [subFolders, setSubFolders] = useState<SubFolder[]>([]);

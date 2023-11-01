@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Folder } from "./Folder";
+import { Folder } from "../../components/Folder";
 import FolderList from "./FolderList";
 // import { MOCK_FOLDERS } from './MockFolders'
 import { folderAPI } from "../../apis/FolderAPI";

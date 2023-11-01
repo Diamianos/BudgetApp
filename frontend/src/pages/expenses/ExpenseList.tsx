@@ -34,8 +34,8 @@ import InfoIcon from "@mui/icons-material/Info";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import EditIcon from "@mui/icons-material/Edit";
 import React, { useState } from "react";
-import { SubFolder } from "./SubFolder";
-import { Expense } from "./Expense";
+import { SubFolder } from "../../components/SubFolder";
+import { Expense } from "../../components/Expense";
 import { Dayjs } from "dayjs";
 import { expenseAPI } from "../../apis/ExpenseAPI";
 import { ExpenseInterface } from "../../interfaces/ExpenseInterface";
@@ -173,6 +173,7 @@ function ExpenseList({
 			setModalError(newModalError);
 		}
 	};
+
 	const modalStyle = {
 		position: "absolute" as "absolute",
 		top: "50%",

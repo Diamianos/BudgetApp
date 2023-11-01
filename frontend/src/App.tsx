@@ -6,7 +6,7 @@ import { Container } from "@mui/system";
 import FoldersPage from "./pages/folders/FolderPage";
 import SubFoldersPage from "./pages/subFolders/SubFolderPage";
 import Navbar from "./components/Navbar";
-import CreateSubFoldersPage from "./pages/createSubFolders/CreateSubFoldersPage";
+import CreateSubFoldersPage from "./pages/subFolders/CreateSubFoldersPage";
 
 function App() {
 	return (

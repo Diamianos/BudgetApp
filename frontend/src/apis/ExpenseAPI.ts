@@ -1,4 +1,4 @@
-import { Expense } from "../pages/subFolders/Expense";
+import { Expense } from "../components/Expense";
 import { apiUtils } from "../utils/APIutils";
 
 function convertToExpenseModel(item: any): Expense {

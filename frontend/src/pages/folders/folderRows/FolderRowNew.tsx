@@ -1,6 +1,6 @@
 import { Button, TableCell, TableRow, TextField } from "@mui/material";
 import React, { useState } from "react";
-import { Folder } from "../Folder";
+import { Folder } from "../../../components/Folder";
 
 interface FolderRowNewProps {
 	onSave: (folder: Folder, newFolder: boolean) => void;

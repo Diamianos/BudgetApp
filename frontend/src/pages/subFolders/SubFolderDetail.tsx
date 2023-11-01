@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { SubFolder } from "./SubFolder";
+import { SubFolder } from "../../components/SubFolder";
 import {
 	Box,
 	Button,
@@ -18,8 +18,8 @@ import DraftsIcon from "@mui/icons-material/Drafts";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import CurrencyExchangeIcon from "@mui/icons-material/CurrencyExchange";
-import ExpenseList from "./ExpenseList";
-import { Expense } from "./Expense";
+import ExpenseList from "../expenses/ExpenseList";
+import { Expense } from "../../components/Expense";
 
 interface SubFolderDetailProps {
 	selectedSubFolder: SubFolder | undefined;

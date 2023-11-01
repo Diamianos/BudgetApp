@@ -1,4 +1,4 @@
-import { SubFolder } from "../pages/subFolders/SubFolder";
+import { SubFolder } from "../components/SubFolder";
 import { apiUtils } from "../utils/APIutils";
 
 function convertToSubFolderModels(data: any[]): SubFolder[] {
