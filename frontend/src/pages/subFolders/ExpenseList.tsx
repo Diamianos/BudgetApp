@@ -3,10 +3,18 @@ import {
 	Box,
 	Button,
 	Container,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogContentText,
+	DialogTitle,
 	FormControl,
 	IconButton,
 	InputAdornment,
 	InputLabel,
+	List,
+	ListItem,
+	ListItemText,
 	Modal,
 	OutlinedInput,
 	Paper,
@@ -30,6 +38,8 @@ import { SubFolder } from "./SubFolder";
 import { Expense } from "./Expense";
 import { Dayjs } from "dayjs";
 import { expenseAPI } from "../../apis/ExpenseAPI";
+import { ExpenseInterface } from "../../interfaces/ExpenseInterface";
+import { BlankExpenseDisplayInformation } from "../../static_data/BlankExpenseDisplayInformation";
 
 interface ExpenseListProps {
 	subFolder: SubFolder | undefined;
@@ -38,12 +48,11 @@ interface ExpenseListProps {
 
 function ExpenseList({ subFolder, handleExpenseUpdate }: ExpenseListProps) {
 	const [expenseModalOpen, setExpenseModalOpen] = useState(false);
-	const [expenseModalInformation, setExpenseModalInformation] = useState({
-		dateOfTransaction: "",
-		merchant: "",
-		amount: "",
-		description: "",
-	});
+	const [expenseDialogOpen, setExpenseDialogOpen] = useState(false);
+	const [expenseModalInformation, setExpenseModalInformation] =
+		useState<ExpenseInterface>(BlankExpenseDisplayInformation);
+	const [expenseDialogInformation, setExpenseDialogInformation] =
+		useState<ExpenseInterface>(BlankExpenseDisplayInformation);
 	const [datePicker, setDatePicker] = useState<Dayjs | null>(null);
 	const [modalError, setModalError] = useState({
 		showError: false,
@@ -60,11 +69,20 @@ function ExpenseList({ subFolder, handleExpenseUpdate }: ExpenseListProps) {
 			errorMsg: "",
 		};
 		setModalError(newModalError);
+		setExpenseModalInformation(BlankExpenseDisplayInformation);
+		setDatePicker(null);
 		setExpenseModalOpen(false);
 	};
 
+	const handleDialogOpen = () => {
+		setExpenseDialogOpen(true);
+	};
+
+	const handleDialogClose = () => {
+		setExpenseDialogOpen(false);
+	};
+
 	const handleExpenseButtonClick = async () => {
-		console.log(JSON.stringify(expenseModalInformation));
 		const expense = new Expense(expenseModalInformation);
 		try {
 			const newExpense = await expenseAPI.post(subFolder?.id, expense);
@@ -123,6 +141,17 @@ function ExpenseList({ subFolder, handleExpenseUpdate }: ExpenseListProps) {
 			};
 			setExpenseModalInformation(updatedModalQueueInformation);
 		}
+	};
+
+	const handleInfoButtonClick = (expense: Expense) => {
+		const newExpenseDialogInformation = {
+			dateOfTransaction: expense.dateOfTransaction,
+			merchant: expense.merchant,
+			amount: expense.amount.toString(),
+			description: expense.description,
+		};
+		setExpenseDialogInformation(newExpenseDialogInformation);
+		handleDialogOpen();
 	};
 	const modalStyle = {
 		position: "absolute" as "absolute",
@@ -183,9 +212,7 @@ function ExpenseList({ subFolder, handleExpenseUpdate }: ExpenseListProps) {
 								<TableCell
 									sx={{ display: "flex", justifyContent: "space-evenly" }}
 								>
-									<IconButton
-										onClick={(event) => console.log("info icon clicked")}
-									>
+									<IconButton onClick={() => handleInfoButtonClick(expense)}>
 										<InfoIcon />
 									</IconButton>
 									<IconButton>
@@ -265,6 +292,59 @@ function ExpenseList({ subFolder, handleExpenseUpdate }: ExpenseListProps) {
 							</Box>
 						</Box>
 					</Modal>
+
+					{/* Dialog for displaying expense information */}
+					<Dialog
+						open={expenseDialogOpen}
+						onClose={handleDialogClose}
+						aria-labelledby="alert-dialog-title"
+						aria-describedby="alert-dialog-description"
+					>
+						<DialogTitle id="alert-dialog-title">
+							{"Expense Information"}
+						</DialogTitle>
+						<DialogContent>
+							<List>
+								<ListItem>
+									<ListItemText>
+										<Box component="span" fontWeight="bold">
+											{"Merchant: "}
+										</Box>
+										{expenseDialogInformation.merchant}
+									</ListItemText>
+								</ListItem>
+								<ListItem>
+									<ListItemText>
+										<Box component="span" fontWeight="bold">
+											{"Amount: "}
+										</Box>
+										{expenseDialogInformation.amount}
+									</ListItemText>
+								</ListItem>
+								<ListItem>
+									<ListItemText>
+										<Box component="span" fontWeight="bold">
+											{"Date: "}
+										</Box>
+										{expenseDialogInformation.dateOfTransaction}
+									</ListItemText>
+								</ListItem>
+								<ListItem>
+									<ListItemText>
+										<Box component="span" fontWeight="bold">
+											{"Description: "}
+										</Box>
+										{expenseDialogInformation.description}
+									</ListItemText>
+								</ListItem>
+							</List>
+						</DialogContent>
+						<DialogActions>
+							<Button onClick={handleDialogClose} autoFocus>
+								Close
+							</Button>
+						</DialogActions>
+					</Dialog>
 				</Table>
 			</TableContainer>
 		</Container>
