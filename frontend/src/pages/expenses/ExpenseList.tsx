@@ -36,14 +36,15 @@ import EditIcon from "@mui/icons-material/Edit";
 import React, { useState } from "react";
 import { SubFolder } from "../../components/SubFolder";
 import { Expense } from "../../components/Expense";
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import { expenseAPI } from "../../apis/ExpenseAPI";
 import { ExpenseInterface } from "../../interfaces/ExpenseInterface";
 import { BlankExpenseDisplayInformation } from "../../static_data/BlankExpenseDisplayInformation";
+import { ExpenseProcess } from "../../components/ExpenseProcess";
 
 interface ExpenseListProps {
 	subFolder: SubFolder | undefined;
-	handleExpenseUpdate: (expense: Expense) => void;
+	handleExpenseUpdate: (expense: Expense, process: ExpenseProcess) => void;
 	handleExpenseDelete: (expense: Expense) => void;
 }
 
@@ -63,8 +64,13 @@ function ExpenseList({
 		showError: false,
 		errorMsg: "",
 	});
+	// This state is for describing if we are doing a post or patch to reuse the handleExpenseUpdate function
+	const [expenseProcess, setExpenseProcess] = useState<ExpenseProcess | null>(
+		null
+	);
 
 	const handleAddExpenseButton = () => {
+		setExpenseProcess(ExpenseProcess.Post);
 		setExpenseModalOpen(true);
 	};
 
@@ -77,6 +83,7 @@ function ExpenseList({
 		setExpenseModalInformation(BlankExpenseDisplayInformation);
 		setDatePicker(null);
 		setExpenseModalOpen(false);
+		setExpenseProcess(null);
 	};
 
 	const handleDialogOpen = () => {
@@ -133,11 +140,23 @@ function ExpenseList({
 	const handleExpenseButtonClick = async () => {
 		const expense = new Expense(expenseModalInformation);
 		try {
-			const newExpense = await expenseAPI.post(subFolder?.id, expense);
-			if (newExpense) {
-				handleExpenseUpdate(newExpense);
-				handleExpenseModalClose();
+			let newExpense: Expense;
+			if (expenseProcess === ExpenseProcess.Post) {
+				newExpense = await expenseAPI.post(subFolder?.id, expense);
+				console.log("New Expense");
+				console.log(newExpense);
+				handleExpenseUpdate(newExpense, expenseProcess);
+			} else if (expenseProcess === ExpenseProcess.Patch) {
+				newExpense = await expenseAPI.patch(
+					subFolder?.id,
+					expense.id,
+					JSON.stringify(expenseModalInformation)
+				);
+				console.log("New Expense");
+				console.log(newExpense);
+				handleExpenseUpdate(newExpense, expenseProcess);
 			}
+			handleExpenseModalClose();
 		} catch (error: any) {
 			const jsonError = JSON.parse(error.message);
 			const newModalError = {
@@ -150,6 +169,7 @@ function ExpenseList({
 
 	const handleInfoButtonClick = (expense: Expense) => {
 		const newExpenseDialogInformation = {
+			id: undefined,
 			dateOfTransaction: expense.dateOfTransaction,
 			merchant: expense.merchant,
 			amount: expense.amount.toString(),
@@ -157,6 +177,20 @@ function ExpenseList({
 		};
 		setExpenseDialogInformation(newExpenseDialogInformation);
 		handleDialogOpen();
+	};
+
+	const handleEditButtonClick = async (expense: Expense) => {
+		const newExpenseModalInfo: ExpenseInterface = {
+			id: expense.id,
+			dateOfTransaction: expense.dateOfTransaction,
+			amount: expense.amount.toString(),
+			merchant: expense.merchant,
+			description: expense.description,
+		};
+		setExpenseModalInformation(newExpenseModalInfo);
+		setDatePicker(dayjs(expense.dateOfTransaction));
+		setExpenseProcess(ExpenseProcess.Patch);
+		setExpenseModalOpen(true);
 	};
 
 	const handleDeleteButtonClick = async (expense: Expense) => {
@@ -236,7 +270,7 @@ function ExpenseList({
 									<IconButton onClick={() => handleInfoButtonClick(expense)}>
 										<InfoIcon />
 									</IconButton>
-									<IconButton>
+									<IconButton onClick={() => handleEditButtonClick(expense)}>
 										<EditIcon />
 									</IconButton>
 									<IconButton onClick={() => handleDeleteButtonClick(expense)}>

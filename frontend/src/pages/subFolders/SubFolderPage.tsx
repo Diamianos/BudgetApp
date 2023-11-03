@@ -13,6 +13,7 @@ import SubFolderList from "./SubFolderList";
 import { subFolderAPI } from "../../apis/SubFolderAPI";
 import SubFolderDetail from "./SubFolderDetail";
 import { Expense } from "../../components/Expense";
+import { ExpenseProcess } from "../../components/ExpenseProcess";
 
 function SubFoldersPage() {
 	const [subFolders, setSubFolders] = useState<SubFolder[]>([]);
@@ -55,15 +56,33 @@ function SubFoldersPage() {
 		setShowDescriptionSaveButton(false);
 	};
 
-	const handleExpenseUpdate = (expense: Expense) => {
-		// Update the current folder
+	const handleExpenseUpdate = (expense: Expense, process: ExpenseProcess) => {
+		// Create new Subfolder for original for the update process
 		let newSelectedSubFolder: SubFolder = new SubFolder({
 			...selectedSubFolder,
 		});
-		newSelectedSubFolder.expenses?.push(expense);
-		newSelectedSubFolder.balance =
-			newSelectedSubFolder.balance - expense.amount;
-
+		if (process === ExpenseProcess.Post) {
+			newSelectedSubFolder.expenses?.push(expense);
+			newSelectedSubFolder.balance =
+				newSelectedSubFolder.balance - expense.amount;
+		} else if (process === ExpenseProcess.Patch) {
+			let originalExpenseAmount = 0;
+			const newExpenses = newSelectedSubFolder.expenses?.map((e) => {
+				if (e.id === expense.id) {
+					originalExpenseAmount = e.amount;
+					return expense;
+				} else {
+					return e;
+				}
+			});
+			newSelectedSubFolder.expenses = newExpenses;
+			// Adding back the original expense amount that was updated
+			newSelectedSubFolder.balance =
+				newSelectedSubFolder.balance + originalExpenseAmount;
+			// Minusing the new expense amount after patch
+			newSelectedSubFolder.balance =
+				newSelectedSubFolder.balance - expense.amount;
+		}
 		setSelectedSubFolder(newSelectedSubFolder);
 	};
 

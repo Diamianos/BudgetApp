@@ -111,7 +111,7 @@ public class ExpenseController {
     produces = { "application/json" },
     consumes = { "application/json" }
   )
-  public ResponseEntity<String> patchExpense(
+  public ResponseEntity<Expense> patchExpense(
     @RequestParam("subFolderId") int subFolderId,
     @RequestParam("expenseId") int expenseId,
     @RequestBody String json
@@ -123,15 +123,14 @@ public class ExpenseController {
     if (subFolder.isPresent() && expense.isPresent()) {
       return expenseService.patchExpense(subFolder.get(), expense.get(), json);
     } else {
-      return ResponseEntity
-        .badRequest()
-        .body(
-          String.format(
-            "Error retrieving subFolder with ID %s or expense with ID %s. Unable to save expense.",
-            subFolderId,
-            expenseId
-          )
-        );
+      throw new ResponseStatusException(
+        HttpStatus.BAD_REQUEST,
+        String.format(
+          "Error retrieving subFolder with ID %s or expense with ID %s. Unable to save expense.",
+          subFolderId,
+          expenseId
+        )
+      );
     }
   }
 

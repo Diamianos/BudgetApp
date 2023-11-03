@@ -20,13 +20,14 @@ import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import CurrencyExchangeIcon from "@mui/icons-material/CurrencyExchange";
 import ExpenseList from "../expenses/ExpenseList";
 import { Expense } from "../../components/Expense";
+import { ExpenseProcess } from "../../components/ExpenseProcess";
 
 interface SubFolderDetailProps {
 	selectedSubFolder: SubFolder | undefined;
 	handleSubFolderUpdate: (subFolder: SubFolder) => void;
 	showDescriptionSaveButton: boolean;
 	setShowDescriptionSaveButton: (value: boolean) => void;
-	handleExpenseUpdate: (expense: Expense) => void;
+	handleExpenseUpdate: (expense: Expense, process: ExpenseProcess) => void;
 	handleExpenseDelete: (expense: Expense) => void;
 }
 

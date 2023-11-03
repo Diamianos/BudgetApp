@@ -14,8 +14,10 @@ import java.math.BigDecimal;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class ExpenseService {
@@ -73,7 +75,7 @@ public class ExpenseService {
     }
   }
 
-  public ResponseEntity<String> patchExpense(
+  public ResponseEntity<Expense> patchExpense(
     SubFolder subFolder,
     Expense expense,
     String json
@@ -83,15 +85,14 @@ public class ExpenseService {
       Expense patch = objectMapper.readValue(json, Expense.class);
       return handlePatchingExpense(expense, patch, subFolder);
     } catch (JsonProcessingException e) {
-      return ResponseEntity
-        .badRequest()
-        .body(
-          String.format(
-            "Json did not match expense object format. Please check passed in fields: %s \n %s",
-            json,
-            e.toString()
-          )
-        );
+      throw new ResponseStatusException(
+        HttpStatus.BAD_REQUEST,
+        String.format(
+          "Json did not match expense object format. Please check passed in fields: %s \n %s",
+          json,
+          e.toString()
+        )
+      );
     }
   }
 
@@ -113,7 +114,7 @@ public class ExpenseService {
     }
   }
 
-  private ResponseEntity<String> handlePatchingExpense(
+  private ResponseEntity<Expense> handlePatchingExpense(
     Expense existing,
     Expense patch,
     SubFolder subFolder
@@ -130,11 +131,14 @@ public class ExpenseService {
       // Verify new expense will not be greater than subfolder balance
       if (patch.getAmount().compareTo(newSubFolderBalance) == 1) {
         // return error stating expense amount cannot be greater than sub folder balance
-        return ResponseEntity
-          .badRequest()
-          .body(
-            "Expense cannot be greater than sub folder amount. Unable to update expense."
-          );
+        throw new ResponseStatusException(
+          HttpStatus.BAD_REQUEST,
+          String.format(
+            "Expense amount %s is greater than sub folder balance of %s. Unable to update expense.",
+            patch.getAmount(),
+            newSubFolderBalance
+          )
+        );
       } else {
         // Save subFolder with updated balance amount and expense
         existing.setAmount(patch.getAmount());
@@ -158,6 +162,6 @@ public class ExpenseService {
 
     // Save the updated expense
     Expense updatedExpense = expenseRepository.save(existing);
-    return ResponseEntity.ok().body(updatedExpense.toString());
+    return ResponseEntity.ok().body(updatedExpense);
   }
 }
