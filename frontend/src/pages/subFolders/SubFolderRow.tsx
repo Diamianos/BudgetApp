@@ -1,6 +1,7 @@
 import { TableCell, TableRow, TextField, makeStyles } from "@mui/material";
 import React, { Dispatch, SetStateAction } from "react";
 import { SubFolder } from "../../components/SubFolder";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 interface SubFolderRowProps {
 	subFolder: SubFolder;
@@ -29,14 +30,13 @@ function SubFolderRow({
 				"&:last-child td, &:last-child th": { border: 0 },
 			}}
 		>
-			<TableCell sx={{ fontSize: "17px" }} align="center">
-				{subFolder.name}
-			</TableCell>
-			<TableCell sx={{ fontSize: "17px" }} align="center">
-				{subFolder.amount}
-			</TableCell>
-			<TableCell sx={{ fontSize: "17px" }} align="center">
-				{subFolder.balance}
+			<TableCell sx={{ fontSize: "17px" }}>{subFolder.name}</TableCell>
+			<TableCell sx={{ fontSize: "17px" }}>{subFolder.amount}</TableCell>
+			<TableCell sx={{ fontSize: "17px" }}>{subFolder.balance}</TableCell>
+			<TableCell>
+				<CheckCircleIcon
+					style={subFolder.tagsComplete ? { color: "green" } : {}}
+				/>
 			</TableCell>
 		</TableRow>
 	);

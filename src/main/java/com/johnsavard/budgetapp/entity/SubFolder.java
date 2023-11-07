@@ -58,6 +58,9 @@ public class SubFolder extends AuditModel {
   @Convert(converter = SubFolderTagsConverter.class)
   private Tags tags;
 
+  @Column(name = "tags_complete")
+  private boolean tagsComplete;
+
   // Great article about one to many mappings with Spring Boot: https://www.callicoder.com/hibernate-spring-boot-jpa-one-to-many-mapping-example/
   @ManyToOne(
     cascade = {
@@ -163,6 +166,14 @@ public class SubFolder extends AuditModel {
 
   public void setExpenses(List<Expense> expenses) {
     this.expenses = expenses;
+  }
+
+  public boolean isTagsComplete() {
+    return tagsComplete;
+  }
+
+  public void setTagsComplete(boolean tagsComplete) {
+    this.tagsComplete = tagsComplete;
   }
 
   @Override

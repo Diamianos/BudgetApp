@@ -47,6 +47,7 @@ CREATE TABLE `sub_folder` (
                           `month_period` ENUM('FIRST_HALF', 'SECOND_HALF'),
                           `description` varchar(1000),
                           `tags` JSON, 
+                          `tags_complete` boolean,
                           `folder_id` int,
                           INDEX `folder_idx` (folder_id),
                           PRIMARY KEY (`id`),
@@ -60,13 +61,13 @@ CREATE TABLE `sub_folder` (
 -- Data for table `sub_folder`
 --
 
-INSERT INTO `sub_folder` (name, amount, balance, month_period, description, folder_id) VALUES
-('Tithe',430, 430, 'FIRST_HALF', 'Tithe Folder', 1),
-   ('Tithe',430, 430, 'SECOND_HALF', 'Tithe Folder', 1),
-   ('Emily',150, 150, 'FIRST_HALF', 'Emily Folder', 2),
-   ('Emily',150, 150, 'SECOND_HALF', 'Emily Folder', 2),
-   ('John',100, 100, 'FIRST_HALF', 'John Folder', 3),
-   ('Isabella',100, 100, 'SECOND_HALF', 'Isabella Folder', 4);
+INSERT INTO `sub_folder` (name, amount, balance, month_period, description, tags_complete, folder_id) VALUES
+('Tithe',430, 430, 'FIRST_HALF', 'Tithe Folder', 0, 1),
+   ('Tithe',430, 430, 'SECOND_HALF', 'Tithe Folder', 0, 1),
+   ('Emily',150, 150, 'FIRST_HALF', 'Emily Folder', 0, 2),
+   ('Emily',150, 150, 'SECOND_HALF', 'Emily Folder', 0, 2),
+   ('John',100, 100, 'FIRST_HALF', 'John Folder', 0, 3),
+   ('Isabella',100, 100, 'SECOND_HALF', 'Isabella Folder', 0, 4);
 
 --
 -- Table structure for table `expense`

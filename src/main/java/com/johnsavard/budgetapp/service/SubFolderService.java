@@ -61,6 +61,7 @@ public class SubFolderService {
     System.out.println();
     if (subFolder.getTags() == null) {
       subFolder.setTags(new Tags(0, 0, 0, 0));
+      subFolder.setTagsComplete(false);
     }
     return subFolderRepository.save(subFolder);
   }
@@ -100,6 +101,7 @@ public class SubFolderService {
     }
     if (patch.getTags() != null) {
       existingSubfolder.setTags(patch.getTags());
+      existingSubfolder.setTagsComplete(patch.isTagsComplete());
     }
 
     // Save the updated subFolder

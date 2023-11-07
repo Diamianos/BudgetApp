@@ -11,6 +11,7 @@ export class SubFolder {
 	description: string = "";
 	monthPeriod: string = "";
 	tags: Tags = new Tags();
+	tagsComplete: boolean = false;
 	expenses: Expense[] | undefined;
 
 	constructor(initializer?: any) {
@@ -24,6 +25,13 @@ export class SubFolder {
 		if (initializer.description) this.description = initializer.description;
 		if (initializer.monthPeriod) this.monthPeriod = initializer.monthPeriod;
 		if (initializer.tags) this.tags = initializer.tags;
+		if (initializer.tagsComplete) {
+			console.log(initializer.tagsComplete);
+			if (initializer.tagsComplete === null) {
+				this.tagsComplete = false;
+			}
+			this.tagsComplete = initializer.tagsComplete;
+		}
 		if (initializer.expenses) this.expenses = initializer.expenses;
 	}
 }

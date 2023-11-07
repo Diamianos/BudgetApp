@@ -18,6 +18,7 @@ import DraftsIcon from "@mui/icons-material/Drafts";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import CurrencyExchangeIcon from "@mui/icons-material/CurrencyExchange";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ExpenseList from "../expenses/ExpenseList";
 import { Expense } from "../../components/Expense";
 import { ExpenseProcess } from "../../components/ExpenseProcess";
@@ -49,6 +50,17 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 		setSubFolder(selectedSubFolder);
 	}, [selectedSubFolder]);
 
+	function calculateTagTotal() {
+		let tagsTotal = 0;
+		if (subFolder) {
+			const tagValues = Object.values(subFolder.tags);
+			tagValues.forEach((t) => {
+				tagsTotal = tagsTotal + t;
+			});
+		}
+		return tagsTotal;
+	}
+
 	const calculateFoldersTotal = (folders: SubFolder[]) => {
 		let values = folders.map((f) => {
 			return f.amount;
@@ -63,6 +75,10 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 	const handleSave = () => {
 		setModifyTags(false);
 		if (subFolder) {
+			const tagsTotal = calculateTagTotal();
+			tagsTotal === subFolder.amount
+				? (subFolder.tagsComplete = true)
+				: (subFolder.tagsComplete = false);
 			handleSubFolderUpdate(subFolder);
 		} else {
 			return;
@@ -106,7 +122,6 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 			...tagChange,
 		});
 		setSubFolder(updatedSubFolder);
-		console.log(subFolder);
 	};
 
 	const handleModifyTags = () => {
@@ -144,46 +159,63 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 				<Typography fontWeight="bold" variant="h6" align="center">
 					Tags
 				</Typography>
-				<Box sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
-					<List>
-						<ListItem disablePadding>
-							<ListItemButton>
-								<ListItemIcon>
-									<AccountBalanceIcon />
-								</ListItemIcon>
-								<ListItemText primary={"Bill $" + subFolder?.tags.bill} />
-							</ListItemButton>
-						</ListItem>
-						<ListItem disablePadding>
-							<ListItemButton>
-								<ListItemIcon>
-									<AttachMoneyIcon />
-								</ListItemIcon>
-								<ListItemText
-									primary={"Take Out $" + subFolder?.tags.takeOut}
-								/>
-							</ListItemButton>
-						</ListItem>
-						<ListItem disablePadding>
-							<ListItemButton>
-								<ListItemIcon>
-									<DraftsIcon />
-								</ListItemIcon>
-								<ListItemText primary={"Leave $" + subFolder?.tags.leave} />
-							</ListItemButton>
-						</ListItem>
-						<ListItem disablePadding>
-							<ListItemButton>
-								<ListItemIcon>
-									<CurrencyExchangeIcon />
-								</ListItemIcon>
-								<ListItemText
-									primary={"Transfer $" + subFolder?.tags.transfer}
-								/>
-							</ListItemButton>
-						</ListItem>
-					</List>
-				</Box>
+				<Grid container spacing={2} alignItems="center">
+					<Grid item xs={6}>
+						<List>
+							<ListItem disablePadding>
+								<ListItemButton>
+									<ListItemIcon>
+										<AccountBalanceIcon />
+									</ListItemIcon>
+									<ListItemText primary={"Bill $" + subFolder?.tags.bill} />
+								</ListItemButton>
+							</ListItem>
+							<ListItem disablePadding>
+								<ListItemButton>
+									<ListItemIcon>
+										<AttachMoneyIcon />
+									</ListItemIcon>
+									<ListItemText
+										primary={"Take Out $" + subFolder?.tags.takeOut}
+									/>
+								</ListItemButton>
+							</ListItem>
+							<ListItem disablePadding>
+								<ListItemButton>
+									<ListItemIcon>
+										<DraftsIcon />
+									</ListItemIcon>
+									<ListItemText primary={"Leave $" + subFolder?.tags.leave} />
+								</ListItemButton>
+							</ListItem>
+							<ListItem disablePadding>
+								<ListItemButton>
+									<ListItemIcon>
+										<CurrencyExchangeIcon />
+									</ListItemIcon>
+									<ListItemText
+										primary={"Transfer $" + subFolder?.tags.transfer}
+									/>
+								</ListItemButton>
+							</ListItem>
+						</List>
+					</Grid>
+					<Grid item xs={6} textAlign={"center"}>
+						<Typography variant="h5" mb={".5rem"}>
+							Tag Allocation
+						</Typography>
+						<Typography variant="h5" mb={".5rem"}>
+							{calculateTagTotal()} / {subFolder?.amount}
+						</Typography>
+						<CheckCircleIcon
+							style={
+								subFolder?.tagsComplete
+									? { color: "green", fontSize: "3rem" }
+									: { fontSize: "3rem" }
+							}
+						/>
+					</Grid>
+				</Grid>
 				<Button size="large" variant="contained" onClick={handleModifyTags}>
 					Modify Tags
 				</Button>
@@ -217,6 +249,8 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 					handleExpenseDelete={handleExpenseDelete}
 				></ExpenseList>
 			</Container>
+
+			{/* Modal for updating the sub folder tags */}
 			<Modal
 				open={modifyTags}
 				onClose={handleModifyTagsModalClose}
