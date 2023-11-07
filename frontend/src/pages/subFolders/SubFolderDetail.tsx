@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { SubFolder } from "../../components/SubFolder";
 import {
+	Alert,
 	Box,
 	Button,
 	Container,
@@ -49,16 +50,20 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 	const [tagValues, setTagValues] = useState<Tags>(
 		subFolder ? subFolder.tags : new Tags()
 	);
+	const [modalError, setModalError] = useState({
+		showError: false,
+		message: "",
+	});
 
 	useEffect(() => {
 		setSubFolder(selectedSubFolder);
 		if (selectedSubFolder) setTagValues(selectedSubFolder.tags);
 	}, [selectedSubFolder]);
 
-	function calculateTagTotal(subFolder: SubFolder | undefined) {
+	function calculateTagTotal(tags: Tags | undefined) {
 		let tagsTotal = 0;
-		if (subFolder) {
-			const tagValues = Object.values(subFolder.tags);
+		if (tags) {
+			const tagValues = Object.values(tags);
 			tagValues.forEach((t) => {
 				tagsTotal = tagsTotal + t;
 			});
@@ -66,35 +71,46 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 		return tagsTotal;
 	}
 
-	const calculateFoldersTotal = (folders: SubFolder[]) => {
-		let values = folders.map((f) => {
-			return f.amount;
-		});
-		return values.reduce((partialSum, a) => partialSum + a, 0);
-	};
+	function verifyTagAmounts(sbuFolder: SubFolder | undefined) {
+		const tagTotal = calculateTagTotal(tagValues);
+		console.log(`Tag Total: ${tagTotal}`);
+		if (subFolder) {
+			if (tagTotal > subFolder.amount) return false;
+			else return true;
+		}
+	}
 
 	const handleClick = (event: any) => {
 		event.stopPropagation();
 	};
 
 	const handleSave = () => {
-		setModifyTags(false);
-		// updating the subfolder tag values
-		const tagChange = { ["tags"]: tagValues };
-		let updatedSubFolder: SubFolder = new SubFolder({
-			...subFolder,
-			...tagChange,
-		});
+		// make sure tag values are not greater than sub folder amount
+		if (verifyTagAmounts(subFolder)) {
+			// updating the subfolder tag values
+			const tagChange = { ["tags"]: tagValues };
+			let updatedSubFolder: SubFolder = new SubFolder({
+				...subFolder,
+				...tagChange,
+			});
 
-		// Checking tags complete field
-		const tagsTotal = calculateTagTotal(updatedSubFolder);
-		tagsTotal === updatedSubFolder.amount
-			? (updatedSubFolder.tagsComplete = true)
-			: (updatedSubFolder.tagsComplete = false);
+			// Checking tags complete field
+			const tagsTotal = calculateTagTotal(updatedSubFolder.tags);
+			tagsTotal === updatedSubFolder.amount
+				? (updatedSubFolder.tagsComplete = true)
+				: (updatedSubFolder.tagsComplete = false);
 
-		// setting the subfolder and executing the update
-		setSubFolder(updatedSubFolder);
-		handleSubFolderUpdate(updatedSubFolder);
+			// setting the subfolder and executing the update
+			setSubFolder(updatedSubFolder);
+			handleSubFolderUpdate(updatedSubFolder);
+			setModifyTags(false);
+		} else {
+			const newModalError = {
+				showError: true,
+				message: "Tag total cannot be greater than subfolder amount",
+			};
+			setModalError(newModalError);
+		}
 	};
 
 	const handleDescriptionChange = (event: any) => {
@@ -140,6 +156,10 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 			setTagValues(subFolder.tags);
 		}
 		setModifyTags(false);
+		setModalError({
+			showError: false,
+			message: "",
+		});
 	};
 
 	const modalStyle = {
@@ -216,7 +236,7 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 							Tag Allocation
 						</Typography>
 						<Typography variant="h5" mb={".5rem"}>
-							{calculateTagTotal(subFolder)} / {subFolder?.amount}
+							{calculateTagTotal(subFolder?.tags)} / {subFolder?.amount}
 						</Typography>
 						<CheckCircleIcon
 							style={
@@ -268,9 +288,20 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 				aria-labelledby="modal-modal-title"
 			>
 				<Box sx={modalStyle}>
-					<Typography id="modal-modal-title" variant="h6" component="h2">
+					<Typography
+						id="modal-modal-title"
+						variant="h6"
+						component="h2"
+						mb={".5rem"}
+					>
 						Modify Tags
 					</Typography>
+					<Typography
+						fontWeight={"bold"}
+					>{`Sub Folder Amount ${subFolder?.amount}`}</Typography>
+					{modalError.showError ? (
+						<Alert severity="error">{modalError.message}</Alert>
+					) : null}
 					<Box sx={{ flexGrow: 1 }}>
 						<Grid container marginTop={2}>
 							<Grid xs={6} item={true} display="flex" alignItems="center">

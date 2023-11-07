@@ -143,8 +143,6 @@ function ExpenseList({
 			let newExpense: Expense;
 			if (expenseProcess === ExpenseProcess.Post) {
 				newExpense = await expenseAPI.post(subFolder?.id, expense);
-				console.log("New Expense");
-				console.log(newExpense);
 				handleExpenseUpdate(newExpense, expenseProcess);
 			} else if (expenseProcess === ExpenseProcess.Patch) {
 				newExpense = await expenseAPI.patch(

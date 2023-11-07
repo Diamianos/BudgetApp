@@ -26,7 +26,6 @@ export class SubFolder {
 		if (initializer.monthPeriod) this.monthPeriod = initializer.monthPeriod;
 		if (initializer.tags) this.tags = initializer.tags;
 		if (initializer.tagsComplete) {
-			console.log(initializer.tagsComplete);
 			if (initializer.tagsComplete === null) {
 				this.tagsComplete = false;
 			}
