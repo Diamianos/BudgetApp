@@ -22,6 +22,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ExpenseList from "../expenses/ExpenseList";
 import { Expense } from "../../components/Expense";
 import { ExpenseProcess } from "../../components/ExpenseProcess";
+import { Tags } from "../../components/Tags";
 
 interface SubFolderDetailProps {
 	selectedSubFolder: SubFolder | undefined;
@@ -45,12 +46,16 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 	const [subFolder, setSubFolder] = useState<SubFolder | undefined>();
 	const [modifyTags, setModifyTags] = useState(false);
 	const [showTagModifyButton, setShowTagModifyButton] = useState(false);
+	const [tagValues, setTagValues] = useState<Tags>(
+		subFolder ? subFolder.tags : new Tags()
+	);
 
 	useEffect(() => {
 		setSubFolder(selectedSubFolder);
+		if (selectedSubFolder) setTagValues(selectedSubFolder.tags);
 	}, [selectedSubFolder]);
 
-	function calculateTagTotal() {
+	function calculateTagTotal(subFolder: SubFolder | undefined) {
 		let tagsTotal = 0;
 		if (subFolder) {
 			const tagValues = Object.values(subFolder.tags);
@@ -74,15 +79,22 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 
 	const handleSave = () => {
 		setModifyTags(false);
-		if (subFolder) {
-			const tagsTotal = calculateTagTotal();
-			tagsTotal === subFolder.amount
-				? (subFolder.tagsComplete = true)
-				: (subFolder.tagsComplete = false);
-			handleSubFolderUpdate(subFolder);
-		} else {
-			return;
-		}
+		// updating the subfolder tag values
+		const tagChange = { ["tags"]: tagValues };
+		let updatedSubFolder: SubFolder = new SubFolder({
+			...subFolder,
+			...tagChange,
+		});
+
+		// Checking tags complete field
+		const tagsTotal = calculateTagTotal(updatedSubFolder);
+		tagsTotal === updatedSubFolder.amount
+			? (updatedSubFolder.tagsComplete = true)
+			: (updatedSubFolder.tagsComplete = false);
+
+		// setting the subfolder and executing the update
+		setSubFolder(updatedSubFolder);
+		handleSubFolderUpdate(updatedSubFolder);
 	};
 
 	const handleDescriptionChange = (event: any) => {
@@ -114,20 +126,19 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 			[name]: updatedValue,
 		};
 
-		const tagValues = { ...subFolder?.tags, ...change };
-		const tagChange = { ["tags"]: tagValues };
-
-		let updatedSubFolder: SubFolder = new SubFolder({
-			...subFolder,
-			...tagChange,
-		});
-		setSubFolder(updatedSubFolder);
+		const newTagValues = { ...tagValues, ...change };
+		if (newTagValues) {
+			setTagValues(newTagValues);
+		}
 	};
 
 	const handleModifyTags = () => {
 		setModifyTags(true);
 	};
 	const handleModifyTagsModalClose = () => {
+		if (subFolder) {
+			setTagValues(subFolder.tags);
+		}
 		setModifyTags(false);
 	};
 
@@ -205,7 +216,7 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 							Tag Allocation
 						</Typography>
 						<Typography variant="h5" mb={".5rem"}>
-							{calculateTagTotal()} / {subFolder?.amount}
+							{calculateTagTotal(subFolder)} / {subFolder?.amount}
 						</Typography>
 						<CheckCircleIcon
 							style={
@@ -269,7 +280,7 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 								<TextField
 									name="bill"
 									type="number"
-									value={subFolder?.tags.bill}
+									value={tagValues?.bill}
 									size="small"
 									onChange={handleTagsChange}
 								></TextField>
@@ -282,7 +293,7 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 									sx={{ mt: 1 }}
 									name="takeOut"
 									type="number"
-									value={subFolder?.tags.takeOut}
+									value={tagValues?.takeOut}
 									size="small"
 									onChange={handleTagsChange}
 								></TextField>
@@ -295,7 +306,7 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 									sx={{ mt: 1 }}
 									name="leave"
 									type="number"
-									value={subFolder?.tags.leave}
+									value={tagValues?.leave}
 									size="small"
 									onChange={handleTagsChange}
 								></TextField>
@@ -309,7 +320,7 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 									sx={{ mt: 1 }}
 									name="transfer"
 									type="number"
-									value={subFolder?.tags.transfer}
+									value={tagValues?.transfer}
 									size="small"
 									onChange={handleTagsChange}
 								></TextField>
