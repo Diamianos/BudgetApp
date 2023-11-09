@@ -14,6 +14,7 @@ import { subFolderAPI } from "../../apis/SubFolderAPI";
 import SubFolderDetail from "./SubFolderDetail";
 import { Expense } from "../../components/Expense";
 import { ExpenseProcess } from "../../components/ExpenseProcess";
+import SubFolderSummary from "./SubFolderSummary";
 
 function SubFoldersPage() {
 	const [subFolders, setSubFolders] = useState<SubFolder[]>([]);
@@ -43,6 +44,7 @@ function SubFoldersPage() {
 
 	const handleClickOnContainer = (event: any) => {
 		setShowDescriptionSaveButton(false);
+		setSelectedSubFolder(undefined);
 	};
 
 	const handleSubFolderUpdate = async (subFolder: SubFolder) => {
@@ -165,13 +167,20 @@ function SubFoldersPage() {
 					</Grid>
 				</Grid>
 			) : (
-				<SubFolderList
-					subFolders={subFolders}
-					monthPeriod={monthPeriod}
-					selectedSubFolder={selectedSubFolder}
-					handleSelectedSubFolderChange={handleSelectedSubFolderChange}
-					setShowDescriptionSaveButton={setShowDescriptionSaveButton}
-				></SubFolderList>
+				<Grid container spacing={2}>
+					<Grid item md={5}>
+						<SubFolderList
+							subFolders={subFolders}
+							monthPeriod={monthPeriod}
+							selectedSubFolder={selectedSubFolder}
+							handleSelectedSubFolderChange={handleSelectedSubFolderChange}
+							setShowDescriptionSaveButton={setShowDescriptionSaveButton}
+						></SubFolderList>
+					</Grid>
+					<Grid item md={7}>
+						<SubFolderSummary subFolders={subFolders}></SubFolderSummary>
+					</Grid>
+				</Grid>
 			)}
 		</Container>
 	);
