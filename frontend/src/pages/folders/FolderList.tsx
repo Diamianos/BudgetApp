@@ -31,8 +31,6 @@ export default function FolderList({
 	const [folderBeingEdited, setFolderBeingEdited] = useState({});
 	const [hideNewFolder, setHideNewFolder] = useState(true);
 
-	const date = "05_05_2023";
-
 	const handleEdit = (folder: Folder) => {
 		setHideNewFolder(true);
 		setFolderBeingEdited(folder);
@@ -108,7 +106,7 @@ export default function FolderList({
 				</TableBody>
 			</Table>
 			<div className="create-subfolders-div">
-				<Link to={`/create_subfolders/${date}`}>
+				<Link to={`/create_subfolders/`}>
 					<Button variant="contained" color="secondary">
 						Create Sub Folders
 					</Button>

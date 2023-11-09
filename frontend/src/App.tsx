@@ -15,12 +15,12 @@ function App() {
 				<Navbar />
 				<Container>
 					<Routes>
-						<Route path="/" element={<FoldersPage />}></Route>
+						<Route path="/" element={<SubFoldersPage />}></Route>
 						<Route
-							path="/create_subfolders/:date"
+							path="/create_subfolders/"
 							element={<CreateSubFoldersPage />}
 						></Route>
-						<Route path="/subfolders" element={<SubFoldersPage />}></Route>
+						<Route path="/folders" element={<FoldersPage />}></Route>
 					</Routes>
 				</Container>
 			</Router>

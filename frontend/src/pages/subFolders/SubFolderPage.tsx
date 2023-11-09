@@ -3,11 +3,13 @@ import React, { useEffect, useState } from "react";
 import { SubFolder } from "../../components/SubFolder";
 import {
 	Box,
+	Button,
 	CircularProgress,
 	Container,
 	Grid,
 	ToggleButton,
 	ToggleButtonGroup,
+	Typography,
 } from "@mui/material";
 import SubFolderList from "./SubFolderList";
 import { subFolderAPI } from "../../apis/SubFolderAPI";
@@ -15,6 +17,7 @@ import SubFolderDetail from "./SubFolderDetail";
 import { Expense } from "../../components/Expense";
 import { ExpenseProcess } from "../../components/ExpenseProcess";
 import SubFolderSummary from "./SubFolderSummary";
+import { Link } from "react-router-dom";
 
 function SubFoldersPage() {
 	const [subFolders, setSubFolders] = useState<SubFolder[]>([]);
@@ -125,7 +128,17 @@ function SubFoldersPage() {
 			sx={{ backgroundColor: "#f5f5f5", minHeight: "100vh" }}
 			onClick={handleClickOnContainer}
 		>
-			<h2 className="table-header">Budget</h2>
+			<Typography textAlign={"center"} variant="h4" mt={".5rem"}>
+				Budget
+			</Typography>
+			<Box width={"100%"} textAlign={"right"} marginBottom={"1rem"}>
+				<Link to={`/folders`}>
+					<Button size="large" variant="contained">
+						Create New Budget
+					</Button>
+				</Link>
+			</Box>
+
 			<Container
 				disableGutters
 				sx={{ display: "flex", justifyContent: "center", marginBottom: "2rem" }}

@@ -1,30 +1,24 @@
-import { AppBar, Box, Container, Link, Toolbar } from '@mui/material'
-import React from 'react'
+import { AppBar, Box, Container, Link, Toolbar } from "@mui/material";
+import React from "react";
 
 function Navbar() {
-  return (
-    <AppBar position="static">
-      <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          <Box sx={{ flexGrow: 1, display: 'flex' }}>
-            <Link
-                href='/'
-                variant='button'
-                sx={{ color: 'white', display: 'block' }}>
-                Folders
-            </Link>
-            <Link
-                href='/subfolders'
-                variant='button'
-                sx={{ marginLeft: '5rem', color: 'white', display: 'block' }}
-                >
-                SubFolders
-            </Link>
-          </Box>
-        </Toolbar>
-      </Container>
-    </AppBar>
-  )
+	return (
+		<AppBar position="static">
+			<Container maxWidth="xl">
+				<Toolbar disableGutters>
+					<Box sx={{ flexGrow: 1, display: "flex" }}>
+						<Link
+							href="/"
+							variant="button"
+							sx={{ color: "white", display: "block" }}
+						>
+							Home
+						</Link>
+					</Box>
+				</Toolbar>
+			</Container>
+		</AppBar>
+	);
 }
 
-export default Navbar
+export default Navbar;
