@@ -1,6 +1,8 @@
 package com.johnsavard.budgetapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.math.BigDecimal;
+import java.util.Date;
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
@@ -29,6 +31,10 @@ public class Folder extends AuditModel {
   @DecimalMin(value = "0.0", inclusive = true)
   @Column(name = "balance")
   private BigDecimal balance;
+
+  @JsonFormat(pattern = "MM-dd-yyyy")
+  @Column(name = "monthYearPeriod")
+  private Date monthYearPeriod;
 
   public Folder() {}
 
@@ -68,6 +74,14 @@ public class Folder extends AuditModel {
 
   public void setBalance(BigDecimal balance) {
     this.balance = balance;
+  }
+
+  public Date getMonthYearPeriod() {
+    return monthYearPeriod;
+  }
+
+  public void setMonthYearPeriod(Date monthYearPeriod) {
+    this.monthYearPeriod = monthYearPeriod;
   }
 
   @Override

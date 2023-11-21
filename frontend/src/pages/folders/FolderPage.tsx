@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Folder } from "../../components/Folder";
 import FolderList from "./FolderList";
-// import { MOCK_FOLDERS } from './MockFolders'
 import { folderAPI } from "../../apis/FolderAPI";
 import { Box } from "@mui/system";
 import {
@@ -12,13 +11,42 @@ import {
 	DialogContent,
 	DialogContentText,
 	DialogTitle,
+	FormControl,
+	InputLabel,
+	Menu,
+	MenuItem,
+	Select,
+	SelectChangeEvent,
+	TextField,
 } from "@mui/material";
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 
 function FoldersPage() {
-	// const [folders, setFolders] = useState<Folder[]>(MOCK_FOLDERS)
 	const [folders, setFolders] = useState<Folder[]>([]);
 	const [loading, setLoading] = useState(false);
 	const [openDialog, setOpenDialog] = useState(false);
+	const [month, setMonth] = useState("");
+	const [year, setYear] = useState("");
+
+	const months = [
+		"January",
+		"February",
+		"March",
+		"April",
+		"May",
+		"June",
+		"July",
+		"August",
+		"September",
+		"October",
+		"November",
+		"December",
+	];
+
+	const handleMonthChange = (event: SelectChangeEvent) => {
+		setMonth(event.target.value as string);
+	};
 
 	const handleSave = async (folder: Folder, newFolder: boolean) => {
 		if (checkForDuplicateFolderName(folder, folders)) {
@@ -28,10 +56,17 @@ function FoldersPage() {
 
 		let updatedFolders: React.SetStateAction<Folder[]> = [];
 		if (newFolder) {
-			const newFolder = await folderAPI.post(folder);
-			updatedFolders = [...folders];
-			updatedFolders.push(new Folder(newFolder));
-			updatedFolders.sort((a, b) => a.name.localeCompare(b.name)); // Sorting alphabetically by name
+			dayjs.extend(customParseFormat);
+			console.log(month);
+			console.log(year);
+			const formattedDate = dayjs(`${year} ${month} 01`, "YYYY MMMM DD").format(
+				"MM-DD-YYYY"
+			);
+			console.log(formattedDate);
+			// const newFolder = await folderAPI.post(folder);
+			// updatedFolders = [...folders];
+			// updatedFolders.push(new Folder(newFolder));
+			// updatedFolders.sort((a, b) => a.name.localeCompare(b.name)); // Sorting alphabetically by name
 		} else {
 			const updatedFolder = await folderAPI.put(folder);
 			updatedFolders = folders.map((f: Folder) => {
@@ -78,11 +113,41 @@ function FoldersPage() {
 					<CircularProgress />
 				</Box>
 			) : (
-				<FolderList
-					folders={folders}
-					onSave={handleSave}
-					onDelete={handleDelete}
-				/>
+				<>
+					<Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
+						<FormControl sx={{ minWidth: 120 }}>
+							<InputLabel id="simple-select-label">Month</InputLabel>
+							<Select
+								labelId="simple-select-label"
+								id="simple-select"
+								value={month}
+								label="Month"
+								onChange={handleMonthChange}
+							>
+								{months.map((name) => (
+									<MenuItem key={name} value={name}>
+										{name}
+									</MenuItem>
+								))}
+							</Select>
+						</FormControl>
+						<TextField
+							variant="outlined"
+							type="number"
+							label="Year"
+							value={year}
+							onChange={(e) => {
+								setYear(e.target.value);
+							}}
+							sx={{ marginLeft: ".5rem", marginRight: ".5rem" }}
+						></TextField>
+					</Box>
+					<FolderList
+						folders={folders}
+						onSave={handleSave}
+						onDelete={handleDelete}
+					/>
+				</>
 			)}
 			<Dialog
 				open={openDialog}

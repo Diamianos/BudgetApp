@@ -20,7 +20,9 @@ CREATE TABLE `folder` (
                           `name` varchar(45),
                           `amount` decimal,
                           `balance` decimal, 
-                          PRIMARY KEY (`id`)
+                          `month_year_period` DATETIME,
+                          PRIMARY KEY (`id`),
+                          INDEX `month_year_period_idx` (month_year_period)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 --
