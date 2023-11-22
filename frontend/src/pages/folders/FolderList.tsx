@@ -7,6 +7,8 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 
+import { folderAPI } from "../../apis/FolderAPI";
+
 import { Folder } from "../../components/Folder";
 import FolderRow from "./folderRows/FolderRow";
 import FolderRowEdit from "./folderRows/FolderRowEdit";
@@ -54,6 +56,17 @@ export default function FolderList({
 		onSave(folder, newFolder);
 	};
 
+	const handleCreateSubFolders = () => {
+		try {
+			folders.forEach((f) => {
+				folderAPI.post(f);
+			});
+			window.location.href = "/create_subfolders";
+		} catch (Error) {
+			console.log("An error occured posting the folders to the database.");
+		}
+	};
+
 	return (
 		<TableContainer>
 			<div className="new-folder-div">
@@ -86,7 +99,7 @@ export default function FolderList({
 						<FolderRowNew onSave={handleSave} onCancel={handleCancel} />
 					)}
 					{folders.map((folder) => (
-						<React.Fragment key={folder.id}>
+						<React.Fragment key={folder.name}>
 							{folder === folderBeingEdited ? (
 								<FolderRowEdit
 									folder={folder}
@@ -106,11 +119,13 @@ export default function FolderList({
 				</TableBody>
 			</Table>
 			<div className="create-subfolders-div">
-				<Link to={`/create_subfolders/`}>
-					<Button variant="contained" color="secondary">
-						Create Sub Folders
-					</Button>
-				</Link>
+				<Button
+					variant="contained"
+					color="secondary"
+					onClick={handleCreateSubFolders}
+				>
+					Create Sub Folders
+				</Button>
 			</div>
 		</TableContainer>
 	);

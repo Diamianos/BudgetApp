@@ -216,7 +216,7 @@ function CreateSubFoldersPage() {
 							})}
 						</Container>
 					</DragDropContext>
-					<Link to={`/subfolders`}>
+					<Link to={`/`}>
 						<Button
 							variant="contained"
 							onClick={handleSplitFolders}
