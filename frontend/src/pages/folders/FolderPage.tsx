@@ -24,8 +24,9 @@ function FoldersPage() {
 	const handleSave = (folder: Folder, newFolder: boolean) => {
 		dayjs.extend(customParseFormat);
 		const formattedDate = dayjs(`${year} ${month} 01`, "YYYY MMMM DD").format(
-			"MM-DD-YYYY"
+			"YYYY-MM-DD"
 		);
+		console.log(formattedDate);
 		folder.monthYearPeriod = formattedDate;
 
 		let updatedFolders: React.SetStateAction<Folder[]> = [];

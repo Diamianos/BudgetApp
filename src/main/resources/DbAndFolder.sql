@@ -29,11 +29,15 @@ CREATE TABLE `folder` (
 -- Data for table `folder`
 --
 
--- INSERT INTO `folder` (name, amount, balance) VALUES
--- ('Tithe',860, 860),
---    ('Emily',300, 300),
---    ('John',100, 100),
---    ('Isabella',100, 100);
+INSERT INTO `folder` (name, amount, balance, month_year_period) VALUES
+   ('Tithe',860, 860, "2023-11-01"),
+   ('Emily',300, 300, "2023-11-01"),
+   ('John',100, 100, "2023-11-01"),
+   ('Isabella',100, 100, "2023-11-01"),
+   ('Necessities', 200, 200, "2023-12-01"),
+   ('Gas', 240, 240, "2023-12-01"),
+   ('Car Maintenance', 150, 150, "2023-12-01"),
+   ('Roth',100, 100, "2023-12-01");
 
 --
 -- Table structure for table `subfoler`

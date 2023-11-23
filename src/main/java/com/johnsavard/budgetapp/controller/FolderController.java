@@ -1,11 +1,14 @@
 package com.johnsavard.budgetapp.controller;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.johnsavard.budgetapp.entity.Folder;
 import com.johnsavard.budgetapp.service.FolderService;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,6 +34,8 @@ public class FolderController {
    */
   @RequestMapping(method = RequestMethod.GET, produces = { "application/json" })
   public List<Folder> getAllFolders() {
+    System.out.println("\n\n\n\n");
+    System.out.println("getAll");
     return folderService.findAllFolders();
   }
 
@@ -40,7 +45,7 @@ public class FolderController {
    * @return Folder wrapped in an Optional object.
    */
   @RequestMapping(
-    path = "/{folderId}",
+    path = "/getById/{folderId}",
     method = RequestMethod.GET,
     produces = { "application/json" }
   )
@@ -102,5 +107,23 @@ public class FolderController {
   public ResponseEntity<String> deleteFolder(@PathVariable Integer id) {
     folderService.deleteFolder(id);
     return ResponseEntity.ok().build();
+  }
+
+  /**
+   *
+   * @param monthYearPeriod - String format of "YYYY-MM-DD"
+   * @return - List of Folders
+   */
+  @RequestMapping(
+    path = "/date",
+    method = RequestMethod.GET,
+    produces = { "application/json" }
+  )
+  public List<Folder> getAllFoldersByMonthYearPeriod(
+    @RequestParam("monthYearPeriod") @DateTimeFormat(
+      iso = DateTimeFormat.ISO.DATE
+    ) Date monthYearPeriod
+  ) {
+    return folderService.findAllByMonthYearPeriod(monthYearPeriod);
   }
 }
