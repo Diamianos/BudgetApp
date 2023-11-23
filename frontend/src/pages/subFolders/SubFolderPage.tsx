@@ -10,6 +10,7 @@ import {
 	ToggleButton,
 	ToggleButtonGroup,
 	Typography,
+	makeStyles,
 } from "@mui/material";
 import SubFolderList from "./SubFolderList";
 import { subFolderAPI } from "../../apis/SubFolderAPI";
@@ -18,6 +19,7 @@ import { Expense } from "../../components/Expense";
 import { ExpenseProcess } from "../../components/ExpenseProcess";
 import SubFolderSummary from "./SubFolderSummary";
 import { Link } from "react-router-dom";
+import MonthYearDropDown from "../../components/MonthYearDropDown";
 
 function SubFoldersPage() {
 	const [subFolders, setSubFolders] = useState<SubFolder[]>([]);
@@ -30,6 +32,8 @@ function SubFoldersPage() {
 	const [loading, setLoading] = useState(false);
 	const [showDescriptionSaveButton, setShowDescriptionSaveButton] =
 		useState(false);
+	const [month, setMonth] = useState("");
+	const [year, setYear] = useState("");
 
 	const handleSelectedSubFolderChange = (subFolder: SubFolder) => {
 		setSelectedSubFolder(subFolder);
@@ -106,6 +110,10 @@ function SubFoldersPage() {
 		setSelectedSubFolder(newSelectedSubFolder);
 	};
 
+	const handleMonthYearButtonClick = () => {
+		console.log("handleMonthYearButtonClick clicked");
+	};
+
 	useEffect(() => {
 		async function loadFolders() {
 			setLoading(true);
@@ -125,23 +133,45 @@ function SubFoldersPage() {
 
 	return (
 		<Container
-			sx={{ backgroundColor: "#f5f5f5", minHeight: "100vh" }}
+			sx={{
+				backgroundColor: "#f5f5f5",
+				minHeight: "100vh",
+				paddingTop: "1rem",
+				marginTop: ".5rem",
+			}}
 			onClick={handleClickOnContainer}
 		>
-			<Typography textAlign={"center"} variant="h4" mt={".5rem"}>
+			<Typography textAlign={"center"} variant="h4" mt={".5rem"} mb="1rem">
 				Budget
 			</Typography>
-			<Box width={"100%"} textAlign={"right"} marginBottom={"1rem"}>
-				<Link to={`/folders`}>
-					<Button size="large" variant="contained">
-						Create New Budget
-					</Button>
-				</Link>
-			</Box>
+
+			<Grid container alignItems="center">
+				<Grid>
+					<MonthYearDropDown
+						month={month}
+						setMonth={setMonth}
+						year={year}
+						setYear={setYear}
+						handleMonthYearButtonClick={handleMonthYearButtonClick}
+					/>
+				</Grid>
+				<Grid sx={{ marginLeft: "auto" }}>
+					<Link to={`/folders`}>
+						<Button size="large" variant="contained">
+							Create New Budget
+						</Button>
+					</Link>
+				</Grid>
+			</Grid>
 
 			<Container
 				disableGutters
-				sx={{ display: "flex", justifyContent: "center", marginBottom: "2rem" }}
+				sx={{
+					display: "flex",
+					justifyContent: "center",
+					marginBottom: "2rem",
+					marginTop: "2rem",
+				}}
 			>
 				<ToggleButtonGroup
 					size="large"

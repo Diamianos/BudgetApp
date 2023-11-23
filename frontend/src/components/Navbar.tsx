@@ -6,7 +6,7 @@ function Navbar() {
 		<AppBar position="static">
 			<Container maxWidth="xl">
 				<Toolbar disableGutters>
-					<Box sx={{ flexGrow: 1, display: "flex" }}>
+					<Box sx={{ flexGrow: 1, display: "flex", justifyContent: "center" }}>
 						<Link
 							href="/"
 							variant="button"

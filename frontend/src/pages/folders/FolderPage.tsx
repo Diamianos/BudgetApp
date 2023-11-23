@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Folder } from "../../components/Folder";
 import FolderList from "./FolderList";
-import { Box } from "@mui/system";
 import {
 	Button,
 	Dialog,
@@ -9,40 +8,18 @@ import {
 	DialogContent,
 	DialogContentText,
 	DialogTitle,
-	FormControl,
-	InputLabel,
-	MenuItem,
-	Select,
-	SelectChangeEvent,
-	TextField,
+	Typography,
 } from "@mui/material";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import MonthYearDropDown from "../../components/MonthYearDropDown";
 
 function FoldersPage() {
 	const [folders, setFolders] = useState<Folder[]>([]);
 	const [openDialog, setOpenDialog] = useState(false);
 	const [month, setMonth] = useState("");
 	const [year, setYear] = useState("");
-
-	const months = [
-		"January",
-		"February",
-		"March",
-		"April",
-		"May",
-		"June",
-		"July",
-		"August",
-		"September",
-		"October",
-		"November",
-		"December",
-	];
-
-	const handleMonthChange = (event: SelectChangeEvent) => {
-		setMonth(event.target.value as string);
-	};
+	const [showFolderList, setShowFolderList] = useState(false);
 
 	const handleSave = (folder: Folder, newFolder: boolean) => {
 		dayjs.extend(customParseFormat);
@@ -76,47 +53,42 @@ function FoldersPage() {
 		setOpenDialog(false);
 	};
 
+	const handleMonthYearButtonClick = () => {
+		if (year === null || month === null) {
+			return;
+		}
+
+		if (year.toString().length !== 4) {
+			return;
+		}
+		setShowFolderList(true);
+	};
+
 	useEffect(() => {
 		setFolders([]);
+		setShowFolderList(false);
 	}, [month, year]);
 
 	return (
 		<>
-			<h2 className="table-header">Folders</h2>
+			<Typography variant="h4" textAlign="center" mt="1rem" mb="1rem">
+				Folder Creation
+			</Typography>
 
-			<Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
-				<FormControl sx={{ minWidth: 120 }}>
-					<InputLabel id="simple-select-label">Month</InputLabel>
-					<Select
-						labelId="simple-select-label"
-						id="simple-select"
-						value={month}
-						label="Month"
-						onChange={handleMonthChange}
-					>
-						{months.map((name) => (
-							<MenuItem key={name} value={name}>
-								{name}
-							</MenuItem>
-						))}
-					</Select>
-				</FormControl>
-				<TextField
-					variant="outlined"
-					type="number"
-					label="Year"
-					value={year}
-					onChange={(e) => {
-						setYear(e.target.value);
-					}}
-					sx={{ marginLeft: ".5rem", marginRight: ".5rem" }}
-				></TextField>
-			</Box>
-			<FolderList
-				folders={folders}
-				onSave={handleSave}
-				onDelete={handleDelete}
+			<MonthYearDropDown
+				month={month}
+				setMonth={setMonth}
+				year={year}
+				setYear={setYear}
+				handleMonthYearButtonClick={handleMonthYearButtonClick}
 			/>
+			{showFolderList ? (
+				<FolderList
+					folders={folders}
+					onSave={handleSave}
+					onDelete={handleDelete}
+				/>
+			) : null}
 
 			<Dialog
 				open={openDialog}
