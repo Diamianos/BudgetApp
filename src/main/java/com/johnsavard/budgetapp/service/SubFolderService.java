@@ -7,6 +7,7 @@ import com.johnsavard.budgetapp.entity.Expense;
 import com.johnsavard.budgetapp.entity.SubFolder;
 import com.johnsavard.budgetapp.entity.Tags;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
@@ -78,6 +79,12 @@ public class SubFolderService {
   }
 
   public void deleteSubFolderByFolderId(int folderId) {}
+
+  public List<SubFolder> findSubfoldersByFolderMonthYearPeriod(
+    Date monthYearPeriod
+  ) {
+    return subFolderRepository.findAllByFolderMonthYearPeriod(monthYearPeriod);
+  }
 
   private SubFolder handlePatchingSubfolder(
     SubFolder existingSubfolder,

@@ -6,14 +6,17 @@ import com.johnsavard.budgetapp.service.FolderService;
 import com.johnsavard.budgetapp.service.SubFolderService;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -46,6 +49,26 @@ public class SubFolderController {
     @PathVariable Integer subFolderId
   ) {
     return subFolderService.findSubFolderById(subFolderId);
+  }
+
+  /**
+   *
+   * @param monthYearPeriod - String format of "YYYY-MM-DD"
+   * @return - List of SubFolders
+   */
+  @RequestMapping(
+    path = "/date",
+    method = RequestMethod.GET,
+    produces = { "application/json" }
+  )
+  public List<SubFolder> getAllSubfoldersByMonthYearPeriod(
+    @RequestParam("monthYearPeriod") @DateTimeFormat(
+      iso = DateTimeFormat.ISO.DATE
+    ) Date monthYearPeriod
+  ) {
+    return subFolderService.findSubfoldersByFolderMonthYearPeriod(
+      monthYearPeriod
+    );
   }
 
   @RequestMapping(
