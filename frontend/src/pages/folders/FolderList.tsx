@@ -23,12 +23,14 @@ interface FolderListProps {
 	folders: Folder[];
 	onSave: (folder: Folder, newFolder: boolean) => void;
 	onDelete: (folder: Folder) => void;
+	monthYearPeriod: string;
 }
 
 export default function FolderList({
 	folders,
 	onSave,
 	onDelete,
+	monthYearPeriod,
 }: FolderListProps) {
 	const [folderBeingEdited, setFolderBeingEdited] = useState({});
 	const [hideNewFolder, setHideNewFolder] = useState(true);
@@ -61,7 +63,7 @@ export default function FolderList({
 			folders.forEach((f) => {
 				folderAPI.post(f);
 			});
-			window.location.href = "/create_subfolders";
+			window.location.href = `/create_subfolders/${monthYearPeriod}`;
 		} catch (Error) {
 			console.log("An error occured posting the folders to the database.");
 		}

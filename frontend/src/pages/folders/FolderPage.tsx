@@ -21,11 +21,13 @@ function FoldersPage() {
 	const [year, setYear] = useState("");
 	const [showFolderList, setShowFolderList] = useState(false);
 
+	const formattedDate = dayjs(`${year} ${month} 01`, "YYYY MMMM DD").format(
+		"YYYY-MM-DD"
+	);
+
 	const handleSave = (folder: Folder, newFolder: boolean) => {
 		dayjs.extend(customParseFormat);
-		const formattedDate = dayjs(`${year} ${month} 01`, "YYYY MMMM DD").format(
-			"YYYY-MM-DD"
-		);
+
 		console.log(formattedDate);
 		folder.monthYearPeriod = formattedDate;
 
@@ -88,6 +90,7 @@ function FoldersPage() {
 					folders={folders}
 					onSave={handleSave}
 					onDelete={handleDelete}
+					monthYearPeriod={formattedDate}
 				/>
 			) : null}
 

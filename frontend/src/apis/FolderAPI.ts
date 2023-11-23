@@ -20,7 +20,20 @@ const folderAPI = {
 			.catch((error: TypeError) => {
 				console.log("log client error " + error);
 				throw new Error(
-					"There was an error retrieving the folder. Please try again."
+					"There was an error retrieving the folders. Please try again."
+				);
+			});
+	},
+
+	getByMonthYearPeriod(monthYearPeriod: String | undefined) {
+		return fetch(`/folder/date?monthYearPeriod=${monthYearPeriod}`)
+			.then(apiUtils.checkStatus)
+			.then(apiUtils.parseJSON)
+			.then(convertToProjectModels)
+			.catch((error: TypeError) => {
+				console.log("log client error " + error);
+				throw new Error(
+					"There was an error retrieving the folders. Please try again."
 				);
 			});
 	},

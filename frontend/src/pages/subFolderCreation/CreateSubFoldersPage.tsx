@@ -37,7 +37,7 @@ function CreateSubFoldersPage() {
 	});
 
 	// URI params from react router
-	const params = useParams();
+	const { monthYearPeriod } = useParams();
 
 	const handleSplitFolders = (event: any) => {
 		// If any folders remain in the distribute column, present dialog and return from function
@@ -166,7 +166,7 @@ function CreateSubFoldersPage() {
 		async function loadFolders() {
 			setLoading(true);
 			try {
-				const data = await folderAPI.get();
+				const data = await folderAPI.getByMonthYearPeriod(monthYearPeriod);
 				parseDataToColumnsAndFolders(data, setFoldersAndColumns);
 				calculateTotalFolderAmount(data, setFolderTotalAmount);
 			} catch (e) {
