@@ -143,6 +143,10 @@ function SubFoldersPage() {
 		loadFolders();
 	}, []);
 
+	useEffect(() => {
+		setSubFolders([]);
+	}, [year, month]);
+
 	return (
 		<Container
 			sx={{
