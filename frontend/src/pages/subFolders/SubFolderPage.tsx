@@ -2,15 +2,12 @@ import React, { useEffect, useState } from "react";
 
 import { SubFolder } from "../../components/SubFolder";
 import {
-	Box,
 	Button,
-	CircularProgress,
 	Container,
 	Grid,
 	ToggleButton,
 	ToggleButtonGroup,
 	Typography,
-	makeStyles,
 } from "@mui/material";
 import SubFolderList from "./SubFolderList";
 import { subFolderAPI } from "../../apis/SubFolderAPI";
@@ -20,6 +17,7 @@ import { ExpenseProcess } from "../../components/ExpenseProcess";
 import SubFolderSummary from "./SubFolderSummary";
 import { Link } from "react-router-dom";
 import MonthYearDropDown from "../../components/MonthYearDropDown";
+import dayjs from "dayjs";
 
 function SubFoldersPage() {
 	const [subFolders, setSubFolders] = useState<SubFolder[]>([]);
@@ -29,11 +27,10 @@ function SubFoldersPage() {
 	const [monthPeriod, setMonthPeriod] = React.useState<string | null>(
 		"first_half"
 	);
-	const [loading, setLoading] = useState(false);
 	const [showDescriptionSaveButton, setShowDescriptionSaveButton] =
 		useState(false);
-	const [month, setMonth] = useState("");
-	const [year, setYear] = useState("");
+	const [month, setMonth] = useState(dayjs().format("MMMM"));
+	const [year, setYear] = useState(dayjs().format("YYYY"));
 
 	const handleSelectedSubFolderChange = (subFolder: SubFolder) => {
 		setSelectedSubFolder(subFolder);
@@ -59,7 +56,7 @@ function SubFoldersPage() {
 		const updatedSubFolder: SubFolder = await subFolderAPI.patch(subFolder);
 		console.log(updatedSubFolder);
 		updatedSubFolders = subFolders.map((sf: SubFolder) => {
-			return sf.id == updatedSubFolder.id ? updatedSubFolder : sf;
+			return sf.id === updatedSubFolder.id ? updatedSubFolder : sf;
 		});
 		setSubFolders(() => [...updatedSubFolders]);
 		setShowDescriptionSaveButton(false);
@@ -93,6 +90,7 @@ function SubFoldersPage() {
 				newSelectedSubFolder.balance - expense.amount;
 		}
 		setSelectedSubFolder(newSelectedSubFolder);
+		handleMonthYearButtonClick();
 	};
 
 	const handleExpenseDelete = (expense: Expense) => {
@@ -108,28 +106,42 @@ function SubFoldersPage() {
 		newSelectedSubFolder.balance =
 			newSelectedSubFolder.balance + expense.amount;
 		setSelectedSubFolder(newSelectedSubFolder);
+		handleMonthYearButtonClick();
 	};
 
-	const handleMonthYearButtonClick = () => {
-		console.log("handleMonthYearButtonClick clicked");
+	const handleMonthYearButtonClick = async () => {
+		if (year === "" || month === "") {
+			return;
+		} else if (year.toString().length !== 4) {
+			return;
+		} else {
+			const data = await subFolderAPI.getByMonthYearPeriod(
+				getFormattedDate(month, year)
+			);
+			setSubFolders(data);
+		}
 	};
+
+	function getFormattedDate(month: String, year: String) {
+		return dayjs(`${year} ${month} 01`, "YYYY MMMM DD").format("YYYY-MM-DD");
+	}
 
 	useEffect(() => {
 		async function loadFolders() {
-			setLoading(true);
 			try {
-				const data = await subFolderAPI.get();
+				const formattedDate = `${dayjs().format("YYYY")}-${dayjs().format(
+					"MM"
+				)}-01`;
+				const data = await subFolderAPI.getByMonthYearPeriod(formattedDate);
 				setSubFolders(data);
 			} catch (e) {
 				if (e instanceof Error) {
 					console.log(e.message);
 				}
-			} finally {
-				setLoading(false);
 			}
 		}
 		loadFolders();
-	}, [selectedSubFolder]);
+	}, []);
 
 	return (
 		<Container

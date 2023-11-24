@@ -83,7 +83,18 @@ public class SubFolderService {
   public List<SubFolder> findSubfoldersByFolderMonthYearPeriod(
     Date monthYearPeriod
   ) {
-    return subFolderRepository.findAllByFolderMonthYearPeriod(monthYearPeriod);
+    List<SubFolder> subFolders = subFolderRepository.findAllByFolderMonthYearPeriod(
+      monthYearPeriod
+    );
+    subFolders
+      .stream()
+      .forEach(f -> {
+        List<Expense> expenses = expenseService.findExpensesBySubFolderId(
+          f.getId()
+        );
+        f.setExpenses(expenses);
+      });
+    return subFolders;
   }
 
   private SubFolder handlePatchingSubfolder(

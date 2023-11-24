@@ -20,7 +20,19 @@ const subFolderAPI = {
 			.catch((error: TypeError) => {
 				console.log("log client error " + error);
 				throw new Error(
-					"There was an error retrieving the subFolder. Please try again."
+					"There was an error retrieving the subFolders. Please try again."
+				);
+			});
+	},
+	getByMonthYearPeriod(monthYearPeriod: String) {
+		return fetch(`/subfolder/date?monthYearPeriod=${monthYearPeriod}`)
+			.then(apiUtils.checkStatus)
+			.then(apiUtils.parseJSON)
+			.then(convertToSubFolderModels)
+			.catch((error: TypeError) => {
+				console.log("log client error " + error);
+				throw new Error(
+					"There was an error retrieving the subFolders. Please try again."
 				);
 			});
 	},

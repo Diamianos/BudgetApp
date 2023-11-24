@@ -178,7 +178,7 @@ function CreateSubFoldersPage() {
 			}
 		}
 		loadFolders();
-	}, []);
+	}, [monthYearPeriod]);
 
 	return (
 		<>

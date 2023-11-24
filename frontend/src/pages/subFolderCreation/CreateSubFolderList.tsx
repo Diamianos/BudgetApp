@@ -276,7 +276,8 @@ function CreateSubFolderList({
 									<DialogContentText sx={{ textAlign: "center" }}>
 										Please indicate below the amount to put in each folder. The
 										total between both folder amounts must equal{" "}
-										{dialogContentInformation.folderAmount}
+										{dialogContentInformation.folderAmount}... Half is{" "}
+										{dialogContentInformation.folderAmount / 2}
 									</DialogContentText>
 									<TextField
 										margin="dense"

@@ -8,7 +8,6 @@ import {
 	SelectChangeEvent,
 	TextField,
 } from "@mui/material";
-import React, { useState } from "react";
 
 interface MonthYearDropDownProps {
 	month: string;

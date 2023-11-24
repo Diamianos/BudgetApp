@@ -14,7 +14,6 @@ import FolderRow from "./folderRows/FolderRow";
 import FolderRowEdit from "./folderRows/FolderRowEdit";
 import FolderRowNew from "./folderRows/FolderRowNew";
 import FolderTotal from "./folderRows/FolderRowTotal";
-import { Link } from "react-router-dom";
 
 // https://minicss.us/docs.htm#tables
 // Beautiful React DND tutorial for drag-and-drop list functionality: https://egghead.io/lessons/react-set-up-a-react-environment-with-create-react-app
