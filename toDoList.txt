@@ -1,0 +1,29 @@
+- Button to create new month budget with previous month folders as starting point
+- Get running in a docker container, both frontend and backend if possible
+- Test cases
+- Let subfolder month year period selection be for the folder creation
+- pre populate common folders 
+- click in box to edit for folders
+
+
+'Car Insurance ','80'
+'Cell Phone','140'
+'Date Night','200'
+'Car Maintenance ','150'
+'Emily','280'
+'Elizabeth','200'
+'Emily Subscriptions','40'
+'Food','600'
+'Gas','280'
+'Internet','75'
+'John','100'
+'Isabella','90'
+'Life Insurance','60'
+'Mortgage','3160'
+'Necessities','200'
+'Savings','300'
+'Subscriptions','30'
+'Roth','100'
+'Tithe','730'
+'Utilities','250'
+'Trash','45'

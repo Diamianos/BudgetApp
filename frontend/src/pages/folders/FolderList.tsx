@@ -125,7 +125,7 @@ export default function FolderList({
 					color="secondary"
 					onClick={handleCreateSubFolders}
 				>
-					Create Sub Folders
+					Save Folders
 				</Button>
 			</div>
 		</TableContainer>

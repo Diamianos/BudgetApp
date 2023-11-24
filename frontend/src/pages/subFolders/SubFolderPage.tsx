@@ -174,7 +174,7 @@ function SubFoldersPage() {
 				<Grid sx={{ marginLeft: "auto" }}>
 					<Link to={`/folders`}>
 						<Button size="large" variant="contained">
-							Create New Budget
+							Create New Folders
 						</Button>
 					</Link>
 				</Grid>

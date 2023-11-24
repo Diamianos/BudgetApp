@@ -17,7 +17,7 @@ function FolderRowNew(props: FolderRowNewProps) {
 
 	function validate(folder: Folder) {
 		let errors: any = { name: false, amount: false };
-		if (folder.name.length <= 3) {
+		if (folder.name.length === 0) {
 			errors.name = true;
 		}
 		if (folder.amount <= 0) {
