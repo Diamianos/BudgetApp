@@ -264,71 +264,65 @@ function CreateSubFolderList({
 									</Button>
 								)
 							)}
-							<Dialog
-								disableRestoreFocus={true}
-								open={open}
-								onClose={handleClose}
-							>
-								<DialogTitle sx={{ textAlign: "center" }}>
-									Split Folder
-								</DialogTitle>
-								<DialogContent>
-									<DialogContentText sx={{ textAlign: "center" }}>
-										Please indicate below the amount to put in each folder. The
-										total between both folder amounts must equal{" "}
-										{dialogContentInformation.folderAmount}... Half is{" "}
-										{dialogContentInformation.folderAmount / 2}
-									</DialogContentText>
-									<TextField
-										margin="dense"
-										id="folderName"
-										label="Folder Name"
-										type="email"
-										fullWidth
-										variant="standard"
-										value={dialogContentInformation.folderName}
-										InputProps={{
-											readOnly: true,
-										}}
-									/>
-									<TextField
-										margin="dense"
-										name="days1_14Amount"
-										label="Days 1-14 Folder Amount"
-										type="number"
-										fullWidth
-										variant="standard"
-										value={dialogContentInformation.days1_14Amount}
-										inputRef={inputRef}
-										onChange={handleDialogTextFieldChange}
-									/>
-									<TextField
-										margin="dense"
-										name="days15_30Amount"
-										label="Days 15-30 Folder Amount"
-										type="number"
-										fullWidth
-										variant="standard"
-										value={dialogContentInformation.days15_30Amount}
-										onChange={handleDialogTextFieldChange}
-										onKeyDown={handleKeyDown}
-									/>
-								</DialogContent>
-								{showDialogError.showError && (
-									<Alert variant="filled" severity="error">
-										{showDialogError.errorMessage}
-									</Alert>
-								)}
-								<DialogActions>
-									<Button onClick={handleClose}>Cancel</Button>
-									<Button onClick={handleSplitSubmit}>Split</Button>
-								</DialogActions>
-							</Dialog>
 						</Box>
 					)}
 				</Draggable>
 			))}
 			{provided.placeholder}
+			<Dialog disableRestoreFocus={true} open={open} onClose={handleClose}>
+				<DialogTitle sx={{ textAlign: "center" }}>Split Folder</DialogTitle>
+				<DialogContent>
+					<DialogContentText sx={{ textAlign: "center" }}>
+						Please indicate below the amount to put in each folder. The total
+						between both folder amounts must equal{" "}
+						{dialogContentInformation.folderAmount}... Half is{" "}
+						{dialogContentInformation.folderAmount / 2}
+					</DialogContentText>
+					<TextField
+						margin="dense"
+						id="folderName"
+						label="Folder Name"
+						type="email"
+						fullWidth
+						variant="standard"
+						value={dialogContentInformation.folderName}
+						InputProps={{
+							readOnly: true,
+						}}
+					/>
+					<TextField
+						margin="dense"
+						name="days1_14Amount"
+						label="Days 1-14 Folder Amount"
+						type="number"
+						fullWidth
+						variant="standard"
+						value={dialogContentInformation.days1_14Amount}
+						inputRef={inputRef}
+						onChange={handleDialogTextFieldChange}
+					/>
+					<TextField
+						margin="dense"
+						name="days15_30Amount"
+						label="Days 15-30 Folder Amount"
+						type="number"
+						fullWidth
+						variant="standard"
+						value={dialogContentInformation.days15_30Amount}
+						onChange={handleDialogTextFieldChange}
+						onKeyDown={handleKeyDown}
+					/>
+				</DialogContent>
+				{showDialogError.showError && (
+					<Alert variant="filled" severity="error">
+						{showDialogError.errorMessage}
+					</Alert>
+				)}
+				<DialogActions>
+					<Button onClick={handleClose}>Cancel</Button>
+					<Button onClick={handleSplitSubmit}>Split</Button>
+				</DialogActions>
+			</Dialog>
 		</Container>
 	);
 }
