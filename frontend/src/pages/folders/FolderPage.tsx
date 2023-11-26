@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Folder } from "../../components/Folder";
 import FolderList from "./FolderList";
 import {
@@ -10,26 +10,29 @@ import {
 	DialogTitle,
 	Typography,
 } from "@mui/material";
+import { useParams } from "react-router-dom";
 import dayjs from "dayjs";
-import customParseFormat from "dayjs/plugin/customParseFormat";
-import MonthYearDropDown from "../../components/MonthYearDropDown";
 
 function FoldersPage() {
 	const [folders, setFolders] = useState<Folder[]>([]);
 	const [openDialog, setOpenDialog] = useState(false);
-	const [month, setMonth] = useState("");
-	const [year, setYear] = useState("");
-	const [showFolderList, setShowFolderList] = useState(false);
 
-	const formattedDate = dayjs(`${year} ${month} 01`, "YYYY MMMM DD").format(
-		"YYYY-MM-DD"
-	);
+	// URI params from react router
+	const { monthYearPeriod } = useParams();
+	let month = "";
+	let year = "";
+	parseMonthYearPeriodString();
+
+	function parseMonthYearPeriodString() {
+		var customParseFormat = require("dayjs/plugin/customParseFormat");
+		dayjs.extend(customParseFormat);
+		const dateObject = dayjs(monthYearPeriod, "YYYY-MM-DD");
+		month = dateObject.format("MMMM");
+		year = dateObject.format("YYYY");
+	}
 
 	const handleSave = (folder: Folder, newFolder: boolean) => {
-		dayjs.extend(customParseFormat);
-
-		console.log(formattedDate);
-		folder.monthYearPeriod = formattedDate;
+		folder.monthYearPeriod = monthYearPeriod!;
 
 		let updatedFolders: React.SetStateAction<Folder[]> = [];
 		if (newFolder) {
@@ -37,6 +40,7 @@ function FoldersPage() {
 				setOpenDialog(true);
 				return;
 			}
+			console.log(folder);
 			updatedFolders = [...folders];
 			updatedFolders.push(folder);
 			updatedFolders.sort((a, b) => a.name.localeCompare(b.name)); // Sorting alphabetically by name
@@ -56,43 +60,17 @@ function FoldersPage() {
 		setOpenDialog(false);
 	};
 
-	const handleMonthYearButtonClick = () => {
-		if (year === null || month === null) {
-			return;
-		}
-
-		if (year.toString().length !== 4) {
-			return;
-		}
-		setShowFolderList(true);
-	};
-
-	useEffect(() => {
-		setFolders([]);
-		setShowFolderList(false);
-	}, [month, year]);
-
 	return (
 		<>
 			<Typography variant="h4" textAlign="center" mt="1rem" mb="1rem">
-				Folder Creation
+				{month + " " + year}
 			</Typography>
-
-			<MonthYearDropDown
-				month={month}
-				setMonth={setMonth}
-				year={year}
-				setYear={setYear}
-				handleMonthYearButtonClick={handleMonthYearButtonClick}
+			<FolderList
+				folders={folders}
+				onSave={handleSave}
+				onDelete={handleDelete}
+				monthYearPeriod={monthYearPeriod!}
 			/>
-			{showFolderList ? (
-				<FolderList
-					folders={folders}
-					onSave={handleSave}
-					onDelete={handleDelete}
-					monthYearPeriod={formattedDate}
-				/>
-			) : null}
 
 			<Dialog
 				open={openDialog}

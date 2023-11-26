@@ -22,8 +22,6 @@ import SubFolderDetail from "./SubFolderDetail";
 import { Expense } from "../../components/Expense";
 import { ExpenseProcess } from "../../components/ExpenseProcess";
 import SubFolderSummary from "./SubFolderSummary";
-import { Link } from "react-router-dom";
-import MonthYearDropDown from "../../components/MonthYearDropDown";
 import dayjs from "dayjs";
 
 function SubFoldersPage() {
@@ -136,17 +134,32 @@ function SubFoldersPage() {
 	};
 
 	const retrieveSubFolders = async () => {
-		if (year === "" || month === "") {
-			return;
-		} else if (year.toString().length !== 4) {
-			return;
-		} else {
+		if (verifyMonthYearInputs()) {
 			const data = await subFolderAPI.getByMonthYearPeriod(
 				getFormattedDate(month, year)
 			);
 			setSubFolders(data);
 		}
+		return;
 	};
+
+	const handleCreateFolders = () => {
+		if (verifyMonthYearInputs()) {
+			const monthYearPeriod = getFormattedDate(month, year);
+			window.location.href = `/folders/${monthYearPeriod}`;
+		}
+		return;
+	};
+
+	function verifyMonthYearInputs() {
+		if (year === "" || month === "") {
+			return false;
+		} else if (year.toString().length !== 4) {
+			return false;
+		} else {
+			return true;
+		}
+	}
 
 	function getFormattedDate(month: String, year: String) {
 		return dayjs(`${year} ${month} 01`, "YYYY MMMM DD").format("YYYY-MM-DD");
@@ -171,6 +184,7 @@ function SubFoldersPage() {
 
 	useEffect(() => {
 		retrieveSubFolders();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [year, month]);
 
 	return (
@@ -219,11 +233,13 @@ function SubFoldersPage() {
 					</Box>
 				</Grid>
 				<Grid sx={{ marginLeft: "auto" }}>
-					<Link to={`/folders`}>
-						<Button size="large" variant="contained">
-							Create Folders
-						</Button>
-					</Link>
+					<Button
+						size="large"
+						variant="contained"
+						onClick={handleCreateFolders}
+					>
+						Create Folders
+					</Button>
 				</Grid>
 			</Grid>
 

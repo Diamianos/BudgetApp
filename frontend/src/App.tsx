@@ -20,7 +20,10 @@ function App() {
 							path="/create_subfolders/:monthYearPeriod"
 							element={<CreateSubFoldersPage />}
 						></Route>
-						<Route path="/folders" element={<FoldersPage />}></Route>
+						<Route
+							path="/folders/:monthYearPeriod"
+							element={<FoldersPage />}
+						></Route>
 					</Routes>
 				</Container>
 			</Router>
