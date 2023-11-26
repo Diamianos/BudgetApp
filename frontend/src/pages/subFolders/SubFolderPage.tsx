@@ -2,9 +2,16 @@ import React, { useEffect, useState } from "react";
 
 import { SubFolder } from "../../components/SubFolder";
 import {
+	Box,
 	Button,
 	Container,
+	FormControl,
 	Grid,
+	InputLabel,
+	MenuItem,
+	Select,
+	SelectChangeEvent,
+	TextField,
 	ToggleButton,
 	ToggleButtonGroup,
 	Typography,
@@ -31,6 +38,25 @@ function SubFoldersPage() {
 		useState(false);
 	const [month, setMonth] = useState(dayjs().format("MMMM"));
 	const [year, setYear] = useState(dayjs().format("YYYY"));
+
+	const months = [
+		"January",
+		"February",
+		"March",
+		"April",
+		"May",
+		"June",
+		"July",
+		"August",
+		"September",
+		"October",
+		"November",
+		"December",
+	];
+
+	const handleMonthChange = (event: SelectChangeEvent) => {
+		setMonth(event.target.value as string);
+	};
 
 	const handleSelectedSubFolderChange = (subFolder: SubFolder) => {
 		setSelectedSubFolder(subFolder);
@@ -90,7 +116,7 @@ function SubFoldersPage() {
 				newSelectedSubFolder.balance - expense.amount;
 		}
 		setSelectedSubFolder(newSelectedSubFolder);
-		handleMonthYearButtonClick();
+		retrieveSubFolders();
 	};
 
 	const handleExpenseDelete = (expense: Expense) => {
@@ -106,10 +132,10 @@ function SubFoldersPage() {
 		newSelectedSubFolder.balance =
 			newSelectedSubFolder.balance + expense.amount;
 		setSelectedSubFolder(newSelectedSubFolder);
-		handleMonthYearButtonClick();
+		retrieveSubFolders();
 	};
 
-	const handleMonthYearButtonClick = async () => {
+	const retrieveSubFolders = async () => {
 		if (year === "" || month === "") {
 			return;
 		} else if (year.toString().length !== 4) {
@@ -144,7 +170,7 @@ function SubFoldersPage() {
 	}, []);
 
 	useEffect(() => {
-		setSubFolders([]);
+		retrieveSubFolders();
 	}, [year, month]);
 
 	return (
@@ -163,18 +189,39 @@ function SubFoldersPage() {
 
 			<Grid container alignItems="center">
 				<Grid>
-					<MonthYearDropDown
-						month={month}
-						setMonth={setMonth}
-						year={year}
-						setYear={setYear}
-						handleMonthYearButtonClick={handleMonthYearButtonClick}
-					/>
+					<Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
+						<FormControl sx={{ minWidth: 120 }}>
+							<InputLabel id="simple-select-label">Month</InputLabel>
+							<Select
+								labelId="simple-select-label"
+								id="simple-select"
+								value={month}
+								label="Month"
+								onChange={handleMonthChange}
+							>
+								{months.map((name) => (
+									<MenuItem key={name} value={name}>
+										{name}
+									</MenuItem>
+								))}
+							</Select>
+						</FormControl>
+						<TextField
+							variant="outlined"
+							type="number"
+							label="Year"
+							value={year}
+							onChange={(e) => {
+								setYear(e.target.value);
+							}}
+							sx={{ marginLeft: ".5rem", marginRight: ".5rem" }}
+						></TextField>
+					</Box>
 				</Grid>
 				<Grid sx={{ marginLeft: "auto" }}>
 					<Link to={`/folders`}>
 						<Button size="large" variant="contained">
-							Create New Folders
+							Create Folders
 						</Button>
 					</Link>
 				</Grid>
