@@ -34,10 +34,6 @@ export default function FolderList({
 	const [folderBeingEdited, setFolderBeingEdited] = useState({});
 	const [hideNewFolder, setHideNewFolder] = useState(true);
 
-	const handleEdit = (folder: Folder) => {
-		setHideNewFolder(true);
-		setFolderBeingEdited(folder);
-	};
 	const handleCancel = (newFolder: boolean) => {
 		if (newFolder) {
 			setHideNewFolder(true);
@@ -100,7 +96,7 @@ export default function FolderList({
 						<FolderRowNew onSave={handleSave} onCancel={handleCancel} />
 					)}
 					{folders.map((folder) => (
-						<React.Fragment key={folder.name}>
+						<React.Fragment key={folder.id}>
 							{folder === folderBeingEdited ? (
 								<FolderRowEdit
 									folder={folder}
@@ -110,8 +106,8 @@ export default function FolderList({
 							) : (
 								<FolderRow
 									folder={folder}
-									onEdit={handleEdit}
 									onDelete={onDelete}
+									onSave={onSave}
 								/>
 							)}
 						</React.Fragment>

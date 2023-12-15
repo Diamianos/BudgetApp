@@ -40,13 +40,12 @@ function FoldersPage() {
 				setOpenDialog(true);
 				return;
 			}
-			console.log(folder);
 			updatedFolders = [...folders];
 			updatedFolders.push(folder);
 			updatedFolders.sort((a, b) => a.name.localeCompare(b.name)); // Sorting alphabetically by name
 		} else {
 			updatedFolders = folders.map((f: Folder) => {
-				return f.name === folder.name ? folder : f;
+				return f.id === folder.id ? folder : f;
 			});
 		}
 		setFolders(updatedFolders);
