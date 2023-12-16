@@ -19,9 +19,10 @@ import { TagDialogInterface } from "../../interfaces/TagDialogInterface";
 
 interface SubFolderSummaryProps {
 	subFolders: SubFolder[];
+	monthPeriod: string | null;
 }
 
-function SubFolderSummary({ subFolders }: SubFolderSummaryProps) {
+function SubFolderSummary({ subFolders, monthPeriod }: SubFolderSummaryProps) {
 	const [dialog, setDialog] = useState<TagDialogInterface>({
 		open: false,
 		name: "",
@@ -86,10 +87,12 @@ function SubFolderSummary({ subFolders }: SubFolderSummaryProps) {
 		};
 
 		subFolders.forEach((f) => {
-			let k: keyof typeof f.tags;
-			for (k in f.tags) {
-				const keyValue = f.tags[k];
-				tagTotals[k] = tagTotals[k] + keyValue;
+			if (f.monthPeriod.toLowerCase() === monthPeriod?.toLowerCase()) {
+				let k: keyof typeof f.tags;
+				for (k in f.tags) {
+					const keyValue = f.tags[k];
+					tagTotals[k] = tagTotals[k] + keyValue;
+				}
 			}
 		});
 

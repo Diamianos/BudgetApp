@@ -300,7 +300,10 @@ function SubFoldersPage() {
 						></SubFolderList>
 					</Grid>
 					<Grid item md={7}>
-						<SubFolderSummary subFolders={subFolders}></SubFolderSummary>
+						<SubFolderSummary
+							subFolders={subFolders}
+							monthPeriod={monthPeriod}
+						></SubFolderSummary>
 					</Grid>
 				</Grid>
 			)}
