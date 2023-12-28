@@ -70,6 +70,7 @@ function CreateSubFolderList({
 	});
 	const [open, setOpen] = React.useState(false);
 	const [openPopup, setOpenPopup] = React.useState(false);
+	const [splitEvenly, setSplitEvenly] = React.useState(false);
 
 	/******************
 	 * Refs
@@ -90,6 +91,19 @@ function CreateSubFolderList({
 		}, 0);
 		return () => clearTimeout(timeout);
 	}, [openPopup]);
+
+	// Used to handle splitting sub folders evenly based off of a boolean state value
+	useEffect(() => {
+		handleRegularFolderSubmit(
+			foldersAndColumns,
+			dialogContentInformation,
+			splitFolderHistory,
+			setSplitFolderHistory,
+			setFoldersAndColumns,
+			setOpen,
+			setOpenPopup
+		);
+	}, [splitEvenly]);
 
 	/******************
 	 * Arrow Functions
@@ -157,6 +171,18 @@ function CreateSubFolderList({
 		if (event.key === "Enter") {
 			handleSplitSubmit();
 		}
+	};
+
+	// This relies on a 'useEffect' hook to kick off the split even process
+	const handleSplitEvenly = () => {
+		const newDialogContentInformation = { ...dialogContentInformation };
+		newDialogContentInformation.days1_14Amount =
+			newDialogContentInformation.folderAmount / 2;
+		newDialogContentInformation.days15_30Amount =
+			newDialogContentInformation.folderAmount / 2;
+		setDialogContentInformation(newDialogContentInformation);
+		// This set has a 'useEffect' hook attached so that it will split the folders after the 'setDialogContentInformation' has completed
+		setSplitEvenly(!splitEvenly);
 	};
 
 	const handleSplitSubmit = () => {
@@ -321,6 +347,7 @@ function CreateSubFolderList({
 				<DialogActions>
 					<Button onClick={handleClose}>Cancel</Button>
 					<Button onClick={handleSplitSubmit}>Split</Button>
+					<Button onClick={handleSplitEvenly}>Split Evenly</Button>
 				</DialogActions>
 			</Dialog>
 		</Container>
