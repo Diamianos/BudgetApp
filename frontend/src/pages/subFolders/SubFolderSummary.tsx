@@ -147,6 +147,11 @@ function SubFolderSummary({ subFolders, monthPeriod }: SubFolderSummaryProps) {
 						<ListItemText primary={"Bill $" + tagTotals.bill} />
 					</ListItemButton>
 				</ListItem>
+				<ListItem sx={{ marginLeft: "3.5rem", fontWeight: "bold" }}>
+					{tagDescriptions.bill.map((v) => {
+						return v + " ";
+					})}
+				</ListItem>
 				<ListItem disablePadding>
 					<ListItemButton onClick={() => handleTagButtonClick("takeOut")}>
 						<ListItemIcon>
@@ -154,6 +159,11 @@ function SubFolderSummary({ subFolders, monthPeriod }: SubFolderSummaryProps) {
 						</ListItemIcon>
 						<ListItemText primary={"Take Out $" + tagTotals.takeOut} />
 					</ListItemButton>
+				</ListItem>
+				<ListItem sx={{ marginLeft: "3.5rem", fontWeight: "bold" }}>
+					{tagDescriptions.takeOut.map((v) => {
+						return v + " ";
+					})}
 				</ListItem>
 				<ListItem disablePadding>
 					<ListItemButton onClick={() => handleTagButtonClick("leave")}>
@@ -163,6 +173,11 @@ function SubFolderSummary({ subFolders, monthPeriod }: SubFolderSummaryProps) {
 						<ListItemText primary={"Leave $" + tagTotals.leave} />
 					</ListItemButton>
 				</ListItem>
+				<ListItem sx={{ marginLeft: "3.5rem", fontWeight: "bold" }}>
+					{tagDescriptions.leave.map((v) => {
+						return v + " ";
+					})}
+				</ListItem>
 				<ListItem disablePadding>
 					<ListItemButton onClick={() => handleTagButtonClick("transfer")}>
 						<ListItemIcon>
@@ -170,6 +185,11 @@ function SubFolderSummary({ subFolders, monthPeriod }: SubFolderSummaryProps) {
 						</ListItemIcon>
 						<ListItemText primary={"Transfer $" + tagTotals.transfer} />
 					</ListItemButton>
+				</ListItem>
+				<ListItem sx={{ marginLeft: "3.5rem", fontWeight: "bold" }}>
+					{tagDescriptions.transfer.map((v) => {
+						return v + " ";
+					})}
 				</ListItem>
 			</List>
 
