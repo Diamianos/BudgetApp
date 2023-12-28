@@ -39,33 +39,35 @@ function SubFolderSummary({ subFolders, monthPeriod }: SubFolderSummaryProps) {
 		let transferList: string[] = [];
 
 		subFolders.forEach((f) => {
-			const folderName = f.name;
-			let k: keyof typeof f.tags;
-			for (k in f.tags) {
-				const keyValue = f.tags[k];
-				switch (k) {
-					case "bill":
-						if (keyValue !== 0) {
-							billList.push(`${folderName} ${keyValue}`);
-						}
-						break;
-					case "takeOut":
-						if (keyValue !== 0) {
-							takeOutList.push(`${folderName} ${keyValue}`);
-						}
-						break;
-					case "leave":
-						if (keyValue !== 0) {
-							leaveList.push(`${folderName} ${keyValue}`);
-						}
-						break;
-					case "transfer":
-						if (keyValue !== 0) {
-							transferList.push(`${folderName} ${keyValue}`);
-						}
-						break;
-					default:
-						break;
+			if (f.monthPeriod.toLowerCase() === monthPeriod?.toLowerCase()) {
+				const folderName = f.name;
+				let k: keyof typeof f.tags;
+				for (k in f.tags) {
+					const keyValue = f.tags[k];
+					switch (k) {
+						case "bill":
+							if (keyValue !== 0) {
+								billList.push(`${folderName} ${keyValue}`);
+							}
+							break;
+						case "takeOut":
+							if (keyValue !== 0) {
+								takeOutList.push(`${folderName} ${keyValue}`);
+							}
+							break;
+						case "leave":
+							if (keyValue !== 0) {
+								leaveList.push(`${folderName} ${keyValue}`);
+							}
+							break;
+						case "transfer":
+							if (keyValue !== 0) {
+								transferList.push(`${folderName} ${keyValue}`);
+							}
+							break;
+						default:
+							break;
+					}
 				}
 			}
 		});
