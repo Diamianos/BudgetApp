@@ -8,6 +8,7 @@ import {
 	ListItemIcon,
 	ListItemText,
 	Typography,
+	makeStyles,
 } from "@mui/material";
 import DraftsIcon from "@mui/icons-material/Drafts";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
@@ -47,22 +48,22 @@ function SubFolderSummary({ subFolders, monthPeriod }: SubFolderSummaryProps) {
 					switch (k) {
 						case "bill":
 							if (keyValue !== 0) {
-								billList.push(`${folderName} ${keyValue}`);
+								billList.push(`${folderName} $${keyValue}`);
 							}
 							break;
 						case "takeOut":
 							if (keyValue !== 0) {
-								takeOutList.push(`${folderName} ${keyValue}`);
+								takeOutList.push(`${folderName} $${keyValue}`);
 							}
 							break;
 						case "leave":
 							if (keyValue !== 0) {
-								leaveList.push(`${folderName} ${keyValue}`);
+								leaveList.push(`${folderName} $${keyValue}`);
 							}
 							break;
 						case "transfer":
 							if (keyValue !== 0) {
-								transferList.push(`${folderName} ${keyValue}`);
+								transferList.push(`${folderName} $${keyValue}`);
 							}
 							break;
 						default:
@@ -123,6 +124,10 @@ function SubFolderSummary({ subFolders, monthPeriod }: SubFolderSummaryProps) {
 		});
 	};
 
+	const boldText = {
+		fontWeight: "bold",
+	};
+
 	return (
 		<Container
 			sx={{
@@ -146,10 +151,13 @@ function SubFolderSummary({ subFolders, monthPeriod }: SubFolderSummaryProps) {
 						<ListItemIcon>
 							<AccountBalanceIcon />
 						</ListItemIcon>
-						<ListItemText primary={"Bill $" + tagTotals.bill} />
+						<ListItemText
+							primaryTypographyProps={{ style: boldText }}
+							primary={"Bill $" + tagTotals.bill}
+						/>
 					</ListItemButton>
 				</ListItem>
-				<ListItem sx={{ marginLeft: "3.5rem", fontWeight: "bold" }}>
+				<ListItem sx={{ marginLeft: "3.5rem" }}>
 					{tagDescriptions.bill.map((v) => {
 						return v + " ";
 					})}
@@ -159,10 +167,13 @@ function SubFolderSummary({ subFolders, monthPeriod }: SubFolderSummaryProps) {
 						<ListItemIcon>
 							<AttachMoneyIcon />
 						</ListItemIcon>
-						<ListItemText primary={"Take Out $" + tagTotals.takeOut} />
+						<ListItemText
+							primaryTypographyProps={{ style: boldText }}
+							primary={"Take Out $" + tagTotals.takeOut}
+						/>
 					</ListItemButton>
 				</ListItem>
-				<ListItem sx={{ marginLeft: "3.5rem", fontWeight: "bold" }}>
+				<ListItem sx={{ marginLeft: "3.5rem" }}>
 					{tagDescriptions.takeOut.map((v) => {
 						return v + " ";
 					})}
@@ -172,10 +183,13 @@ function SubFolderSummary({ subFolders, monthPeriod }: SubFolderSummaryProps) {
 						<ListItemIcon>
 							<DraftsIcon />
 						</ListItemIcon>
-						<ListItemText primary={"Leave $" + tagTotals.leave} />
+						<ListItemText
+							primaryTypographyProps={{ style: boldText }}
+							primary={"Leave $" + tagTotals.leave}
+						/>
 					</ListItemButton>
 				</ListItem>
-				<ListItem sx={{ marginLeft: "3.5rem", fontWeight: "bold" }}>
+				<ListItem sx={{ marginLeft: "3.5rem" }}>
 					{tagDescriptions.leave.map((v) => {
 						return v + " ";
 					})}
@@ -185,10 +199,13 @@ function SubFolderSummary({ subFolders, monthPeriod }: SubFolderSummaryProps) {
 						<ListItemIcon>
 							<CurrencyExchangeIcon />
 						</ListItemIcon>
-						<ListItemText primary={"Transfer $" + tagTotals.transfer} />
+						<ListItemText
+							primaryTypographyProps={{ style: boldText }}
+							primary={"Transfer $" + tagTotals.transfer}
+						/>
 					</ListItemButton>
 				</ListItem>
-				<ListItem sx={{ marginLeft: "3.5rem", fontWeight: "bold" }}>
+				<ListItem sx={{ marginLeft: "3.5rem" }}>
 					{tagDescriptions.transfer.map((v) => {
 						return v + " ";
 					})}
