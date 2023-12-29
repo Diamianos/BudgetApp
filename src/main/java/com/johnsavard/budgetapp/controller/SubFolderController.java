@@ -77,9 +77,15 @@ public class SubFolderController {
     consumes = { "application/json" }
   )
   public ResponseEntity<SubFolder> createSubFolder(
-    @RequestBody SubFolder subFolder
+    @RequestBody SubFolder subFolder,
+    @RequestParam("monthYearPeriod") @DateTimeFormat(
+      iso = DateTimeFormat.ISO.DATE
+    ) Date monthYearPeriod
   ) throws URISyntaxException {
-    Folder tempFolder = folderService.findFolderByName(subFolder.getName());
+    Folder tempFolder = folderService.findFolderByNameAndMonthYearPeriod(
+      subFolder.getName(),
+      monthYearPeriod
+    );
 
     subFolder.setFolder(tempFolder);
 

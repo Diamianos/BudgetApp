@@ -49,17 +49,6 @@ function CreateSubFoldersPage() {
 			setDialog(newDialogState);
 			return;
 		}
-		// Ensure both folders equal the same amount, if not present dialog and return from function
-		// If column-1 equals half of the total, we know folders have been distributed evenly if the "distribute" column is already empty
-		const folderSum = sumColumnFolderAmount("column-1", foldersAndColumns);
-		if (folderSum !== folderTotalAmount / 2) {
-			const newDialogState = {
-				isOpen: true,
-				errorMsg: '"Days 1-14" and "Days 15-30" columns must be equal',
-			};
-			setDialog(newDialogState);
-			return;
-		}
 
 		// Call subfolder API to create subfolders with respective monthPeriod value and proceed to Sub Folder page
 		const column1FolderIds = foldersAndColumns.columns["column-1"].folderIds;
@@ -73,13 +62,15 @@ function CreateSubFoldersPage() {
 		});
 
 		column1Folders.forEach((folder) => {
+			folder.id = undefined;
 			const subFolder = convertFolderToSubfolder(folder, "FIRST_HALF");
-			subFolderAPI.post(subFolder);
+			subFolderAPI.post(subFolder, monthYearPeriod);
 		});
 
 		column3Folders.forEach((folder) => {
+			folder.id = undefined;
 			const subFolder = convertFolderToSubfolder(folder, "SECOND_HALF");
-			subFolderAPI.post(subFolder);
+			subFolderAPI.post(subFolder, monthYearPeriod);
 		});
 	};
 

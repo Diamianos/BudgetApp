@@ -20,8 +20,14 @@ public class FolderService {
     return folderRepository.findAllByOrderByName();
   }
 
-  public Folder findFolderByName(String folderName) {
-    return folderRepository.findByName(folderName);
+  public Folder findFolderByNameAndMonthYearPeriod(
+    String folderName,
+    Date monthYearPeriod
+  ) {
+    return folderRepository.findByNameAndMonthYearPeriod(
+      folderName,
+      monthYearPeriod
+    );
   }
 
   public Optional<Folder> findFolderById(int folderId) {

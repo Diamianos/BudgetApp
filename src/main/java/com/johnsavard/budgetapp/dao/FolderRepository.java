@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface FolderRepository extends JpaRepository<Folder, Integer> {
   public List<Folder> findAllByOrderByName();
 
-  public Folder findByName(String name);
+  public Folder findByNameAndMonthYearPeriod(String name, Date monthYearPeriod);
 
   public List<Folder> findAllByMonthYearPeriod(Date monthYearPeriod);
 }

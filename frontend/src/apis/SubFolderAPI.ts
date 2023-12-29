@@ -37,8 +37,8 @@ const subFolderAPI = {
 			});
 	},
 
-	post(subFolder: SubFolder) {
-		return fetch("/subfolder", {
+	post(subFolder: SubFolder, monthYearPeriod: String | undefined) {
+		return fetch(`/subfolder?monthYearPeriod=${monthYearPeriod}`, {
 			method: "POST",
 			body: JSON.stringify(subFolder),
 			headers: {

@@ -56,6 +56,8 @@ export default function FolderList({
 	const handleCreateSubFolders = () => {
 		try {
 			folders.forEach((f) => {
+				// Removing id so it doesn't interfere in the database
+				f.id = undefined;
 				folderAPI.post(f);
 			});
 			window.location.href = `/create_subfolders/${monthYearPeriod}`;

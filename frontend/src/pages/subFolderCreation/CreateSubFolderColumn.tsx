@@ -46,8 +46,7 @@ function Column({
 				{column.title}
 			</Typography>
 			<Typography variant="h6" sx={{ padding: "8px", textAlign: "center" }}>
-				Total {folderTotal}{" "}
-				{column.title !== "Distribute" ? columnTotalMessage : ""}
+				Total {folderTotal}
 			</Typography>
 			<StrictModeDroppable droppableId={column.id}>
 				{(provided, snapshot) => (
