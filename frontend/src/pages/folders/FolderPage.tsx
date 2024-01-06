@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Folder } from "../../components/Folder";
 import FolderList from "./FolderList";
 import {
 	Button,
+	Container,
 	Dialog,
 	DialogActions,
 	DialogContent,
@@ -12,16 +13,37 @@ import {
 } from "@mui/material";
 import { useParams } from "react-router-dom";
 import dayjs from "dayjs";
+import { folderAPI } from "../../apis/FolderAPI";
 
 function FoldersPage() {
 	const [folders, setFolders] = useState<Folder[]>([]);
 	const [openDialog, setOpenDialog] = useState(false);
+	const [originalFolders, setOriginalFolders] = useState<Folder[]>([]);
+	const [existingFolders, setExistingFolders] = useState(false);
 
 	// URI params from react router
 	const { monthYearPeriod } = useParams();
 	let month = "";
 	let year = "";
 	parseMonthYearPeriodString();
+
+	useEffect(() => {
+		async function loadFolders() {
+			try {
+				const data = await folderAPI.getByMonthYearPeriod(monthYearPeriod);
+				if (data.length > 0) {
+					setFolders(data);
+					setOriginalFolders(data);
+					setExistingFolders(true);
+				}
+			} catch (e) {
+				if (e instanceof Error) {
+					console.log(e.message);
+				}
+			}
+		}
+		loadFolders();
+	}, []);
 
 	function parseMonthYearPeriodString() {
 		var customParseFormat = require("dayjs/plugin/customParseFormat");
@@ -61,34 +83,38 @@ function FoldersPage() {
 
 	return (
 		<>
-			<Typography variant="h4" textAlign="center" mt="1rem" mb="1rem">
-				{month + " " + year}
-			</Typography>
-			<FolderList
-				folders={folders}
-				onSave={handleSave}
-				onDelete={handleDelete}
-				monthYearPeriod={monthYearPeriod!}
-			/>
+			<Container sx={{ marginBottom: "2rem" }}>
+				<Typography variant="h4" textAlign="center" mt="1rem" mb="1rem">
+					{month + " " + year}
+				</Typography>
+				<FolderList
+					folders={folders}
+					onSave={handleSave}
+					onDelete={handleDelete}
+					monthYearPeriod={monthYearPeriod!}
+					originalFolders={originalFolders}
+					existingFolders={existingFolders}
+				/>
 
-			<Dialog
-				open={openDialog}
-				onClose={handleDialogClose}
-				aria-labelledby="alert-dialog-title"
-				aria-describedby="alert-dialog-description"
-			>
-				<DialogTitle id="alert-dialog-title">
-					{"Duplicate Folder Name Found"}
-				</DialogTitle>
-				<DialogContent>
-					<DialogContentText id="alert-dialog-description">
-						Unable to save new folder. Please choose a different name.
-					</DialogContentText>
-				</DialogContent>
-				<DialogActions>
-					<Button onClick={handleDialogClose}>Okay</Button>
-				</DialogActions>
-			</Dialog>
+				<Dialog
+					open={openDialog}
+					onClose={handleDialogClose}
+					aria-labelledby="alert-dialog-title"
+					aria-describedby="alert-dialog-description"
+				>
+					<DialogTitle id="alert-dialog-title">
+						{"Duplicate Folder Name Found"}
+					</DialogTitle>
+					<DialogContent>
+						<DialogContentText id="alert-dialog-description">
+							Unable to save new folder. Please choose a different name.
+						</DialogContentText>
+					</DialogContent>
+					<DialogActions>
+						<Button onClick={handleDialogClose}>Okay</Button>
+					</DialogActions>
+				</Dialog>
+			</Container>
 		</>
 	);
 }

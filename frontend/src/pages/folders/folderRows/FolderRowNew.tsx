@@ -71,32 +71,12 @@ function FolderRowNew(props: FolderRowNewProps) {
 		event.target.select();
 	};
 
-	const style = {
-		"& label.Mui-focused": {
-			color: "rgba(0,0,0,0.23)",
-		},
-		"& .MuiOutlinedInput-root": {
-			"& fieldset": {
-				borderColor: "#2e7d32",
-				borderWidth: "medium",
-			},
-			"&.Mui-focused fieldset": {
-				borderColor: "#2e7d32",
-				borderWidth: "medium",
-			},
-			"&:hover fieldset": {
-				borderColor: "#2e7d32",
-			},
-		},
-	};
-
 	return (
 		<TableRow>
 			<TableCell align="center">
 				<TextField
 					error={errors.name ? true : false}
 					label={errors.name ? "error" : ""}
-					sx={errors.name ? null : style}
 					size="small"
 					value={folder.name}
 					name="name"
@@ -109,7 +89,6 @@ function FolderRowNew(props: FolderRowNewProps) {
 				<TextField
 					error={errors.amount ? true : false}
 					label={errors.amount ? "error" : ""}
-					sx={errors.amount ? null : style}
 					size="small"
 					value={folder.amount}
 					name="amount"
