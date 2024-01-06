@@ -102,6 +102,18 @@ function SubFolderSummary({ subFolders, monthPeriod }: SubFolderSummaryProps) {
 		return tagTotals;
 	}
 
+	function determineSubFolderTotal() {
+		let total = 0;
+
+		subFolders.forEach((sf) => {
+			if (sf.monthPeriod.toLowerCase() === monthPeriod?.toLowerCase()) {
+				total += sf.amount;
+			}
+		});
+
+		return total;
+	}
+
 	const handleTagButtonClick = (value: keyof typeof tagDescriptions) => {
 		const tagText = tagDescriptions[value];
 		let tagTexString = "";
@@ -144,6 +156,18 @@ function SubFolderSummary({ subFolders, monthPeriod }: SubFolderSummaryProps) {
 				gutterBottom
 			>
 				Subfolder Summary
+			</Typography>
+			<Typography mt={3} mb={3} variant="h6" align="center" gutterBottom>
+				{"Total: " + determineSubFolderTotal()}
+			</Typography>
+			<Typography
+				mt={1}
+				variant="h5"
+				align="center"
+				fontWeight={"bold"}
+				gutterBottom
+			>
+				Tags
 			</Typography>
 			<List>
 				<ListItem disablePadding>
