@@ -311,7 +311,7 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 								<TextField
 									name="bill"
 									type="number"
-									value={tagValues?.bill}
+									value={tagValues?.bill === 0 ? "" : tagValues.bill}
 									size="small"
 									onChange={handleTagsChange}
 								></TextField>
@@ -324,7 +324,7 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 									sx={{ mt: 1 }}
 									name="takeOut"
 									type="number"
-									value={tagValues?.takeOut}
+									value={tagValues?.takeOut === 0 ? "" : tagValues.takeOut}
 									size="small"
 									onChange={handleTagsChange}
 								></TextField>
@@ -337,7 +337,7 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 									sx={{ mt: 1 }}
 									name="leave"
 									type="number"
-									value={tagValues?.leave}
+									value={tagValues?.leave === 0 ? "" : tagValues.leave}
 									size="small"
 									onChange={handleTagsChange}
 								></TextField>
@@ -351,7 +351,7 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 									sx={{ mt: 1 }}
 									name="transfer"
 									type="number"
-									value={tagValues?.transfer}
+									value={tagValues?.transfer === 0 ? "" : tagValues.transfer}
 									size="small"
 									onChange={handleTagsChange}
 								></TextField>

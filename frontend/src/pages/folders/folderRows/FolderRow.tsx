@@ -69,7 +69,7 @@ function FolderRow(props: FolderRowProps) {
 				<TextField
 					type="number"
 					size="small"
-					value={folder.amount}
+					value={folder.amount === 0 ? "" : folder.amount}
 					name="amount"
 					onChange={handleChange}
 					onFocus={handleFocus}
