@@ -11,7 +11,6 @@ import { folderAPI } from "../../apis/FolderAPI";
 
 import { Folder } from "../../components/Folder";
 import FolderRow from "./folderRows/FolderRow";
-import FolderRowEdit from "./folderRows/FolderRowEdit";
 import FolderRowNew from "./folderRows/FolderRowNew";
 import FolderTotal from "./folderRows/FolderRowTotal";
 import GenericDialog from "../../utils/GenericDialog";
@@ -37,7 +36,6 @@ export default function FolderList({
 	originalFolders,
 	existingFolders,
 }: FolderListProps) {
-	const [folderBeingEdited, setFolderBeingEdited] = useState({});
 	const [hideNewFolder, setHideNewFolder] = useState(true);
 	const [dialogInformation, setDialogInformation] = useState<DialogInformation>(
 		{
@@ -50,12 +48,10 @@ export default function FolderList({
 		if (newFolder) {
 			setHideNewFolder(true);
 		}
-		setFolderBeingEdited({});
 	};
 
 	const handleNewFolder = (hideFolder: boolean) => {
 		setHideNewFolder(hideFolder);
-		setFolderBeingEdited({});
 	};
 
 	const handleSave = (folder: Folder, newFolder: boolean) => {
@@ -149,19 +145,11 @@ export default function FolderList({
 						)}
 						{folders.map((folder) => (
 							<React.Fragment key={folder.id}>
-								{folder === folderBeingEdited ? (
-									<FolderRowEdit
-										folder={folder}
-										onSave={handleSave}
-										onCancel={handleCancel}
-									/>
-								) : (
-									<FolderRow
-										folder={folder}
-										onDelete={onDelete}
-										onSave={onSave}
-									/>
-								)}
+								<FolderRow
+									folder={folder}
+									onDelete={onDelete}
+									onSave={onSave}
+								/>
 							</React.Fragment>
 						))}
 						<FolderTotal folders={folders} />

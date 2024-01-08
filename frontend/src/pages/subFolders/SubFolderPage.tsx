@@ -193,6 +193,7 @@ function SubFoldersPage() {
 				backgroundColor: "#f5f5f5",
 				minHeight: "100vh",
 				paddingTop: "1rem",
+				paddingBottom: "3rem",
 				marginTop: ".5rem",
 			}}
 			onClick={handleClickOnContainer}
