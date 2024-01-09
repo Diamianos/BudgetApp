@@ -31,7 +31,6 @@ function SubFolderRow({
 			}}
 		>
 			<TableCell sx={{ fontSize: "17px" }}>{subFolder.name}</TableCell>
-			<TableCell sx={{ fontSize: "17px" }}>{subFolder.amount}</TableCell>
 			<TableCell sx={{ fontSize: "17px" }}>{subFolder.balance}</TableCell>
 			<TableCell>
 				<CheckCircleIcon

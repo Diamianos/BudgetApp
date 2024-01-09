@@ -186,6 +186,9 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 			<Typography mt={1} variant="h4" align="center" gutterBottom>
 				{subFolder?.name}
 			</Typography>
+			<Typography mt={3} mb={3} variant="h6" align="center" gutterBottom>
+				{`Total: ${subFolder?.balance}/${subFolder?.amount}`}
+			</Typography>
 			<Container sx={{ marginBottom: "2rem" }}>
 				<Typography fontWeight="bold" variant="h6" align="center">
 					Tags

@@ -35,9 +35,6 @@ function SubFolderList({
 								Name
 							</TableCell>
 							<TableCell sx={{ fontSize: 17, fontWeight: "bold" }}>
-								Amount
-							</TableCell>
-							<TableCell sx={{ fontSize: 17, fontWeight: "bold" }}>
 								Balance
 							</TableCell>
 							<TableCell sx={{ fontSize: 17, fontWeight: "bold" }}>
