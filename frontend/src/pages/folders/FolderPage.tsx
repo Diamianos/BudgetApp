@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Folder } from "../../components/Folder";
 import FolderList from "./FolderList";
 import {
+	Box,
 	Button,
 	Container,
 	Dialog,
@@ -9,6 +10,7 @@ import {
 	DialogContent,
 	DialogContentText,
 	DialogTitle,
+	TextField,
 	Typography,
 } from "@mui/material";
 import { useParams } from "react-router-dom";
@@ -20,6 +22,7 @@ function FoldersPage() {
 	const [openDialog, setOpenDialog] = useState(false);
 	const [originalFolders, setOriginalFolders] = useState<Folder[]>([]);
 	const [existingFolders, setExistingFolders] = useState(false);
+	const [monthlyIncome, setMonthlyIncome] = useState(0);
 
 	// URI params from react router
 	const { monthYearPeriod } = useParams();
@@ -81,12 +84,64 @@ function FoldersPage() {
 		setOpenDialog(false);
 	};
 
+	const calculateFoldersTotal = (folders: Folder[]) => {
+		let values = folders.map((f) => {
+			return f.amount;
+		});
+		return values.reduce((partialSum, a) => partialSum + a, 0);
+	};
+
+	const determineRemainingColor = () => {
+		if (monthlyIncome - calculateFoldersTotal(folders) < 0) {
+			return "red";
+		} else if (monthlyIncome - calculateFoldersTotal(folders) === 0) {
+			return "green";
+		} else {
+			return undefined;
+		}
+	};
+
+	const determineMonthlyValueMessage = () => {
+		if (monthlyIncome - calculateFoldersTotal(folders) === 0) {
+			return "Budget Balanced!";
+		} else {
+			return `Remaining: ${monthlyIncome - calculateFoldersTotal(folders)}`;
+		}
+	};
+
 	return (
 		<>
 			<Container sx={{ marginBottom: "2rem" }}>
-				<Typography variant="h4" textAlign="center" mt="1rem" mb="1rem">
+				<Typography variant="h4" textAlign="center" mt="1rem" mb="3rem">
 					{month + " " + year}
 				</Typography>
+				<Box
+					display={"flex"}
+					alignItems={"center"}
+					justifyContent={"center"}
+					mt={"1rem"}
+					mb={"1rem"}
+				>
+					<Typography variant="h5" mr={"1rem"}>
+						Monthly Income
+					</Typography>
+					<TextField
+						size="small"
+						value={monthlyIncome === 0 ? "" : monthlyIncome}
+						type="number"
+						onChange={(e) => setMonthlyIncome(Number(e.target.value))}
+					></TextField>
+				</Box>
+				<Box
+					display={"flex"}
+					alignItems={"center"}
+					justifyContent={"center"}
+					mt={"2rem"}
+				>
+					<Typography variant="h5" color={determineRemainingColor}>
+						{determineMonthlyValueMessage()}
+					</Typography>
+				</Box>
 				<FolderList
 					folders={folders}
 					onSave={handleSave}

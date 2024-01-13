@@ -35,10 +35,6 @@ function FolderRow(props: FolderRowProps) {
 		onSave(updatedFolder, false);
 	};
 
-	const handleFocus = (event: any) => {
-		event.target.select();
-	};
-
 	const style = {
 		"& label.Mui-focused": {
 			color: "rgba(0,0,0,0.23)",
@@ -62,7 +58,6 @@ function FolderRow(props: FolderRowProps) {
 					value={folder.name}
 					name="name"
 					onChange={handleChange}
-					onFocus={handleFocus}
 				/>
 			</TableCell>
 			<TableCell align="center">
@@ -72,7 +67,6 @@ function FolderRow(props: FolderRowProps) {
 					value={folder.amount === 0 ? "" : folder.amount}
 					name="amount"
 					onChange={handleChange}
-					onFocus={handleFocus}
 				/>
 			</TableCell>
 			<TableCell align="center">

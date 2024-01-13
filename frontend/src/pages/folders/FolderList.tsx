@@ -12,7 +12,6 @@ import { folderAPI } from "../../apis/FolderAPI";
 import { Folder } from "../../components/Folder";
 import FolderRow from "./folderRows/FolderRow";
 import FolderRowNew from "./folderRows/FolderRowNew";
-import FolderTotal from "./folderRows/FolderRowTotal";
 import GenericDialog from "../../utils/GenericDialog";
 import { DialogInformation } from "../../interfaces/DialogInformation";
 
@@ -152,7 +151,6 @@ export default function FolderList({
 								/>
 							</React.Fragment>
 						))}
-						<FolderTotal folders={folders} />
 					</TableBody>
 				</Table>
 				<div className="create-subfolders-div">
