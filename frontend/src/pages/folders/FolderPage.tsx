@@ -109,12 +109,36 @@ function FoldersPage() {
 		}
 	};
 
+	const handlePreviousMonthFolders = async () => {
+		try {
+			// Getting the folders from the previous month folders
+			var customParseFormat = require("dayjs/plugin/customParseFormat");
+			dayjs.extend(customParseFormat);
+			const dateObject = dayjs(monthYearPeriod, "YYYY-MM-DD");
+			const previousMonthDate = dateObject.subtract(1, "month");
+			month = previousMonthDate.format("MM");
+			year = previousMonthDate.format("YYYY");
+			const previousDateString = `${year}-${month}-01`;
+			console.log(previousDateString);
+
+			const data = await folderAPI.getByMonthYearPeriod(previousDateString);
+			if (data.length > 0) {
+				setFolders(data);
+			}
+		} catch (e) {
+			if (e instanceof Error) {
+				console.log(e.message);
+			}
+		}
+	};
+
 	return (
 		<>
 			<Container sx={{ marginBottom: "2rem" }}>
 				<Typography variant="h4" textAlign="center" mt="1rem" mb="3rem">
 					{month + " " + year}
 				</Typography>
+
 				<Box
 					display={"flex"}
 					alignItems={"center"}
@@ -132,16 +156,19 @@ function FoldersPage() {
 						onChange={(e) => setMonthlyIncome(Number(e.target.value))}
 					></TextField>
 				</Box>
-				<Box
-					display={"flex"}
-					alignItems={"center"}
-					justifyContent={"center"}
-					mt={"2rem"}
-				>
-					<Typography variant="h5" color={determineRemainingColor}>
-						{determineMonthlyValueMessage()}
-					</Typography>
-				</Box>
+				{monthlyIncome === 0 ? null : (
+					<Box
+						display={"flex"}
+						alignItems={"center"}
+						justifyContent={"center"}
+						mt={"2rem"}
+					>
+						<Typography variant="h5" color={determineRemainingColor}>
+							{determineMonthlyValueMessage()}
+						</Typography>
+					</Box>
+				)}
+
 				<FolderList
 					folders={folders}
 					onSave={handleSave}
@@ -150,6 +177,11 @@ function FoldersPage() {
 					originalFolders={originalFolders}
 					existingFolders={existingFolders}
 				/>
+				<Box display={"flex"} justifyContent={"right"}>
+					<Button variant="contained" onClick={handlePreviousMonthFolders}>
+						Previous Month Folders
+					</Button>
+				</Box>
 
 				<Dialog
 					open={openDialog}
