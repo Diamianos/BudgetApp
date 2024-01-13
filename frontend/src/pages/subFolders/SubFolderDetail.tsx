@@ -47,6 +47,7 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 	const [subFolder, setSubFolder] = useState<SubFolder | undefined>();
 	const [modifyTags, setModifyTags] = useState(false);
 	const [showTagModifyButton, setShowTagModifyButton] = useState(false);
+	const [stateUpdate, setStateUpdate] = useState(0);
 	const [tagValues, setTagValues] = useState<Tags>(
 		subFolder ? subFolder.tags : new Tags()
 	);
@@ -59,6 +60,12 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 		setSubFolder(selectedSubFolder);
 		if (selectedSubFolder) setTagValues(selectedSubFolder.tags);
 	}, [selectedSubFolder]);
+
+	useEffect(() => {
+		if (subFolder) {
+			handleSave();
+		}
+	}, [stateUpdate]);
 
 	function calculateTagTotal(tags: Tags | undefined) {
 		let tagsTotal = 0;
@@ -162,6 +169,22 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 		});
 	};
 
+	const handleAllocation = (name: string) => {
+		let newTags: Tags = new Tags();
+		const change = {
+			[name]: subFolder?.amount,
+		};
+		newTags = { ...newTags, ...change };
+		setTagValues(newTags);
+		setStateUpdate(stateUpdate + 1);
+	};
+
+	const handleKeyDown = (event: any) => {
+		if (event.key === "Enter") {
+			setStateUpdate(stateUpdate + 1);
+		}
+	};
+
 	const modalStyle = {
 		position: "absolute" as "absolute",
 		top: "50%",
@@ -197,7 +220,11 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 					<Grid item xs={6}>
 						<List>
 							<ListItem disablePadding>
-								<ListItemButton>
+								<ListItemButton
+									onClick={() => {
+										handleAllocation("bill");
+									}}
+								>
 									<ListItemIcon>
 										<AccountBalanceIcon />
 									</ListItemIcon>
@@ -205,7 +232,11 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 								</ListItemButton>
 							</ListItem>
 							<ListItem disablePadding>
-								<ListItemButton>
+								<ListItemButton
+									onClick={() => {
+										handleAllocation("takeOut");
+									}}
+								>
 									<ListItemIcon>
 										<AttachMoneyIcon />
 									</ListItemIcon>
@@ -215,7 +246,11 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 								</ListItemButton>
 							</ListItem>
 							<ListItem disablePadding>
-								<ListItemButton>
+								<ListItemButton
+									onClick={() => {
+										handleAllocation("leave");
+									}}
+								>
 									<ListItemIcon>
 										<DraftsIcon />
 									</ListItemIcon>
@@ -223,7 +258,11 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 								</ListItemButton>
 							</ListItem>
 							<ListItem disablePadding>
-								<ListItemButton>
+								<ListItemButton
+									onClick={() => {
+										handleAllocation("transfer");
+									}}
+								>
 									<ListItemIcon>
 										<CurrencyExchangeIcon />
 									</ListItemIcon>
@@ -317,6 +356,7 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 									value={tagValues?.bill === 0 ? "" : tagValues.bill}
 									size="small"
 									onChange={handleTagsChange}
+									onKeyDown={handleKeyDown}
 								></TextField>
 							</Grid>
 							<Grid xs={6} item={true} display="flex" alignItems="center">
@@ -330,6 +370,7 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 									value={tagValues?.takeOut === 0 ? "" : tagValues.takeOut}
 									size="small"
 									onChange={handleTagsChange}
+									onKeyDown={handleKeyDown}
 								></TextField>
 							</Grid>
 							<Grid xs={6} item={true} display="flex" alignItems="center">
@@ -343,6 +384,7 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 									value={tagValues?.leave === 0 ? "" : tagValues.leave}
 									size="small"
 									onChange={handleTagsChange}
+									onKeyDown={handleKeyDown}
 								></TextField>
 							</Grid>
 
@@ -357,6 +399,7 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 									value={tagValues?.transfer === 0 ? "" : tagValues.transfer}
 									size="small"
 									onChange={handleTagsChange}
+									onKeyDown={handleKeyDown}
 								></TextField>
 							</Grid>
 						</Grid>
