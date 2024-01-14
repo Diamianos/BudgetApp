@@ -123,6 +123,9 @@ function FoldersPage() {
 
 			const data = await folderAPI.getByMonthYearPeriod(previousDateString);
 			if (data.length > 0) {
+				data.forEach((f) => {
+					f.monthYearPeriod = monthYearPeriod ? monthYearPeriod : "";
+				});
 				setFolders(data);
 			}
 		} catch (e) {

@@ -212,7 +212,7 @@ function CreateSubFoldersPage() {
 							variant="contained"
 							onClick={handleSplitFolders}
 							color="success"
-							sx={{ marginTop: "15px" }}
+							sx={{ marginTop: "15px", marginBottom: "2rem" }}
 						>
 							Split Folders
 						</Button>
