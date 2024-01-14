@@ -11,8 +11,8 @@ function FolderRowNew(props: FolderRowNewProps) {
 	const { onSave, onCancel } = props;
 	const [folder, setFolder] = useState(new Folder());
 	const [errors, setErrors] = useState({
-		name: false,
-		amount: false,
+		name: true,
+		amount: true,
 	});
 
 	function validate(folder: Folder) {
@@ -90,7 +90,7 @@ function FolderRowNew(props: FolderRowNewProps) {
 					error={errors.amount ? true : false}
 					label={errors.amount ? "error" : ""}
 					size="small"
-					value={folder.amount}
+					value={folder.amount === 0 ? "" : folder.amount}
 					name="amount"
 					type="number"
 					onChange={handleChange}

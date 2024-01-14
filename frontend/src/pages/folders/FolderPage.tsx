@@ -93,11 +93,11 @@ function FoldersPage() {
 
 	const determineRemainingColor = () => {
 		if (monthlyIncome - calculateFoldersTotal(folders) < 0) {
-			return "red";
+			return "Tomato";
 		} else if (monthlyIncome - calculateFoldersTotal(folders) === 0) {
-			return "green";
+			return "MediumSeaGreen";
 		} else {
-			return undefined;
+			return "DodgerBlue";
 		}
 	};
 
