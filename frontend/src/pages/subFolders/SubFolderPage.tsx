@@ -78,7 +78,6 @@ function SubFoldersPage() {
 	const handleSubFolderUpdate = async (subFolder: SubFolder) => {
 		let updatedSubFolders: SubFolder[] = [];
 		const updatedSubFolder: SubFolder = await subFolderAPI.patch(subFolder);
-		console.log(updatedSubFolder);
 		updatedSubFolders = subFolders.map((sf: SubFolder) => {
 			return sf.id === updatedSubFolder.id ? updatedSubFolder : sf;
 		});
@@ -121,12 +120,10 @@ function SubFoldersPage() {
 		let newSelectedSubFolder: SubFolder = new SubFolder({
 			...selectedSubFolder,
 		});
-		console.log(expense);
 		const newExpenses = newSelectedSubFolder.expenses?.filter((e) => {
 			return e.id !== expense.id;
 		});
 		newSelectedSubFolder.expenses = newExpenses;
-		console.log(newSelectedSubFolder);
 		newSelectedSubFolder.balance =
 			newSelectedSubFolder.balance + expense.amount;
 		setSelectedSubFolder(newSelectedSubFolder);

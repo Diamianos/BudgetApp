@@ -5,7 +5,13 @@ import {
 	Box,
 	Button,
 	Container,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogContentText,
+	DialogTitle,
 	Grid,
+	IconButton,
 	List,
 	ListItem,
 	ListItemButton,
@@ -20,6 +26,7 @@ import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import CurrencyExchangeIcon from "@mui/icons-material/CurrencyExchange";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import EditIcon from "@mui/icons-material/Edit";
 import ExpenseList from "../expenses/ExpenseList";
 import { Expense } from "../../components/Expense";
 import { ExpenseProcess } from "../../components/ExpenseProcess";
@@ -55,10 +62,15 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 		showError: false,
 		message: "",
 	});
+	const [dialogOpen, setDialogOpen] = useState(false);
+	const [subFolderAmount, setSubFolderAmount] = useState(subFolder?.amount);
 
 	useEffect(() => {
 		setSubFolder(selectedSubFolder);
-		if (selectedSubFolder) setTagValues(selectedSubFolder.tags);
+		if (selectedSubFolder) {
+			setTagValues(selectedSubFolder.tags);
+			setSubFolderAmount(selectedSubFolder.amount);
+		}
 	}, [selectedSubFolder]);
 
 	useEffect(() => {
@@ -78,9 +90,8 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 		return tagsTotal;
 	}
 
-	function verifyTagAmounts(sbuFolder: SubFolder | undefined) {
+	function verifyTagAmounts() {
 		const tagTotal = calculateTagTotal(tagValues);
-		console.log(`Tag Total: ${tagTotal}`);
 		if (subFolder) {
 			if (tagTotal > subFolder.amount) return false;
 			else return true;
@@ -93,7 +104,7 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 
 	const handleSave = () => {
 		// make sure tag values are not greater than sub folder amount
-		if (verifyTagAmounts(subFolder)) {
+		if (verifyTagAmounts()) {
 			// updating the subfolder tag values
 			const tagChange = { ["tags"]: tagValues };
 			let updatedSubFolder: SubFolder = new SubFolder({
@@ -130,12 +141,10 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 			[name]: updatedValue,
 		};
 
-		console.log(subFolder);
 		let updatedSubFolder: SubFolder = new SubFolder({
 			...subFolder,
 			...change,
 		});
-		console.log(updatedSubFolder);
 		setSubFolder(updatedSubFolder);
 	};
 
@@ -179,9 +188,34 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 		setStateUpdate(stateUpdate + 1);
 	};
 
-	const handleKeyDown = (event: any) => {
+	const handleKeyDownModal = (event: any) => {
 		if (event.key === "Enter") {
 			setStateUpdate(stateUpdate + 1);
+		}
+	};
+
+	const handleEditButtonClick = () => {
+		setDialogOpen(true);
+	};
+
+	const handleDialogClose = () => {
+		setDialogOpen(false);
+	};
+
+	const handleDialogSubmit = () => {
+		if (subFolderAmount && subFolder && subFolderAmount > 0) {
+			if (subFolder.amount < subFolderAmount) {
+				// if the original amount is less than the new amount, we know the balance also needs to increase
+				subFolder.balance =
+					subFolder.balance + (subFolderAmount - subFolder.amount);
+			} else if (subFolder.amount > subFolderAmount) {
+				// if the original amount is greater than the new amount, we know the balance needs to decrease
+				subFolder.balance =
+					subFolder.balance - (subFolder.amount - subFolderAmount);
+			}
+			subFolder.amount = subFolderAmount;
+			setStateUpdate(stateUpdate + 1);
+			setDialogOpen(false);
 		}
 	};
 
@@ -209,7 +243,12 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 			<Typography mt={1} variant="h4" align="center" gutterBottom>
 				{subFolder?.name}
 			</Typography>
-			<Typography mt={3} mb={3} variant="h6" align="center" gutterBottom>
+			<Box display={"flex"} justifyContent={"right"}>
+				<IconButton onClick={() => handleEditButtonClick()}>
+					<EditIcon />
+				</IconButton>
+			</Box>
+			<Typography mb={3} variant="h6" align="center" gutterBottom>
 				{`Total: ${subFolder?.balance}/${subFolder?.amount}`}
 			</Typography>
 			<Container sx={{ marginBottom: "2rem" }}>
@@ -323,6 +362,34 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 				></ExpenseList>
 			</Container>
 
+			{/* Dialog for editing subFolder amount */}
+			<Dialog open={dialogOpen} onClose={handleDialogClose}>
+				<DialogTitle>Sub Folder Update</DialogTitle>
+				<DialogContent>
+					<DialogContentText>
+						Enter the new amount for this folder
+					</DialogContentText>
+					<TextField
+						autoFocus
+						required
+						margin="dense"
+						id="amount"
+						name="amount"
+						value={subFolderAmount === 0 ? "" : subFolderAmount}
+						type="number"
+						fullWidth
+						variant="standard"
+						onChange={(e) => setSubFolderAmount(Number(e.target.value))}
+					/>
+				</DialogContent>
+				<DialogActions>
+					<Button onClick={handleDialogClose}>Cancel</Button>
+					<Button type="submit" onClick={handleDialogSubmit}>
+						Submit
+					</Button>
+				</DialogActions>
+			</Dialog>
+
 			{/* Modal for updating the sub folder tags */}
 			<Modal
 				open={modifyTags}
@@ -356,7 +423,7 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 									value={tagValues?.bill === 0 ? "" : tagValues.bill}
 									size="small"
 									onChange={handleTagsChange}
-									onKeyDown={handleKeyDown}
+									onKeyDown={handleKeyDownModal}
 								></TextField>
 							</Grid>
 							<Grid xs={6} item={true} display="flex" alignItems="center">
@@ -370,7 +437,7 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 									value={tagValues?.takeOut === 0 ? "" : tagValues.takeOut}
 									size="small"
 									onChange={handleTagsChange}
-									onKeyDown={handleKeyDown}
+									onKeyDown={handleKeyDownModal}
 								></TextField>
 							</Grid>
 							<Grid xs={6} item={true} display="flex" alignItems="center">
@@ -384,7 +451,7 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 									value={tagValues?.leave === 0 ? "" : tagValues.leave}
 									size="small"
 									onChange={handleTagsChange}
-									onKeyDown={handleKeyDown}
+									onKeyDown={handleKeyDownModal}
 								></TextField>
 							</Grid>
 
@@ -399,7 +466,7 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 									value={tagValues?.transfer === 0 ? "" : tagValues.transfer}
 									size="small"
 									onChange={handleTagsChange}
-									onKeyDown={handleKeyDown}
+									onKeyDown={handleKeyDownModal}
 								></TextField>
 							</Grid>
 						</Grid>
