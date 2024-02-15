@@ -54,7 +54,8 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 	const [subFolder, setSubFolder] = useState<SubFolder | undefined>();
 	const [modifyTags, setModifyTags] = useState(false);
 	const [showTagModifyButton, setShowTagModifyButton] = useState(false);
-	const [stateUpdate, setStateUpdate] = useState(0);
+	const [stateTagUpdate, setStateTagUpdate] = useState(0);
+	const [stateFolderAmountUpdate, setStateFolderAmountUpdate] = useState(0);
 	const [tagValues, setTagValues] = useState<Tags>(
 		subFolder ? subFolder.tags : new Tags()
 	);
@@ -77,7 +78,13 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 		if (subFolder) {
 			handleSave();
 		}
-	}, [stateUpdate]);
+	}, [stateTagUpdate]);
+
+	useEffect(() => {
+		if (subFolder) {
+			handleDialogSubmit();
+		}
+	}, [stateFolderAmountUpdate]);
 
 	function calculateTagTotal(tags: Tags | undefined) {
 		let tagsTotal = 0;
@@ -185,12 +192,12 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 		};
 		newTags = { ...newTags, ...change };
 		setTagValues(newTags);
-		setStateUpdate(stateUpdate + 1);
+		setStateTagUpdate(stateTagUpdate + 1);
 	};
 
 	const handleKeyDownModal = (event: any) => {
 		if (event.key === "Enter") {
-			setStateUpdate(stateUpdate + 1);
+			setStateTagUpdate(stateTagUpdate + 1);
 		}
 	};
 
@@ -214,7 +221,6 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 					subFolder.balance - (subFolder.amount - subFolderAmount);
 			}
 			subFolder.amount = subFolderAmount;
-			setStateUpdate(stateUpdate + 1);
 			setDialogOpen(false);
 		}
 	};

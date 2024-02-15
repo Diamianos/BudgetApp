@@ -140,6 +140,35 @@ function SubFolderSummary({ subFolders, monthPeriod }: SubFolderSummaryProps) {
 		fontWeight: "bold",
 	};
 
+	const generateTagDescriptions = (key: string) => {
+		let generatedString = "";
+		switch (key) {
+			case "bill":
+				tagDescriptions.bill.forEach((v) => {
+					generatedString += v + ", ";
+				});
+				break;
+			case "takeOut":
+				tagDescriptions.takeOut.forEach((v) => {
+					generatedString += v + ", ";
+				});
+				break;
+			case "leave":
+				tagDescriptions.leave.forEach((v) => {
+					generatedString += v + ", ";
+				});
+				break;
+			case "transfer":
+				tagDescriptions.transfer.forEach((v) => {
+					generatedString += v + ", ";
+				});
+				break;
+			default:
+				break;
+		}
+		return generatedString.substring(0, generatedString.length - 2);
+	};
+
 	return (
 		<Container
 			sx={{
@@ -182,9 +211,7 @@ function SubFolderSummary({ subFolders, monthPeriod }: SubFolderSummaryProps) {
 					</ListItemButton>
 				</ListItem>
 				<ListItem sx={{ marginLeft: "3.5rem" }}>
-					{tagDescriptions.bill.map((v) => {
-						return v + " ";
-					})}
+					{generateTagDescriptions("bill")}
 				</ListItem>
 				<ListItem disablePadding>
 					<ListItemButton onClick={() => handleTagButtonClick("takeOut")}>
@@ -198,9 +225,7 @@ function SubFolderSummary({ subFolders, monthPeriod }: SubFolderSummaryProps) {
 					</ListItemButton>
 				</ListItem>
 				<ListItem sx={{ marginLeft: "3.5rem" }}>
-					{tagDescriptions.takeOut.map((v) => {
-						return v + " ";
-					})}
+					{generateTagDescriptions("takeOut")}
 				</ListItem>
 				<ListItem disablePadding>
 					<ListItemButton onClick={() => handleTagButtonClick("leave")}>
@@ -214,9 +239,7 @@ function SubFolderSummary({ subFolders, monthPeriod }: SubFolderSummaryProps) {
 					</ListItemButton>
 				</ListItem>
 				<ListItem sx={{ marginLeft: "3.5rem" }}>
-					{tagDescriptions.leave.map((v) => {
-						return v + " ";
-					})}
+					{generateTagDescriptions("leave")}
 				</ListItem>
 				<ListItem disablePadding>
 					<ListItemButton onClick={() => handleTagButtonClick("transfer")}>
@@ -230,9 +253,7 @@ function SubFolderSummary({ subFolders, monthPeriod }: SubFolderSummaryProps) {
 					</ListItemButton>
 				</ListItem>
 				<ListItem sx={{ marginLeft: "3.5rem" }}>
-					{tagDescriptions.transfer.map((v) => {
-						return v + " ";
-					})}
+					{generateTagDescriptions("transfer")}
 				</ListItem>
 			</List>
 
