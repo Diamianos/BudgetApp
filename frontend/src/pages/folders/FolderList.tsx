@@ -93,11 +93,17 @@ export default function FolderList({
 	};
 
 	function addFoldersToDatabaseAndRedirect() {
+		let folderTotal = 0;
 		folders.forEach((f) => {
 			// Removing id so it doesn't interfere in the database
 			f.id = undefined;
+			folderTotal += f.amount;
+			console.log(JSON.stringify(f));
 			folderAPI.post(f);
 		});
+		console.log(
+			`addFoldersToDatabaseAndRedirect() - folder total: ${folderTotal}`
+		);
 		window.location.href = `/create_subfolders/${monthYearPeriod}`;
 	}
 

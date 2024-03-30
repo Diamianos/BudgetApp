@@ -26,9 +26,19 @@ function FolderRow(props: FolderRowProps) {
 		if (type === "number") {
 			updatedValue = Number(updatedValue);
 		}
-		const change = {
-			[name]: updatedValue,
-		};
+
+		let change = {};
+
+		if (name === "amount") {
+			change = {
+				[name]: updatedValue,
+				["balance"]: updatedValue,
+			};
+		} else {
+			change = {
+				[name]: updatedValue,
+			};
+		}
 
 		let updatedFolder: Folder = new Folder({ ...folder, ...change });
 		setFolder(updatedFolder);

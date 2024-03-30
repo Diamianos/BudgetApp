@@ -7,6 +7,8 @@ import java.net.URISyntaxException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/folder")
 public class FolderController {
+
+  Logger logger = LoggerFactory.getLogger(FolderController.class);
 
   private final FolderService folderService;
 
@@ -33,8 +37,7 @@ public class FolderController {
    */
   @RequestMapping(method = RequestMethod.GET, produces = { "application/json" })
   public List<Folder> getAllFolders() {
-    System.out.println("\n\n\n\n");
-    System.out.println("getAll");
+    logger.info("getAllFolders() - Retrieving all folders.");
     return folderService.findAllFolders();
   }
 
