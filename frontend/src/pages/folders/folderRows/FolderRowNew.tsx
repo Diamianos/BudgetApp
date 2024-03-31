@@ -48,9 +48,19 @@ function FolderRowNew(props: FolderRowNewProps) {
 		if (type === "number") {
 			updatedValue = Number(updatedValue);
 		}
-		const change = {
-			[name]: updatedValue,
-		};
+
+		let change;
+		if (name === "amount") {
+			change = {
+				[name]: updatedValue,
+				["balance"]: updatedValue,
+			};
+		} else {
+			change = {
+				[name]: updatedValue,
+			};
+		}
+
 		// need to do functional updated b/c
 		// the new project state is based on the previous project state
 		// so we can keep the project properties that aren't being edited like project.id

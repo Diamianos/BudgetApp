@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/folder")
 public class FolderController {
 
-  Logger logger = LoggerFactory.getLogger(FolderController.class);
+  Logger log = LoggerFactory.getLogger(FolderController.class);
 
   private final FolderService folderService;
 
@@ -37,7 +37,7 @@ public class FolderController {
    */
   @RequestMapping(method = RequestMethod.GET, produces = { "application/json" })
   public List<Folder> getAllFolders() {
-    logger.info("getAllFolders() - Retrieving all folders.");
+    log.info("getAllFolders() - Retrieving all folders.");
     return folderService.findAllFolders();
   }
 
@@ -52,6 +52,7 @@ public class FolderController {
     produces = { "application/json" }
   )
   public Optional<Folder> getFolderById(@PathVariable Integer folderId) {
+    log.info("getFolderById() - Retrieving folder with ID [{}]", folderId);
     return folderService.findFolderById(folderId);
   }
 
@@ -67,11 +68,38 @@ public class FolderController {
   )
   public ResponseEntity<Folder> createFolder(@RequestBody Folder folder)
     throws URISyntaxException {
+    log.info("createFolder() - Saving folder: {}", folder);
     Folder savedFolder = folderService.saveFolder(folder);
+    log.info(
+      "createFolder() - Returning newly created folder: {}",
+      savedFolder
+    );
 
     return ResponseEntity
       .created(new URI("/folder/" + savedFolder.getId()))
       .body(savedFolder);
+  }
+
+  /***
+   *
+   * @param folders - List of folders to be saved to the database
+   * @return - 200 response
+   */
+  @RequestMapping(
+    method = RequestMethod.POST,
+    path = "/folders",
+    produces = { "application/json" },
+    consumes = { "application/json" }
+  )
+  public ResponseEntity<String> createFolders(
+    @RequestBody List<Folder> folders
+  ) {
+    log.info(
+      "createFolders() - Added list of folders to database: {}",
+      folders
+    );
+    folderService.saveFolders(folders);
+    return ResponseEntity.ok("Folders successfully created");
   }
 
   /**
@@ -91,6 +119,12 @@ public class FolderController {
     @PathVariable Integer id,
     @RequestBody Folder folder
   ) throws Exception {
+    log.info(
+      "updateFolder() - Updating folder with ID [{}] with folder: {}",
+      id,
+      folder
+    );
+
     Optional<Folder> currentFolder = folderService.findFolderById(id);
     currentFolder.ifPresent(f -> {
       f.setName(folder.getName());
@@ -107,6 +141,7 @@ public class FolderController {
    */
   @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
   public ResponseEntity<String> deleteFolder(@PathVariable Integer id) {
+    log.info("deleteFolder() - Removing folder with ID [{}]", id);
     folderService.deleteFolder(id);
     return ResponseEntity.ok().build();
   }

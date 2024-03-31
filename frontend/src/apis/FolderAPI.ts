@@ -55,6 +55,22 @@ const folderAPI = {
 				);
 			});
 	},
+	postFolders(folders: Folder[]) {
+		return fetch("/folder/folders", {
+			method: "POST",
+			body: JSON.stringify(folders),
+			headers: {
+				"Content-type": "application/json",
+			},
+		})
+			.then(apiUtils.checkStatus)
+			.catch((error: TypeError) => {
+				console.log("log client error " + error);
+				throw new Error(
+					"There was an error adding the folder. Please try again."
+				);
+			});
+	},
 
 	put(folder: Folder) {
 		return fetch(`/folder/${folder.id}`, {

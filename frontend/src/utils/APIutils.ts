@@ -3,6 +3,9 @@ const apiUtils = {
 		if (response.ok) {
 			return response;
 		} else {
+			console.log(
+				`checkStatus() - None 200 response ${JSON.stringify(response)}`
+			);
 			return response.text().then((text: any | undefined) => {
 				throw new Error(text);
 			});

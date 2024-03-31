@@ -1,14 +1,19 @@
 package com.johnsavard.budgetapp.service;
 
+import com.johnsavard.budgetapp.controller.FolderController;
 import com.johnsavard.budgetapp.dao.FolderRepository;
 import com.johnsavard.budgetapp.entity.Folder;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
 public class FolderService {
+
+  Logger log = LoggerFactory.getLogger(FolderService.class);
 
   private FolderRepository folderRepository;
 
@@ -39,6 +44,16 @@ public class FolderService {
       folder.setBalance(folder.getAmount());
     }
     return folderRepository.save(folder);
+  }
+
+  public void saveFolders(List<Folder> folders) {
+    for (Folder f : folders) {
+      if (f.getId() == 0) {
+        f.setBalance(f.getAmount());
+      }
+      log.info("saveFolders() - Sending folder to database [{}]", f);
+      folderRepository.save(f);
+    }
   }
 
   public void deleteFolder(int folderId) {
