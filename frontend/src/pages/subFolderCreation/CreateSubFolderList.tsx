@@ -232,68 +232,70 @@ function CreateSubFolderList({
 				flexGrow: "1",
 			}}
 		>
-			{folders.map((folder, index) => (
-				<Draggable
-					key={folder.draggable_id}
-					draggableId={folder.draggable_id.toString()}
-					index={index}
-				>
-					{(provided, snapshot) => (
-						<Box
-							{...provided.draggableProps}
-							ref={provided.innerRef}
-							sx={{
-								display: "flex",
-								border: "1px solid grey",
-								borderRadius: "15px",
-								padding: "8px",
-								marginBottom: "8px",
-								backgroundColor: snapshot.isDragging ? "lightblue" : "white",
-							}}
-						>
-							<Box {...provided.dragHandleProps} sx={{ marginRight: "15px" }}>
-								{!determineFolderIsSplitFolder(
-									splitFolderHistory,
-									folder.name
-								) && <DragIndicatorIcon></DragIndicatorIcon>}
-							</Box>
-							<Typography sx={{ marginRight: "10px" }} variant="body1">
-								{folder.name}
-							</Typography>
-							<Typography variant="body1">{folder.amount}</Typography>
-							{column.title === "Distribute" ? (
-								<Button
-									variant="contained"
-									size="small"
-									sx={{ marginLeft: "auto" }}
-									onClick={() => {
-										handleSplitButton(folder);
-									}}
-								>
-									Split
-								</Button>
-							) : (
-								determineFolderIsSplitFolder(
-									splitFolderHistory,
-									folder.name
-								) && (
+			{folders
+				.sort((a, b) => a.name.localeCompare(b.name)) // Sorting alphabetically by name
+				.map((folder, index) => (
+					<Draggable
+						key={folder.draggable_id}
+						draggableId={folder.draggable_id.toString()}
+						index={index}
+					>
+						{(provided, snapshot) => (
+							<Box
+								{...provided.draggableProps}
+								ref={provided.innerRef}
+								sx={{
+									display: "flex",
+									border: "1px solid grey",
+									borderRadius: "15px",
+									padding: "8px",
+									marginBottom: "8px",
+									backgroundColor: snapshot.isDragging ? "lightblue" : "white",
+								}}
+							>
+								<Box {...provided.dragHandleProps} sx={{ marginRight: "15px" }}>
+									{!determineFolderIsSplitFolder(
+										splitFolderHistory,
+										folder.name
+									) && <DragIndicatorIcon></DragIndicatorIcon>}
+								</Box>
+								<Typography sx={{ marginRight: "10px" }} variant="body1">
+									{folder.name}
+								</Typography>
+								<Typography variant="body1">{folder.amount}</Typography>
+								{column.title === "Distribute" ? (
 									<Button
 										variant="contained"
-										color="secondary"
 										size="small"
 										sx={{ marginLeft: "auto" }}
 										onClick={() => {
-											handleSplitEditButton(folder);
+											handleSplitButton(folder);
 										}}
 									>
-										Edit Split
+										Split
 									</Button>
-								)
-							)}
-						</Box>
-					)}
-				</Draggable>
-			))}
+								) : (
+									determineFolderIsSplitFolder(
+										splitFolderHistory,
+										folder.name
+									) && (
+										<Button
+											variant="contained"
+											color="secondary"
+											size="small"
+											sx={{ marginLeft: "auto" }}
+											onClick={() => {
+												handleSplitEditButton(folder);
+											}}
+										>
+											Edit Split
+										</Button>
+									)
+								)}
+							</Box>
+						)}
+					</Draggable>
+				))}
 			{provided.placeholder}
 			<Dialog disableRestoreFocus={true} open={open} onClose={handleClose}>
 				<DialogTitle sx={{ textAlign: "center" }}>Split Folder</DialogTitle>
