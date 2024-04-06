@@ -10,10 +10,14 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
 public class SubFolderService {
+
+  Logger log = LoggerFactory.getLogger(SubFolderService.class);
 
   private SubFolderRepository subFolderRepository;
   private ExpenseService expenseService;
@@ -101,6 +105,12 @@ public class SubFolderService {
     SubFolder existingSubfolder,
     SubFolder patch
   ) {
+    log.debug(
+      "handlePatchingSubfolder() - updating existing subFolder [{}] with patch [{}]",
+      existingSubfolder,
+      patch
+    );
+
     // Update fields that are needed
     if (patch.getName() != null) {
       existingSubfolder.setName(patch.getName());
@@ -123,6 +133,10 @@ public class SubFolderService {
     }
 
     // Save the updated subFolder
+    log.debug(
+      "handlePatchingSubfolder() - updating existing folder to database [{}]",
+      existingSubfolder
+    );
     SubFolder updatedSubFolder = subFolderRepository.save(existingSubfolder);
     return updatedSubFolder;
   }

@@ -9,6 +9,8 @@ import java.net.URISyntaxException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,8 @@ import org.springframework.web.server.ResponseStatusException;
 @RestController
 @RequestMapping("/subfolder")
 public class SubFolderController {
+
+  Logger log = LoggerFactory.getLogger(SubFolderController.class);
 
   private final SubFolderService subFolderService;
   private final FolderService folderService;
@@ -104,13 +108,30 @@ public class SubFolderController {
     @PathVariable("subFolderId") int subFolderId,
     @RequestBody String json
   ) throws IOException {
+    log.info(
+      "patchSubfolder() - request with subFolderId [{}] and json of {}",
+      subFolderId,
+      json
+    );
+
     Optional<SubFolder> existingSubfolder = subFolderService.findSubFolderById(
       subFolderId
     );
+
     if (existingSubfolder.isPresent()) {
+      log.debug(
+        "patchSubfolder() - found existing subfolder {}",
+        existingSubfolder
+      );
+
       SubFolder updatedSubFolder = subFolderService.patchSubFolder(
         existingSubfolder.get(),
         json
+      );
+
+      log.debug(
+        "patchSubfolder() - returning updated sub folder [{}]",
+        updatedSubFolder
       );
       return new ResponseEntity<>(updatedSubFolder, HttpStatus.OK);
     } else {

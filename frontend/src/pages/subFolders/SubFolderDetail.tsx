@@ -31,6 +31,7 @@ import ExpenseList from "../expenses/ExpenseList";
 import { Expense } from "../../components/Expense";
 import { ExpenseProcess } from "../../components/ExpenseProcess";
 import { Tags } from "../../components/Tags";
+import { subFolderAPI } from "../../apis/SubFolderAPI";
 
 interface SubFolderDetailProps {
 	selectedSubFolder: SubFolder | undefined;
@@ -209,7 +210,7 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 		setDialogOpen(false);
 	};
 
-	const handleDialogSubmit = () => {
+	const handleDialogSubmit = async () => {
 		if (subFolderAmount && subFolder && subFolderAmount > 0) {
 			if (subFolder.amount < subFolderAmount) {
 				// if the original amount is less than the new amount, we know the balance also needs to increase
@@ -220,7 +221,15 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 				subFolder.balance =
 					subFolder.balance - (subFolder.amount - subFolderAmount);
 			}
+			// Updated the subfolder amount
 			subFolder.amount = subFolderAmount;
+
+			// Since we are changing the amount, lets clear out the tags
+			subFolder.tags = { bill: 0, takeOut: 0, leave: 0, transfer: 0 };
+			subFolder.tagsComplete = false;
+
+			// Send update to database
+			handleSubFolderUpdate(subFolder);
 			setDialogOpen(false);
 		}
 	};
