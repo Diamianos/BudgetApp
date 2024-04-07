@@ -27,15 +27,16 @@ import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import CurrencyExchangeIcon from "@mui/icons-material/CurrencyExchange";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import ExpenseList from "../expenses/ExpenseList";
 import { Expense } from "../../components/Expense";
 import { ExpenseProcess } from "../../components/ExpenseProcess";
 import { Tags } from "../../components/Tags";
-import { subFolderAPI } from "../../apis/SubFolderAPI";
 
 interface SubFolderDetailProps {
 	selectedSubFolder: SubFolder | undefined;
 	handleSubFolderUpdate: (subFolder: SubFolder) => void;
+	handleSubFolderDelete: (subFolder: SubFolder) => void;
 	showDescriptionSaveButton: boolean;
 	setShowDescriptionSaveButton: (value: boolean) => void;
 	handleExpenseUpdate: (expense: Expense, process: ExpenseProcess) => void;
@@ -46,6 +47,7 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 	const {
 		selectedSubFolder,
 		handleSubFolderUpdate,
+		handleSubFolderDelete,
 		showDescriptionSaveButton,
 		setShowDescriptionSaveButton,
 		handleExpenseUpdate,
@@ -64,7 +66,8 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 		showError: false,
 		message: "",
 	});
-	const [dialogOpen, setDialogOpen] = useState(false);
+	const [sfAmountDialogOpen, setSfAmountDialogOpen] = useState(false);
+	const [sfDeleteDialogOpen, setSfDeleteDialogOpen] = useState(false);
 	const [subFolderAmount, setSubFolderAmount] = useState(subFolder?.amount);
 
 	useEffect(() => {
@@ -83,7 +86,7 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 
 	useEffect(() => {
 		if (subFolder) {
-			handleDialogSubmit();
+			handleEditDialogSubmit();
 		}
 	}, [stateFolderAmountUpdate]);
 
@@ -133,7 +136,7 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 		} else {
 			const newModalError = {
 				showError: true,
-				message: "Tag total cannot be greater than subfolder amount",
+				message: "Tag total cannot be greater than subfolder amount.",
 			};
 			setModalError(newModalError);
 		}
@@ -203,14 +206,19 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 	};
 
 	const handleEditButtonClick = () => {
-		setDialogOpen(true);
+		setSfAmountDialogOpen(true);
+	};
+
+	const handleDeleteButtonClick = () => {
+		setSfDeleteDialogOpen(true);
 	};
 
 	const handleDialogClose = () => {
-		setDialogOpen(false);
+		setSfAmountDialogOpen(false);
+		setSfDeleteDialogOpen(false);
 	};
 
-	const handleDialogSubmit = async () => {
+	const handleEditDialogSubmit = async () => {
 		if (subFolderAmount && subFolder && subFolderAmount > 0) {
 			if (subFolder.amount < subFolderAmount) {
 				// if the original amount is less than the new amount, we know the balance also needs to increase
@@ -230,7 +238,14 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 
 			// Send update to database
 			handleSubFolderUpdate(subFolder);
-			setDialogOpen(false);
+			setSfAmountDialogOpen(false);
+		}
+	};
+
+	const handleDeleteDialogSubmit = () => {
+		if (subFolder) {
+			handleDialogClose();
+			handleSubFolderDelete(subFolder);
 		}
 	};
 
@@ -261,6 +276,9 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 			<Box display={"flex"} justifyContent={"right"}>
 				<IconButton onClick={() => handleEditButtonClick()}>
 					<EditIcon />
+				</IconButton>
+				<IconButton onClick={() => handleDeleteButtonClick()}>
+					<DeleteIcon />
 				</IconButton>
 			</Box>
 			<Typography mb={3} variant="h6" align="center" gutterBottom>
@@ -378,7 +396,7 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 			</Container>
 
 			{/* Dialog for editing subFolder amount */}
-			<Dialog open={dialogOpen} onClose={handleDialogClose}>
+			<Dialog open={sfAmountDialogOpen} onClose={handleDialogClose}>
 				<DialogTitle>Sub Folder Update</DialogTitle>
 				<DialogContent>
 					<DialogContentText>
@@ -399,8 +417,25 @@ function SubFolderDetail(props: SubFolderDetailProps) {
 				</DialogContent>
 				<DialogActions>
 					<Button onClick={handleDialogClose}>Cancel</Button>
-					<Button type="submit" onClick={handleDialogSubmit}>
+					<Button type="submit" onClick={handleEditDialogSubmit}>
 						Submit
+					</Button>
+				</DialogActions>
+			</Dialog>
+
+			{/* Dialog for confirming deletion of sub folder */}
+			<Dialog open={sfDeleteDialogOpen} onClose={handleDialogClose}>
+				<DialogTitle>Delete Sub Folder</DialogTitle>
+				<DialogContent>
+					<DialogContentText>
+						Are you sure you want to delete this subfolder? This cannot be
+						undone.
+					</DialogContentText>
+				</DialogContent>
+				<DialogActions>
+					<Button onClick={handleDialogClose}>No</Button>
+					<Button type="submit" onClick={handleDeleteDialogSubmit}>
+						Yes
 					</Button>
 				</DialogActions>
 			</Dialog>

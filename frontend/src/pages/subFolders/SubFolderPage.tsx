@@ -85,6 +85,15 @@ function SubFoldersPage() {
 		setShowDescriptionSaveButton(false);
 	};
 
+	const handleSubFolderDelete = async (subFolder: SubFolder) => {
+		await subFolderAPI.delete(subFolder);
+		let updatedSubFolders = subFolders.filter((sf: SubFolder) => {
+			return sf.id !== subFolder.id;
+		});
+		setSubFolders(() => [...updatedSubFolders]);
+		setSelectedSubFolder(undefined);
+	};
+
 	const handleExpenseUpdate = (expense: Expense, process: ExpenseProcess) => {
 		// Create new Subfolder for original for the update process
 		let newSelectedSubFolder: SubFolder = new SubFolder({
@@ -279,6 +288,7 @@ function SubFoldersPage() {
 						<SubFolderDetail
 							selectedSubFolder={selectedSubFolder}
 							handleSubFolderUpdate={handleSubFolderUpdate}
+							handleSubFolderDelete={handleSubFolderDelete}
 							showDescriptionSaveButton={showDescriptionSaveButton}
 							setShowDescriptionSaveButton={setShowDescriptionSaveButton}
 							handleExpenseUpdate={handleExpenseUpdate}

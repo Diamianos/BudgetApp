@@ -150,6 +150,10 @@ public class SubFolderController {
   public ResponseEntity<String> deleteSubFolder(
     @PathVariable Integer subFolderId
   ) {
+    log.info(
+      "deleteSubFolder() - Deleting subFolder with ID [{}]",
+      subFolderId
+    );
     subFolderService.deleteSubFolder(subFolderId);
     return ResponseEntity.ok().build();
   }
