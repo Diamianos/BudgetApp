@@ -5,10 +5,18 @@ import {
 	Box,
 	Button,
 	Container,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogTitle,
 	FormControl,
+	FormControlLabel,
+	FormLabel,
 	Grid,
 	InputLabel,
 	MenuItem,
+	Radio,
+	RadioGroup,
 	Select,
 	SelectChangeEvent,
 	TextField,
@@ -18,11 +26,13 @@ import {
 } from "@mui/material";
 import SubFolderList from "./SubFolderList";
 import { subFolderAPI } from "../../apis/SubFolderAPI";
+import { folderAPI } from "../../apis/FolderAPI";
 import SubFolderDetail from "./SubFolderDetail";
 import { Expense } from "../../components/Expense";
 import { ExpenseProcess } from "../../components/ExpenseProcess";
 import SubFolderSummary from "./SubFolderSummary";
 import dayjs from "dayjs";
+import { Folder } from "../../components/Folder";
 
 function SubFoldersPage() {
 	const [subFolders, setSubFolders] = useState<SubFolder[]>([]);
@@ -36,6 +46,15 @@ function SubFoldersPage() {
 		useState(false);
 	const [month, setMonth] = useState(dayjs().format("MMMM"));
 	const [year, setYear] = useState(dayjs().format("YYYY"));
+	const [newSubFolderDialogOpen, setNewSubFolderDialogOpen] = useState(false);
+	const [radioValue, setRadioValue] = useState("FIRST_HALF");
+	const [tempSubFolder, setTempSubFolder] = useState(
+		new SubFolder({ monthPeriod: radioValue })
+	);
+	const [selectedFolderParent, setSelectedFolderParent] = useState(
+		new Folder()
+	);
+	const [folderList, setFolderList] = useState<Folder[]>([]);
 
 	const months = [
 		"January",
@@ -54,6 +73,17 @@ function SubFoldersPage() {
 
 	const handleMonthChange = (event: SelectChangeEvent) => {
 		setMonth(event.target.value as string);
+	};
+
+	const handleSelectedParentFolderChange = (event: SelectChangeEvent) => {
+		const selectedFolder = folderList.find((f) => {
+			return f.name === event.target.value;
+		});
+		if (selectedFolder) {
+			setSelectedFolderParent(selectedFolder);
+		}
+
+		console.log(event);
 	};
 
 	const handleSelectedSubFolderChange = (subFolder: SubFolder) => {
@@ -155,6 +185,89 @@ function SubFoldersPage() {
 			window.location.href = `/folders/${monthYearPeriod}`;
 		}
 		return;
+	};
+
+	const handleNewSubFolderDialogOpen = async () => {
+		const folderList = await folderAPI.getByMonthYearPeriod(
+			getFormattedDate(month, year)
+		);
+		setFolderList(folderList);
+		setNewSubFolderDialogOpen(true);
+	};
+
+	const handleNewSubFolderDialogClose = () => {
+		setTempSubFolder(new SubFolder());
+		setNewSubFolderDialogOpen(false);
+		setSelectedFolderParent(new Folder());
+	};
+
+	const handleNewSubFolderDialogSubmit = async () => {
+		console.log(tempSubFolder);
+
+		if (
+			tempSubFolder.amount === 0 ||
+			tempSubFolder.name === "" ||
+			tempSubFolder.monthPeriod === "" ||
+			selectedFolderParent.name === ""
+		) {
+			console.log("Missing required fields for adding sub folder");
+			return;
+		}
+
+		const monthYearPeriod = getFormattedDate(month, year);
+		const newSubFolder = await subFolderAPI.post(
+			tempSubFolder,
+			monthYearPeriod
+		);
+
+		let updatedSubFolders = [...subFolders];
+		updatedSubFolders.push(newSubFolder);
+		updatedSubFolders.sort((a, b) => a.name.localeCompare(b.name));
+
+		setSubFolders(() => [...updatedSubFolders]);
+		handleNewSubFolderDialogClose();
+	};
+
+	const handleNewSubFolderDialogChange = (event: any) => {
+		const { id, value } = event.target;
+
+		let updatedValue = value;
+
+		// Regex to validate input is a number
+		const re = /^[0-9\b]+$/;
+
+		let change = {};
+		if (id === "amount" && (updatedValue === "" || re.test(updatedValue))) {
+			change = {
+				[id]: updatedValue,
+			};
+		} else if (id !== "amount") {
+			change = {
+				[id]: updatedValue,
+			};
+		}
+
+		let updatedSubFolder: SubFolder = new SubFolder({
+			...tempSubFolder,
+			...change,
+		});
+		setTempSubFolder(updatedSubFolder);
+	};
+
+	const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		const { value } = event.target;
+
+		setRadioValue(value);
+
+		const change = {
+			["monthPeriod"]: value,
+		};
+
+		let updatedSubFolder: SubFolder = new SubFolder({
+			...tempSubFolder,
+			...change,
+		});
+		setTempSubFolder(updatedSubFolder);
 	};
 
 	function verifyMonthYearInputs() {
@@ -272,6 +385,15 @@ function SubFoldersPage() {
 					<ToggleButton value="second_half">Days 15-30</ToggleButton>
 				</ToggleButtonGroup>
 			</Container>
+			<Button
+				variant="contained"
+				color="success"
+				size="small"
+				sx={{ float: "right" }}
+				onClick={handleNewSubFolderDialogOpen}
+			>
+				Add a SubFolder
+			</Button>
 
 			{selectedSubFolder ? (
 				<Grid container spacing={2}>
@@ -315,6 +437,88 @@ function SubFoldersPage() {
 					</Grid>
 				</Grid>
 			)}
+
+			{/* Dialog for adding a new subFolder */}
+			<Dialog
+				open={newSubFolderDialogOpen}
+				onClose={handleNewSubFolderDialogClose}
+			>
+				<DialogTitle>New Sub Folder</DialogTitle>
+				<DialogContent>
+					<TextField
+						autoFocus
+						required
+						margin="dense"
+						id="name"
+						name="name"
+						label="Name"
+						type="text"
+						value={tempSubFolder.name ? tempSubFolder.name : ""}
+						fullWidth
+						variant="standard"
+						onChange={handleNewSubFolderDialogChange}
+					/>
+					<TextField
+						required
+						margin="dense"
+						id="amount"
+						name="amount"
+						label="Amount"
+						type="text"
+						value={tempSubFolder.amount ? tempSubFolder.amount : ""}
+						fullWidth
+						variant="standard"
+						onChange={handleNewSubFolderDialogChange}
+					/>
+					<FormControl sx={{ minWidth: 150, marginTop: "1rem" }}>
+						<FormLabel id="controlled-radio-buttons-group">
+							Month Period
+						</FormLabel>
+						<RadioGroup
+							aria-labelledby="demo-controlled-radio-buttons-group"
+							name="controlled-radio-buttons-group"
+							id="monthPeriod"
+							value={radioValue}
+							onChange={handleRadioChange}
+							row
+							sx={{ marginBottom: "2rem" }}
+						>
+							<FormControlLabel
+								value="FIRST_HALF"
+								control={<Radio />}
+								label="Days 1-14"
+							/>
+							<FormControlLabel
+								value="SECOND_HALF"
+								control={<Radio />}
+								label="Days 15-30"
+							/>
+						</RadioGroup>
+					</FormControl>
+					<FormControl sx={{ width: "100%" }}>
+						<InputLabel id="simple-select-label">Parent Folder</InputLabel>
+						<Select
+							labelId="simple-select-label"
+							id="simple-select"
+							value={selectedFolderParent ? selectedFolderParent.name : ""}
+							label="Parent Folder"
+							onChange={handleSelectedParentFolderChange}
+						>
+							{folderList.map((f) => (
+								<MenuItem key={f.id} value={f.name}>
+									{f.name}
+								</MenuItem>
+							))}
+						</Select>
+					</FormControl>
+				</DialogContent>
+				<DialogActions>
+					<Button onClick={handleNewSubFolderDialogClose}>Cancel</Button>
+					<Button type="submit" onClick={handleNewSubFolderDialogSubmit}>
+						Submit
+					</Button>
+				</DialogActions>
+			</Dialog>
 		</Container>
 	);
 }
