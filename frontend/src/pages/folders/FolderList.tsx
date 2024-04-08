@@ -92,7 +92,7 @@ export default function FolderList({
 		});
 	};
 
-	function addFoldersToDatabaseAndRedirect() {
+	async function addFoldersToDatabaseAndRedirect() {
 		folders.forEach((f) => {
 			// Removing id so it doesn't interfere in the database
 			f.id = undefined;
@@ -104,7 +104,7 @@ export default function FolderList({
 			)}`
 		);
 
-		folderAPI.postFolders(folders);
+		await folderAPI.postFolders(folders);
 
 		window.location.href = `/create_subfolders/${monthYearPeriod}`;
 	}
