@@ -149,22 +149,24 @@ function CreateSubFolderList({
 	};
 
 	const handleDialogTextFieldChange = (event: any) => {
-		const { name, value, type } = event.target;
+		const { name, value } = event.target;
 
 		let updatedValue = value;
 		// if input type is number, convert the updatedValue string to a number
-		if (type === "number") {
-			updatedValue = Number(updatedValue);
+
+		// Regex to validate input is a number
+		const re = /^[0-9\b]+$/;
+
+		if (updatedValue === "" || re.test(updatedValue)) {
+			const newDialogContentInformation = {
+				...dialogContentInformation,
+				[name]: Number(updatedValue),
+			};
+
+			setShowDialogError({ showError: false, errorMessage: "" });
+
+			setDialogContentInformation(newDialogContentInformation);
 		}
-
-		const newDialogContentInformation = {
-			...dialogContentInformation,
-			[name]: updatedValue,
-		};
-
-		setShowDialogError({ showError: false, errorMessage: "" });
-
-		setDialogContentInformation(newDialogContentInformation);
 	};
 
 	const handleKeyDown = (event: any) => {
@@ -322,10 +324,13 @@ function CreateSubFolderList({
 						margin="dense"
 						name="days1_14Amount"
 						label="Days 1-14 Folder Amount"
-						type="number"
 						fullWidth
 						variant="standard"
-						value={dialogContentInformation.days1_14Amount}
+						value={
+							dialogContentInformation.days1_14Amount
+								? dialogContentInformation.days1_14Amount
+								: ""
+						}
 						inputRef={inputRef}
 						onChange={handleDialogTextFieldChange}
 					/>
@@ -333,10 +338,13 @@ function CreateSubFolderList({
 						margin="dense"
 						name="days15_30Amount"
 						label="Days 15-30 Folder Amount"
-						type="number"
 						fullWidth
 						variant="standard"
-						value={dialogContentInformation.days15_30Amount}
+						value={
+							dialogContentInformation.days15_30Amount
+								? dialogContentInformation.days15_30Amount
+								: ""
+						}
 						onChange={handleDialogTextFieldChange}
 						onKeyDown={handleKeyDown}
 					/>
@@ -349,7 +357,12 @@ function CreateSubFolderList({
 				<DialogActions>
 					<Button onClick={handleClose}>Cancel</Button>
 					<Button onClick={handleSplitSubmit}>Split</Button>
-					<Button onClick={handleSplitEvenly}>Split Evenly</Button>
+					<Button
+						disabled={column.title === "Distribute" ? false : true}
+						onClick={handleSplitEvenly}
+					>
+						Split Evenly
+					</Button>
 				</DialogActions>
 			</Dialog>
 		</Container>
