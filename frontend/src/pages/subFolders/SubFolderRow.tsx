@@ -2,6 +2,7 @@ import { TableCell, TableRow, TextField, makeStyles } from "@mui/material";
 import React, { Dispatch, SetStateAction } from "react";
 import { SubFolder } from "../../components/SubFolder";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import StickyNote2Icon from "@mui/icons-material/StickyNote2";
 
 interface SubFolderRowProps {
 	subFolder: SubFolder;
@@ -35,6 +36,11 @@ function SubFolderRow({
 			<TableCell>
 				<CheckCircleIcon
 					style={subFolder.tagsComplete ? { color: "green" } : {}}
+				/>
+			</TableCell>
+			<TableCell>
+				<StickyNote2Icon
+					style={subFolder.description !== "" ? { color: "green" } : {}}
 				/>
 			</TableCell>
 		</TableRow>

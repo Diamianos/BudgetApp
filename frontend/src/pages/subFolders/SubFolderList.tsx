@@ -40,6 +40,9 @@ function SubFolderList({
 							<TableCell sx={{ fontSize: 17, fontWeight: "bold" }}>
 								Allocated
 							</TableCell>
+							<TableCell sx={{ fontSize: 17, fontWeight: "bold" }}>
+								Note
+							</TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>
