@@ -235,7 +235,6 @@ function CreateSubFolderList({
 			}}
 		>
 			{folders
-				.sort((a, b) => a.name.localeCompare(b.name)) // Sorting alphabetically by name
 				.map((folder, index) => (
 					<Draggable
 						key={folder.draggable_id}
